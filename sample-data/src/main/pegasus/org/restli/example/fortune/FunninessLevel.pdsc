@@ -1,0 +1,7 @@
+{
+    "type" : "enum",
+    "name" : "FunninessLevel",
+    "doc" : "Defines funniness of something",
+    "namespace" : "org.restli.example.fortune",
+    "symbols" : [ "BLAH", "LOL", "ROFL", "LMAO" ]
+}

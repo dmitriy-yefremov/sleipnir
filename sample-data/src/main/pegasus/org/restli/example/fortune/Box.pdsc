@@ -1,0 +1,47 @@
+{
+    "type": "record",
+    "name": "Box",
+    "namespace": "org.restli.example.fortune",
+    "doc": "A box of fortune cookies",
+    "fields": [
+        {
+            "name": "fortunes",
+            "type": {
+                "type": "array",
+                "items": "Fortune"
+            },
+            "doc": "Array of cookies in this box"
+        },
+        {
+            "name": "nutritionFacts",
+            "type": {
+                "type": "map",
+                "values": "int"
+             },
+             "doc": "Map of cookies in this box"
+        },
+        {
+            "name": "expirationDate",
+            "type": [
+                "string",
+                {
+                    "type": "record",
+                    "name": "EpochDate",
+                    "fields": [
+                        {
+                            "name": "millis",
+                            "type": "long",
+                            "doc": "The number of milliseconds since Epoch"
+                        }
+                    ]
+                }
+            ],
+            "doc": "Expiration date of the box. Can be represented either as a string or as an Epoch date"
+        },
+        {
+            "name": "signature",
+            "type": "MD5",
+            "doc": "MD5 hash of the secret key"
+        }
+    ]
+}

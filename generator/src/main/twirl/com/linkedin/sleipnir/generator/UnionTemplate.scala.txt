@@ -1,0 +1,61 @@
+@(generator: com.linkedin.sleipnir.generator.types.UnionTypeGenerator)
+
+@import _root_.scala.collection.JavaConverters._
+@import _root_.com.linkedin.sleipnir.generator.types.TypeGeneratorFactory
+@import _root_.com.linkedin.sleipnir.generator.types.TypeGenerator
+
+package @(generator.packageName)
+
+import com.linkedin.data.DataMap
+import com.linkedin.data.schema.UnionDataSchema
+import com.linkedin.data.template.DataTemplateUtil
+
+import com.linkedin.sleipnir.data.ScalaUnionTemplate
+
+import @(generator.shortClassName)._
+
+
+class @(generator.shortClassName)(data: AnyRef) extends ScalaUnionTemplate(data, Schema) {
+
+@for(typeGenerator <- generator.typeGenerators) {
+
+  def is@(typeGenerator.shortClassName): Boolean = memberIs("@(typeGenerator.schema.getUnionMemberKey)")
+
+  def as@(typeGenerator.shortClassName): Option[@(typeGenerator.fullClassName)] = maybeGet[@(typeGenerator.fullClassName)](@(generator.memberValName(typeGenerator)))
+
+}
+
+}
+
+
+object @(generator.shortClassName) {
+
+  private val SchemaJson = "@(generator.schemaJson)"
+
+  private val Schema = DataTemplateUtil.parseSchema(SchemaJson).asInstanceOf[UnionDataSchema]
+
+@for(typeGenerator <- generator.typeGenerators) {
+
+  val @(generator.memberValName(typeGenerator)) = Schema.getType("@(typeGenerator.schema.getUnionMemberKey)")
+
+  def apply(value: @(typeGenerator.fullClassName)): @(generator.shortClassName) = {
+    val union = new @(generator.shortClassName)(new DataMap())
+    union.set(@(generator.memberValName(typeGenerator)), value)
+    union
+  }
+
+}
+
+  def unapply(union: @(generator.shortClassName)): Option[Any] = {
+    union.memberType match {
+
+    @for(typeGenerator <- generator.typeGenerators) {
+      case @(generator.memberValName(typeGenerator)) => union.as@(typeGenerator.shortClassName)
+    }
+      case _ => None
+    }
+
+  }
+
+
+}

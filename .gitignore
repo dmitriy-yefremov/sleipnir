@@ -1,0 +1,38 @@
+*.class
+*.log
+
+# sbt
+.cache/
+.history/
+.lib/
+dist/*
+target/
+lib_managed/
+src_managed/
+project/boot/
+project/plugins/project/
+
+# Intellij
+.idea/
+.idea_modules/
+*.iml
+*.iws
+*.ipr
+
+# Mac
+.DS_Store
+
+# test generated files
+test/gen/
+.project
+.settings
+.classpath
+.gradle
+.idea
+*.iml
+*.ipr
+*.iws
+/build
+*/build
+out/
+*/bin/

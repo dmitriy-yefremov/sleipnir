@@ -1,0 +1,50 @@
+@(generator: com.linkedin.sleipnir.generator.types.RecordTypeGenerator)
+
+@import _root_.scala.collection.JavaConverters._
+@import _root_.com.linkedin.data.schema.RecordDataSchema.Field
+
+package @(generator.packageName)
+
+import com.linkedin.data.DataMap
+import com.linkedin.data.schema.RecordDataSchema
+import com.linkedin.data.template.DataTemplateUtil
+import com.linkedin.sleipnir.data.ScalaRecordTemplate
+
+import @(generator.shortClassName)._
+
+/**
+ * @(generator.schema.getDoc)
+ */
+class @(generator.shortClassName)(data: DataMap) extends ScalaRecordTemplate(data, Schema) {
+
+  def this(@(generator.constructorArgs)) = {
+    this(new DataMap())
+    @for(field <- generator.schema.getFields.asScala) {
+      set(@(generator.fieldValName(field)), @(field.getName))
+    }
+  }
+
+@for(field <- generator.schema.getFields.asScala) {
+
+  /**
+   * @(field.getDoc)
+   */
+  def @(field.getName): @(generator.recordTypeOf(field)) = get[@(generator.recordTypeOf(field))](@(generator.fieldValName(field)))
+
+}
+
+}
+
+object @(generator.shortClassName) {
+
+  private val SchemaJson = "@(generator.schemaJson)"
+
+  private val Schema = DataTemplateUtil.parseSchema(SchemaJson).asInstanceOf[RecordDataSchema]
+
+@for(field <- generator.schema.getFields.asScala) {
+  private val @(generator.fieldValName(field)) = Schema.getField("@(field.getName)")
+}
+
+  def apply(@(generator.constructorArgs)) = new @(generator.shortClassName)(@generator.constructorParams)
+
+}

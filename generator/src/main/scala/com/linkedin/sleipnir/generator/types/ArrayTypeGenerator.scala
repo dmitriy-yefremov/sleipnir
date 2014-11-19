@@ -1,0 +1,64 @@
+package com.linkedin.sleipnir.generator.types
+
+import com.linkedin.data.schema.{DataSchema, ArrayDataSchema}
+import com.linkedin.data.template._
+import com.linkedin.sleipnir.generator.GeneratedClass
+import com.linkedin.sleipnir.generator.txt.ArrayTemplate
+import com.typesafe.scalalogging.slf4j.StrictLogging
+
+/**
+ * Common functionality for [[ArrayDataSchema]] generators.
+ * @author Dmitriy Yefremov
+ */
+sealed trait ArrayTypeGenerator extends TypeGenerator {
+
+  override def schema: ArrayDataSchema
+
+  protected def itemsGenerator: TypeGenerator = TypeGeneratorFactory.instance(schema.getItems, schema)
+
+  override def externalClassName: String = s"Seq[${itemsGenerator.fullClassName}]"
+
+}
+
+/**
+ * A generator for arrays of primitive types (e.g. an array of integers).
+ */
+case class ComplexArrayTypeGenerator(override val schema: ArrayDataSchema) extends ArrayTypeGenerator with StrictLogging {
+
+  override def shortClassName: String = itemsGenerator.shortClassName + "Array"
+
+  override def packageName: String = itemsGenerator.packageName
+
+  override def generateClasses: Seq[GeneratedClass] = {
+    logger.info(s"Generating $fullClassName")
+    val source = ArrayTemplate(this).toString()
+    val generated = GeneratedClass(fullClassName, source)
+    generated +: itemsGenerator.generateClasses
+  }
+
+  def itemsClassName: String = itemsGenerator.shortClassName
+
+}
+
+/**
+ * A generator for arrays of complex types (e.g. an array of records).
+ */
+case class PrimitiveArrayTypeGenerator(override val schema: ArrayDataSchema) extends ArrayTypeGenerator {
+
+  private val PrimitiveWrapperClasses = Map(
+    DataSchema.Type.BOOLEAN -> classOf[BooleanArray],
+    DataSchema.Type.INT -> classOf[IntegerArray],
+    DataSchema.Type.LONG -> classOf[LongArray],
+    DataSchema.Type.FLOAT -> classOf[FloatArray],
+    DataSchema.Type.DOUBLE -> classOf[DoubleArray],
+    DataSchema.Type.BYTES -> classOf[BytesArray],
+    DataSchema.Type.STRING -> classOf[StringArray]
+  )
+
+  override def shortClassName: String = PrimitiveWrapperClasses(schema.getItems.getType).getName
+
+  override def packageName: String = PrimitiveWrapperClasses(schema.getItems.getType).getPackage.getName
+
+  override def generateClasses: Seq[GeneratedClass] = Seq.empty
+
+}

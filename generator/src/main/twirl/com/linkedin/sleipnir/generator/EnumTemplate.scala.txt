@@ -1,0 +1,16 @@
+@(generator: com.linkedin.sleipnir.generator.types.EnumTypeGenerator)
+
+@import _root_.scala.collection.JavaConverters._
+
+package @(generator.packageName)
+
+/**
+ * @(generator.schema.getDoc)
+ */
+object @(generator.shortClassName) extends Enumeration {
+
+  type @(generator.shortClassName) = Value
+
+  val @(generator.symbols) = Value
+
+}

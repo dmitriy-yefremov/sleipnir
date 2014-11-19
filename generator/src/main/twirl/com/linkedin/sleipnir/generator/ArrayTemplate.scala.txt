@@ -1,0 +1,31 @@
+@(generator: com.linkedin.sleipnir.generator.types.ComplexArrayTypeGenerator)
+
+@import _root_.scala.collection.JavaConverters._
+@import _root_.com.linkedin.data.schema.RecordDataSchema.Field
+
+package @(generator.packageName)
+
+import com.linkedin.data.DataList
+import com.linkedin.data.schema.ArrayDataSchema
+import com.linkedin.data.template.DataTemplateUtil
+import com.linkedin.sleipnir.data.ScalaArrayTemplate
+
+import @(generator.shortClassName)._
+
+class @(generator.shortClassName)(val items: Seq[@(generator.itemsClassName)], itemsData: DataList) extends ScalaArrayTemplate(itemsData, Schema) {
+
+  def this(items: Seq[@(generator.itemsClassName)]) = this(items, ScalaArrayTemplate.unwrapAll(items))
+
+  def this(data: DataList) = this(ScalaArrayTemplate.wrapAll(data, data => new @(generator.itemsClassName)(data)), data)
+
+}
+
+object @(generator.shortClassName) {
+
+  private val SchemaJson = "@(generator.schemaJson)"
+
+  private val Schema = DataTemplateUtil.parseSchema(SchemaJson).asInstanceOf[ArrayDataSchema]
+
+  def apply(items: Seq[@(generator.itemsClassName)]) = new @(generator.shortClassName)(items)
+
+}

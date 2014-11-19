@@ -2,45 +2,45 @@ package com.linkedin.sleipnir.generator.types
 
 import com.linkedin.data.ByteString
 import com.linkedin.data.schema._
-import com.linkedin.data.schema.DataSchema.Type
 import com.linkedin.sleipnir.generator.GeneratedClass
+import com.typesafe.scalalogging.slf4j.StrictLogging
 
 /**
  * A universal generator for all primitive data types.
  * @param schema the type schema
  * @author Dmitriy Yefremov
  */
-case class PrimitiveTypeGenerator(override val schema: PrimitiveDataSchema) extends TypeGenerator {
+case class PrimitiveTypeGenerator(override val schema: PrimitiveDataSchema) extends TypeGenerator with StrictLogging {
 
-  private val PrimitiveClassNames = Map(
-    Type.BOOLEAN -> "Boolean",
-    Type.NULL -> "Null",
-    Type.FLOAT -> "Float",
-    Type.STRING -> "String",
-    Type.DOUBLE -> "Double",
-    Type.LONG -> "Long",
-    Type.INT -> "Int"
-  )
+  override def shortClassName: String = {
+    schema match {
+      case b: BytesDataSchema => classOf[ByteString].getSimpleName
+      case _ => primitiveClassName
+    }
+  }
 
-  override def shortClassName: String = PrimitiveClassNames(schema.getType)
+  override def fullClassName: String = {
+    schema match {
+      case b: BytesDataSchema => classOf[ByteString].getName
+      case _ => primitiveClassName
+    }
+  }
 
-  override def packageName: String = "scala"
+  override def externalClassName: String = fullClassName
 
-  override def externalClassName: String = shortClassName
+  private def primitiveClassName: String = {
+    schema match {
+      case b: BooleanDataSchema => "Boolean"
+      case n: NullDataSchema => "Null"
+      case f: FloatDataSchema => "Float"
+      case s: StringDataSchema => "String"
+      case d: DoubleDataSchema => "Double"
+      case l: LongDataSchema => "Long"
+      case i: IntegerDataSchema => "Int"
+    }
+  }
 
-  override def generateClasses: Seq[GeneratedClass] = Seq.empty
-
-}
-
-/**
- * Even though [[BytesDataSchema]] represents primitive data types it needs to be handles separately.
- * @param schema the type schema
- */
-case class BytesTypeGenerator(override val schema: BytesDataSchema) extends TypeGenerator {
-
-  override def shortClassName: String = classOf[ByteString].getSimpleName
-
-  override def packageName: String = classOf[ByteString].getPackage.getName
+  override def packageName: String = throw new NotImplementedError("This method should never be called for primitive types")
 
   override def generateClasses: Seq[GeneratedClass] = Seq.empty
 

@@ -24,6 +24,7 @@ object TypeGeneratorFactory {
 
   private def instance(schema: DataSchema, parentSchemaOpt: Option[DataSchema]): TypeGenerator = {
     schema match {
+      case bytes: BytesDataSchema => BytesTypeGenerator(bytes)
       case primitive: PrimitiveDataSchema => PrimitiveTypeGenerator(primitive)
       case enum: EnumDataSchema => EnumTypeGenerator(enum)
       case record: RecordDataSchema => RecordTypeGenerator(record)

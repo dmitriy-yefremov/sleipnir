@@ -15,7 +15,7 @@ sealed trait MapTypeGenerator extends TypeGenerator {
 
   override def schema: MapDataSchema
 
-  protected def valuesGenerator: TypeGenerator = TypeGeneratorFactory.instance(schema.getValues, schema)
+  protected def valuesGenerator: TypeGenerator = nestedGenerator(schema.getValues)
 
   override def externalClassName: String = s"Map[String, ${valuesGenerator.fullClassName}]"
 

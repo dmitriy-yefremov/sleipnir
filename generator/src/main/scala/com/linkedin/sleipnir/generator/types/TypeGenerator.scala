@@ -51,5 +51,10 @@ trait TypeGenerator {
    */
   def generateClasses: Seq[GeneratedClass]
 
+  /**
+   * Creates an instance of the generator of the specified type. Current schema is used as parent when an instance is created.
+   */
+  protected def nestedGenerator(nestedSchema: DataSchema) = TypeGeneratorFactory.instance(nestedSchema, schema)
+
 
 }

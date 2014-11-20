@@ -32,7 +32,7 @@ case class UnionTypeGenerator(override val schema: UnionDataSchema, parentSchema
 
   override def externalClassName: String = fullClassName
 
-  def typeGenerators: Seq[TypeGenerator] = schema.getTypes.asScala.map(TypeGeneratorFactory.instance)
+  def typeGenerators: Seq[TypeGenerator] = schema.getTypes.asScala.map(nestedGenerator)
 
   def memberValName(generator: TypeGenerator): String = s"Member${generator.shortClassName}"
 
@@ -40,8 +40,7 @@ case class UnionTypeGenerator(override val schema: UnionDataSchema, parentSchema
     logger.info(s"Generating $fullClassName")
     val source = UnionTemplate(this).toString()
     val generated = GeneratedClass(fullClassName, source)
-    generated +: schema.getTypes.asScala.flatMap { tpe =>
-      val generator = TypeGeneratorFactory.instance(tpe, schema)
+    generated +: typeGenerators.flatMap { generator =>
       generator.generateClasses
     }
   }

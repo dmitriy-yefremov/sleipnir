@@ -23,17 +23,16 @@ object TypeGeneratorFactory {
   def instance(schema: DataSchema, parentSchema: DataSchema): TypeGenerator = instance(schema, Some(parentSchema))
 
   private def instance(schema: DataSchema, parentSchemaOpt: Option[DataSchema]): TypeGenerator = {
-    schema match {
+    schema.getDereferencedDataSchema match {
       case bytes: BytesDataSchema => BytesTypeGenerator(bytes)
       case primitive: PrimitiveDataSchema => PrimitiveTypeGenerator(primitive)
       case enum: EnumDataSchema => EnumTypeGenerator(enum)
       case record: RecordDataSchema => RecordTypeGenerator(record)
       case fixed: FixedDataSchema => FixedTypeGenerator(fixed)
-      case array: ArrayDataSchema if array.getItems.isComplex => ComplexArrayTypeGenerator(array)
-      case array: ArrayDataSchema if array.getItems.isPrimitive => PrimitiveArrayTypeGenerator(array)
-      case map: MapDataSchema if map.getValues.isComplex => ComplexMapTypeGenerator(map)
-      case map: MapDataSchema if map.getValues.isPrimitive => PrimitiveMapTypeGenerator(map)
-      case ref: TyperefDataSchema => RefTypeGenerator(ref)
+      case array: ArrayDataSchema if array.getItems.getDereferencedDataSchema.isComplex => ComplexArrayTypeGenerator(array)
+      case array: ArrayDataSchema if array.getItems.getDereferencedDataSchema.isPrimitive => PrimitiveArrayTypeGenerator(array)
+      case map: MapDataSchema if map.getValues.getDereferencedDataSchema.isComplex => ComplexMapTypeGenerator(map)
+      case map: MapDataSchema if map.getValues.getDereferencedDataSchema.isPrimitive => PrimitiveMapTypeGenerator(map)
       case union: UnionDataSchema => parentSchemaOpt match {
         case Some(record: RecordDataSchema) => UnionTypeGenerator(union, record)
       }

@@ -4,7 +4,7 @@ import twirl.sbt.TwirlPlugin._
 
 object Sleipnir extends Build {
 
-  lazy val sleipnir = project.in(file(".")).aggregate(generator, sampleData)
+  lazy val sleipnir = project.in(file(".")).aggregate(generator)
 
   val twirlSettings = Twirl.settings ++ Seq(
     libraryDependencies := libraryDependencies.value.filterNot(_.organization == "io.spray")
@@ -12,6 +12,7 @@ object Sleipnir extends Build {
 
   lazy val generator = project
     .settings(
+      sbtPlugin := true,
       libraryDependencies ++= Seq(
         "org.clapper" %% "grizzled-slf4j" % "1.0.1",
         "org.slf4j" % "slf4j-simple" % "1.7.2",
@@ -23,6 +24,7 @@ object Sleipnir extends Build {
     )
     .settings(twirlSettings: _*)
 
+  // TODO: move tests to separate repo, or compile plugin in project/project to use in this project
   lazy val sampleData = project.in(file("sample-data"))
     .dependsOn(generator)
     .settings(

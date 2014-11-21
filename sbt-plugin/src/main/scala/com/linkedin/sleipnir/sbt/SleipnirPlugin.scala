@@ -1,4 +1,6 @@
-package com.linkedin.sleipnir
+package com.linkedin.sleipnir.sbt
+
+import com.linkedin.sleipnir.Sleipnir
 
 import sbt._
 import Keys._

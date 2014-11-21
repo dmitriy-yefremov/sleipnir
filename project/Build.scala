@@ -4,15 +4,12 @@ import twirl.sbt.TwirlPlugin._
 
 object Sleipnir extends Build {
 
-  lazy val sleipnir = project.in(file(".")).aggregate(generator)
-
   val twirlSettings = Twirl.settings ++ Seq(
     libraryDependencies := libraryDependencies.value.filterNot(_.organization == "io.spray")
   )
 
-  lazy val generator = project
+  lazy val sleipnirGenerator = project.in(file("generator"))
     .settings(
-      sbtPlugin := true,
       libraryDependencies ++= Seq(
         "org.clapper" %% "grizzled-slf4j" % "1.0.1",
         "org.slf4j" % "slf4j-simple" % "1.7.2",
@@ -24,39 +21,14 @@ object Sleipnir extends Build {
     )
     .settings(twirlSettings: _*)
 
-  // TODO: move tests to separate repo, or compile plugin in project/project to use in this project
-  lazy val sampleData = project.in(file("sample-data"))
-    .dependsOn(generator)
+  lazy val sleipnirSbtPlugin = project.in(file("sbt-plugin"))
     .settings(
-      sleipnirGenerator in Compile := {
-        val src = sourceDirectory.value / "main" / "pegasus"
-        val dst = sourceManaged.value
-        val classpath = (dependencyClasspath in Runtime in generator).value.files
-        runSleipnirGenerator(src, dst, classpath)
-      },
-      sourceGenerators in Compile <+= (sleipnirGenerator in Compile)
+      sbtPlugin := true
     )
+    .dependsOn(sleipnirGenerator)
+    .aggregate(sleipnirGenerator)
 
-  lazy val sleipnirGenerator = taskKey[Seq[File]]("Sleipnir Generator")
 
-  def runSleipnirGenerator(src: File, dst: File, classpath: Seq[File]): Seq[File] = {
-    val mainClass = "com.linkedin.sleipnir.Sleipnir"
-    val args = Seq(src.toString, src.toString, dst.toString)
-    val result = new Fork.ForkScala(mainClass).fork(
-      None,
-      Nil,
-      classpath,
-      args,
-      None,
-      false,
-      StdoutOutput
-    ).exitValue()
-
-    if (result != 0) {
-      sys.error("Trouble with code generator")
-    }
-
-    Seq.empty
-  }
+  lazy val sleipnir = project.in(file(".")).aggregate(sleipnirGenerator, sleipnirSbtPlugin)
 
 }

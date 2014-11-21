@@ -4,11 +4,11 @@ import java.io.{File, FileWriter, PrintWriter}
 
 import com.linkedin.data.schema._
 import com.linkedin.sleipnir.generator.types._
-import com.typesafe.scalalogging.slf4j.StrictLogging
+import grizzled.slf4j.Logging
 import scala.util.control.NonFatal
 import scalariform.formatter.ScalaFormatter
 
-trait Generator extends StrictLogging {
+trait Generator extends Logging {
   
   def processSchema(schema: DataSchema, targetDir: File): Seq[File] = {
     logger.info(s"Processing top level schema: $schema")

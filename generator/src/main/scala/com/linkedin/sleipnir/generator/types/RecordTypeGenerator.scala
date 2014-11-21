@@ -1,6 +1,6 @@
 package com.linkedin.sleipnir.generator.types
 
-import com.typesafe.scalalogging.slf4j.StrictLogging
+import grizzled.slf4j.Logging
 
 import scala.collection.JavaConverters._
 
@@ -13,7 +13,7 @@ import com.linkedin.sleipnir.generator.txt.RecordTemplate
  * @param schema the type schema
  * @author Dmitriy Yefremov
  */
-case class RecordTypeGenerator(override val schema: RecordDataSchema) extends NamedTypeGenerator with StrictLogging {
+case class RecordTypeGenerator(override val schema: RecordDataSchema) extends NamedTypeGenerator with Logging {
 
   def fieldValName(field: RecordDataSchema.Field): String = {
     s"Field${field.getName.capitalize}"

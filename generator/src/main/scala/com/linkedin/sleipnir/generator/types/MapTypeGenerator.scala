@@ -4,7 +4,7 @@ import com.linkedin.data.schema.{DataSchema, MapDataSchema}
 import com.linkedin.data.template._
 import com.linkedin.sleipnir.generator.GeneratedClass
 import com.linkedin.sleipnir.generator.txt.MapTemplate
-import com.typesafe.scalalogging.slf4j.StrictLogging
+import grizzled.slf4j.Logging
 
 
 /**
@@ -21,7 +21,7 @@ sealed trait MapTypeGenerator extends TypeGenerator {
 
 }
 
-case class ComplexMapTypeGenerator(override val schema: MapDataSchema) extends MapTypeGenerator with StrictLogging {
+case class ComplexMapTypeGenerator(override val schema: MapDataSchema) extends MapTypeGenerator with Logging {
 
   override def shortClassName: String = valuesGenerator.shortClassName + "Map"
 

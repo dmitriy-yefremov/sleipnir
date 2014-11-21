@@ -2,7 +2,7 @@ package com.linkedin.sleipnir.generator.types
 
 import com.linkedin.sleipnir.generator.GeneratedClass
 import com.linkedin.sleipnir.generator.txt.UnionTemplate
-import com.typesafe.scalalogging.slf4j.StrictLogging
+import grizzled.slf4j.Logging
 
 import scala.collection.JavaConverters._
 
@@ -14,7 +14,7 @@ import com.linkedin.data.schema.{RecordDataSchema, UnionDataSchema}
  * @param parentSchema the parent type schema (e.g. a record that contains the union type as a field)
  * @author Dmitriy Yefremov
  */
-case class UnionTypeGenerator(override val schema: UnionDataSchema, parentSchema: RecordDataSchema) extends TypeGenerator with StrictLogging {
+case class UnionTypeGenerator(override val schema: UnionDataSchema, parentSchema: RecordDataSchema) extends TypeGenerator with Logging {
 
   override def shortClassName: String = {
     // try to find the field of the parent that the current schema represents

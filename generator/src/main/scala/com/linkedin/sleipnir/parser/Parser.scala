@@ -1,13 +1,13 @@
 package com.linkedin.sleipnir.parser
 
-import com.typesafe.scalalogging.slf4j.StrictLogging
+import grizzled.slf4j.Logging
 import java.io.{FileInputStream, FileNotFoundException, File}
 import com.linkedin.util.FileUtil
 import com.linkedin.data.schema.resolver.{FileDataSchemaLocation, FileDataSchemaResolver}
 import com.linkedin.data.schema._
 import scala.collection.JavaConverters._
 
-trait Parser extends StrictLogging {
+trait Parser extends Logging {
 
   def expandSource(sourceFile: File): Seq[File] = {
     if (sourceFile.isFile) {

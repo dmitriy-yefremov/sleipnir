@@ -2,7 +2,7 @@ package com.linkedin.sleipnir.generator.types
 
 import com.linkedin.sleipnir.generator.GeneratedClass
 import com.linkedin.sleipnir.generator.txt.EnumTemplate
-import com.typesafe.scalalogging.slf4j.StrictLogging
+import grizzled.slf4j.Logging
 
 import scala.collection.JavaConverters._
 
@@ -13,7 +13,7 @@ import com.linkedin.data.schema.EnumDataSchema
  * @param schema the type schema
  * @author Dmitriy Yefremov
  */
-case class EnumTypeGenerator(override val schema: EnumDataSchema) extends NamedTypeGenerator with StrictLogging {
+case class EnumTypeGenerator(override val schema: EnumDataSchema) extends NamedTypeGenerator with Logging {
 
   override def externalClassName: String = fullClassName + ".Value"
 

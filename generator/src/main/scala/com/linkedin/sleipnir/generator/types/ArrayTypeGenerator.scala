@@ -4,7 +4,7 @@ import com.linkedin.data.schema.{DataSchema, ArrayDataSchema}
 import com.linkedin.data.template._
 import com.linkedin.sleipnir.generator.GeneratedClass
 import com.linkedin.sleipnir.generator.txt.ArrayTemplate
-import com.typesafe.scalalogging.slf4j.StrictLogging
+import grizzled.slf4j.Logging
 
 /**
  * Common functionality for [[ArrayDataSchema]] generators.
@@ -23,7 +23,7 @@ sealed trait ArrayTypeGenerator extends TypeGenerator {
 /**
  * A generator for arrays of primitive types (e.g. an array of integers).
  */
-case class ComplexArrayTypeGenerator(override val schema: ArrayDataSchema) extends ArrayTypeGenerator with StrictLogging {
+case class ComplexArrayTypeGenerator(override val schema: ArrayDataSchema) extends ArrayTypeGenerator with Logging {
 
   override def shortClassName: String = itemsGenerator.shortClassName + "Array"
 

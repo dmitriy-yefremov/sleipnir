@@ -2,7 +2,7 @@ package com.linkedin.sleipnir.generator.types
 
 import com.linkedin.data.schema.DataSchema
 import com.linkedin.sleipnir.generator.GeneratedClass
-import org.apache.commons.lang.StringEscapeUtils
+import org.apache.commons.lang3.StringEscapeUtils
 
 /**
  * Base interface for type generators. A type generator is responsible for generation of classes of the specific type.

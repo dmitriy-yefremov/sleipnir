@@ -1,6 +1,7 @@
 import sbt._
 import Keys._
 import twirl.sbt.TwirlPlugin._
+import com.linkedin.sbt.MintPlugin
 
 object Sleipnir extends Build {
 
@@ -20,11 +21,13 @@ object Sleipnir extends Build {
       )
     )
     .settings(twirlSettings: _*)
+    .settings(commands ++= Seq(MintPlugin.buildCmd))
 
   lazy val sleipnirSbtPlugin = project.in(file("sbt-plugin"))
     .settings(
       sbtPlugin := true
     )
+    .settings(commands ++= Seq(MintPlugin.buildCmd))
     .dependsOn(sleipnirGenerator)
     .aggregate(sleipnirGenerator)
 

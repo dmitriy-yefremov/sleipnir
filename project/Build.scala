@@ -2,22 +2,24 @@ import sbt._
 import Keys._
 import twirl.sbt.TwirlPlugin._
 import com.linkedin.sbt.MintPlugin
+import com.linkedin.sbt.core.ext.LiKeys._
 
 object Sleipnir extends Build {
 
+  //TODO: dyefremo: filter out all "spray.io" dependencies as we don't have them in the artifactory
   val twirlSettings = Twirl.settings ++ Seq(
     libraryDependencies := libraryDependencies.value.filterNot(_.organization == "io.spray")
   )
 
   lazy val sleipnirGenerator = project.in(file("generator"))
     .settings(
-      libraryDependencies ++= Seq(
-        "org.clapper" %% "grizzled-slf4j" % "1.0.1",
-        "org.slf4j" % "slf4j-simple" % "1.7.2",
-        "com.linkedin.pegasus" % "data" % "1.15.9",
-        "org.scalariform" %% "scalariform" % "0.1.4",
-        "org.scala-lang" % "scala-reflect" % "2.10.3",
-        "org.apache.commons" % "commons-lang3" % "3.3.2"
+      productSpecDependencies ++= Seq(
+        "external.grizzled-slf4j",
+        "external.slf4j-simple",
+        "external.commons-lang",
+        "external.scalariform",
+        "external.scala-reflect",
+        "product.pegasus.data"
       )
     )
     .settings(twirlSettings: _*)

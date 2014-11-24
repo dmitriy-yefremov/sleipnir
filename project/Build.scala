@@ -6,11 +6,6 @@ import com.linkedin.sbt.core.ext.LiKeys._
 
 object Sleipnir extends Build {
 
-  //TODO: dyefremo: filter out all "spray.io" dependencies as we don't have them in the artifactory
-  val twirlSettings = Twirl.settings ++ Seq(
-    libraryDependencies := libraryDependencies.value.filterNot(_.organization == "io.spray")
-  )
-
   lazy val sleipnirGenerator = project.in(file("generator"))
     .settings(
       productSpecDependencies ++= Seq(
@@ -22,7 +17,7 @@ object Sleipnir extends Build {
         "product.pegasus.data"
       )
     )
-    .settings(twirlSettings: _*)
+    .settings(Twirl.settings: _*)
     .settings(commands ++= Seq(MintPlugin.buildCmd))
 
   lazy val sleipnirSbtPlugin = project.in(file("sbt-plugin"))

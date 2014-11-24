@@ -21,7 +21,13 @@ object SleipnirPlugin extends Plugin {
 
       runSleipnirGenerator(resolverPath, src, dst)
     },
-    sourceGenerators in Compile <+= (sleipnirGenerator in Compile)
+    sourceGenerators in Compile <+= (sleipnirGenerator in Compile),
+    libraryDependencies  <+= (version) { projectVersion =>
+      require(projectVersion.endsWith("-SNAPSHOT"))
+      val libVersion = projectVersion.drop(9)
+      val scalaBinary = "2.10"
+      "com.linkedin.sleipnir" % s"sleipnirgenerator_$scalaBinary" % libVersion
+    }
   )
 
   def runSleipnirGenerator(resolverPath: String, src: File, dst: File): Seq[File] = {

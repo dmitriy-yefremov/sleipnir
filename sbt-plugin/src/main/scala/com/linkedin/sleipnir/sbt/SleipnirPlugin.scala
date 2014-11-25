@@ -24,7 +24,7 @@ object SleipnirPlugin extends Plugin {
     sourceGenerators in Compile <+= (sleipnirGenerator in Compile),
     libraryDependencies  <+= (version) { projectVersion =>
       require(projectVersion.endsWith("-SNAPSHOT"))
-      val libVersion = projectVersion.drop(9)
+      val libVersion = projectVersion.dropRight(9)
       val scalaBinary = "2.10"
       "com.linkedin.sleipnir" % s"sleipnirgenerator_$scalaBinary" % libVersion
     }

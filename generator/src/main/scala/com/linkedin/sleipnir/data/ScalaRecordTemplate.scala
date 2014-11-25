@@ -38,11 +38,15 @@ abstract class ScalaRecordTemplate(data: DataMap, schema: RecordDataSchema) exte
    * @tparam T the field type
    */
   protected def set[T: TypeTag](field: RecordDataSchema.Field, value: T): Unit = {
-    typeOf[T] match {
+    set(field, value, typeOf[T])
+  }
+
+  private def set[T](field: RecordDataSchema.Field, value: T, valueType: Type): Unit = {
+    valueType match {
       case dataType if dataType <:< typeOf[DataTemplate[_]] =>
         setDataTemplate(field, value.asInstanceOf[DataTemplate[_]])
       case optionType if optionType <:< typeOf[Option[_]] =>
-        setOption(field, value.asInstanceOf[Option[_]])
+        setOption(field, value.asInstanceOf[Option[_]], optionType)
       case listType if listType <:< typeOf[Seq[Any]] =>
         setArray(field, value.asInstanceOf[Seq[Any]])
       case mapType if mapType <:< typeOf[Map[String,Any]] =>
@@ -59,11 +63,11 @@ abstract class ScalaRecordTemplate(data: DataMap, schema: RecordDataSchema) exte
     putDirect(field, clazz, value)
   }
 
-  private def setOption[T](field: RecordDataSchema.Field, option: Option[T]): Unit = {
-    //TODO add support for complex types
+  private def setOption[T](field: RecordDataSchema.Field, option: Option[T], optionType: Type): Unit = {
     option.foreach { v =>
-      val clazz = v.getClass.asInstanceOf[Class[Any]]
-      putDirect(field, clazz, v)
+      optionType match {
+        case optionType @ TypeRef(_, _, typeArg::Nil) => set(field, v, typeArg)
+      }
     }
   }
 
@@ -111,36 +115,46 @@ abstract class ScalaRecordTemplate(data: DataMap, schema: RecordDataSchema) exte
    * @return the value stored in the underlying data map converted to an appropriate Scala type
    */
   protected def get[T: TypeTag](field: RecordDataSchema.Field): T = {
-    typeOf[T] match {
+    get(field, typeOf[T])
+  }
+
+  private def get[T](field: RecordDataSchema.Field, valueType: Type): T = {
+    valueType match {
       case dataType if dataType <:< typeOf[DataTemplate[_]] =>
-        getDataTemplate[T](field)
+        getDataTemplate[T](field, valueType)
       case optionType if optionType <:< typeOf[Option[_]] =>
-        getOption[T](field)
+        getOption[T](field, valueType)
       case listType if listType <:< typeOf[Seq[Any]] =>
-        getArray[T](field)
+        getArray[T](field, valueType)
       case mapType if mapType <:< typeOf[Map[String,Any]] =>
-        getMap[T](field)
+        getMap[T](field, valueType)
       case enumType if enumType <:< typeOf[Enumeration#Value] =>
-        getEnum[T](field)
+        getEnum[T](field, valueType)
       case directType if field.getType.isPrimitive =>
-        getDirect[T](field)
+        getDirect[T](field, valueType)
     }
   }
 
-  private def getDirect[T: TypeTag](field: RecordDataSchema.Field): T = {
-    obtainDirect(field, runtimeClass[Any](typeOf[T]), GetMode.STRICT).asInstanceOf[T]
+  private def getDirect[T](field: RecordDataSchema.Field, valueType: Type): T = {
+    obtainDirect(field, runtimeClass[Any](valueType), GetMode.STRICT).asInstanceOf[T]
   }
 
-  private def getOption[T : TypeTag](field: RecordDataSchema.Field): T = {
-    //TODO add support for complex types
-    Option(obtainDirect(field, runtimeClass[Any](typeOf[T]), GetMode.NULL)).asInstanceOf[T]
+  private def getOption[T](field: RecordDataSchema.Field, valueType: Type): T = {
+    val result = if (contains(field)) {
+      valueType match {
+        case optionType @ TypeRef(_, _, typeArg::Nil) => Some(get(field, typeArg))
+      }
+    } else {
+      None
+    }
+    result.asInstanceOf[T]
   }
 
-  private def getDataTemplate[T : TypeTag](field: RecordDataSchema.Field): T = {
-    obtainWrapped(field, runtimeClass[DataTemplate[Any]](typeOf[T]), GetMode.STRICT).asInstanceOf[T]
+  private def getDataTemplate[T](field: RecordDataSchema.Field, valueType: Type): T = {
+    obtainWrapped(field, runtimeClass[DataTemplate[Any]](valueType), GetMode.STRICT).asInstanceOf[T]
   }
 
-  private def getMap[T : TypeTag](field: RecordDataSchema.Field): T = {
+  private def getMap[T](field: RecordDataSchema.Field, valueType: Type): T = {
     val generator = TypeGeneratorFactory.instance(field.getType).asInstanceOf[MapTypeGenerator]
     val map = if (generator.schema.getValues.isComplex) {
       val wrapperClass = runtimeClass[ScalaMapTemplate](generator.fullClassName)
@@ -152,7 +166,7 @@ abstract class ScalaRecordTemplate(data: DataMap, schema: RecordDataSchema) exte
     map.asInstanceOf[T]
   }
 
-  private def getArray[T : TypeTag](field: RecordDataSchema.Field): T = {
+  private def getArray[T](field: RecordDataSchema.Field, valueType: Type): T = {
     val generator = TypeGeneratorFactory.instance(field.getType).asInstanceOf[ArrayTypeGenerator]
     val result = if (generator.schema.getItems.isComplex) {
       val wrapperClass = runtimeClass[ScalaArrayTemplate](generator.fullClassName)
@@ -164,8 +178,8 @@ abstract class ScalaRecordTemplate(data: DataMap, schema: RecordDataSchema) exte
     result.asInstanceOf[T]
   }
 
-  private def getEnum[T : TypeTag](field: RecordDataSchema.Field): T = {
-    val preType = typeOf[T] match {
+  private def getEnum[T](field: RecordDataSchema.Field, valueType: Type): T = {
+    val preType = valueType match {
       case TypeRef(pre, _, _) => pre
     }
     val name = obtainDirect(field, classOf[String], GetMode.STRICT)

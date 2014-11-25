@@ -38,7 +38,7 @@ case class UnionTypeGenerator(override val schema: UnionDataSchema, parentSchema
 
   override def generateClasses: Seq[GeneratedClass] = {
     logger.info(s"Generating $fullClassName")
-    val source = UnionTemplate(this).toString()
+    val source = UnionTemplate(this).toString
     val generated = GeneratedClass(fullClassName, source)
     generated +: typeGenerators.flatMap { generator =>
       generator.generateClasses

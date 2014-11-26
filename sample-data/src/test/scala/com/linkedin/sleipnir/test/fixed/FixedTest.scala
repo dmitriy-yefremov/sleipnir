@@ -4,7 +4,6 @@ import java.security.MessageDigest
 
 import com.linkedin.data.ByteString
 import com.linkedin.sleipnir.test.SleipnirSpec
-import org.apache.commons.lang.StringEscapeUtils
 
 class FixedTest extends SleipnirSpec {
 

@@ -17,11 +17,9 @@ object Test extends App {
 
   val fortunes = Seq(fortune1, fortune2)
 
-  val signature = MD5(MessageDigest.getInstance("MD5").digest("Yo!".getBytes))
-
   val expirationDate = BoxExpirationDateUnion(EpochDate(System.currentTimeMillis()))
 
-  val box = Box(fortunes, Map("1" -> 1, "2" -> 2), expirationDate, signature)
+  val box = Box(fortunes, Map("1" -> 1, "2" -> 2), expirationDate)
   println(s"Box: $box")
 
   val json = dataTemplateCodec.dataTemplateToString(box)

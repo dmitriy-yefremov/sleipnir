@@ -1,8 +1,12 @@
 import sbt._
 import Keys._
+import sbt.IO
+
 import twirl.sbt.TwirlPlugin._
+
 import com.linkedin.sbt.MintPlugin
 import com.linkedin.sbt.core.ext.LiKeys._
+import com.linkedin.sbt.core.ext.Predef._
 
 object Sleipnir extends Build {
 
@@ -23,6 +27,7 @@ object Sleipnir extends Build {
         "external.commons-lang",
         "external.scalariform",
         "external.scala-reflect",
+        "external.specs2" in "test",
         "product.pegasus.data"
       )
     )
@@ -47,6 +52,11 @@ object Sleipnir extends Build {
   lazy val sampleData = project.in(file("sample-data"))
     .dependsOn(sleipnirGenerator)
     .settings(forkedVmSleipnirGeneratorSettings: _*)
+    .settings(
+      productSpecDependencies ++= Seq(
+        "external.specs2" in "test"
+      )
+    )
 
   lazy val forkedVmSleipnirGenerator = taskKey[Seq[File]]("Sleipnir generator executed in a forked VM")
 
@@ -63,21 +73,30 @@ object Sleipnir extends Build {
   def runForkedGenerator(src: File, dst: File, classpath: Seq[File]): Seq[File] = {
     val mainClass = "com.linkedin.sleipnir.Sleipnir"
     val args = Seq(src.toString, src.toString, dst.toString)
-    val result = new Fork.ForkScala(mainClass).fork(
-      None,
-      Nil,
-      classpath,
-      args,
-      None,
-      false,
-      StdoutOutput
-    ).exitValue()
-
-    if (result != 0) {
-      sys.error("Trouble with code generator")
+    val jvmOptions = Seq("-Dorg.slf4j.simpleLogger.logFile=System.out")
+    IO.withTemporaryFile("sleipnir", "output") { tmpFile =>
+      val outStream = new java.io.FileOutputStream(tmpFile)
+      try {
+        val exitValue = new Fork.ForkScala(mainClass)(None, jvmOptions, classpath, args, None, CustomOutput(outStream))
+        val outputLines = scala.io.Source.fromFile(tmpFile).getLines()
+        if (exitValue != 0) {
+          outputLines.foreach(println)
+          sys.error(s"Troubles with code generator: $exitValue")
+        }
+      } finally {
+        outStream.close()
+      }
+      val outputLines = scala.io.Source.fromFile(tmpFile).getLines()
+      outputLines.flatMap { line =>
+        val parts = line.split(" Writing ")
+        if (parts.length == 2) {
+          val outputFile = file(parts(1))
+          Some(outputFile)
+        } else {
+          None
+        }
+      }.toSeq
     }
-
-    Seq.empty
   }
 
 }

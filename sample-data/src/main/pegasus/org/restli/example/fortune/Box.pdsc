@@ -37,11 +37,6 @@
                 }
             ],
             "doc": "Expiration date of the box. Can be represented either as a string or as an Epoch date"
-        },
-        {
-            "name": "signature",
-            "type": "MD5",
-            "doc": "MD5 hash of the secret key"
         }
     ]
 }

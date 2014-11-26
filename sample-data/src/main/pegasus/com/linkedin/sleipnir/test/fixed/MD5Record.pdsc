@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "name": "MD5Record",
+  "namespace": "com.linkedin.sleipnir.test.fixed",
+  "fields": [
+    {
+      "name": "fixed",
+      "type": "MD5"
+    }
+  ]
+}

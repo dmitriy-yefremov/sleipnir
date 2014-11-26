@@ -29,11 +29,15 @@ case class ComplexArrayTypeGenerator(override val schema: ArrayDataSchema) exten
 
   override def packageName: String = itemsGenerator.packageName
 
-  override def generateClasses: Seq[GeneratedClass] = {
+  override def referencedGeneratorsAcc(acc: Set[TypeGenerator]): Set[TypeGenerator] = {
+    if (acc contains this) acc
+    else itemsGenerator.referencedGeneratorsAcc(acc + this)
+  }
+
+  override def generateClass: Option[GeneratedClass] = {
     logger.info(s"Generating $fullClassName")
     val source = ArrayTemplate(this).toString()
-    val generated = GeneratedClass(fullClassName, source)
-    generated +: itemsGenerator.generateClasses
+    Some(GeneratedClass(fullClassName, source))
   }
 
   def itemsClassName: String = itemsGenerator.shortClassName
@@ -59,6 +63,8 @@ case class PrimitiveArrayTypeGenerator(override val schema: ArrayDataSchema) ext
 
   override def packageName: String = PrimitiveWrapperClasses(schema.getItems.getType).getPackage.getName
 
-  override def generateClasses: Seq[GeneratedClass] = Seq.empty
+  override def referencedGeneratorsAcc(acc: Set[TypeGenerator]): Set[TypeGenerator] = acc
+
+  override def generateClass: Option[GeneratedClass] = None
 
 }

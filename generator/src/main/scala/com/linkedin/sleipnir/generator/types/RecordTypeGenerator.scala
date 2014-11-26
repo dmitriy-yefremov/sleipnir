@@ -4,7 +4,7 @@ import grizzled.slf4j.Logging
 
 import scala.collection.JavaConverters._
 
-import com.linkedin.data.schema.RecordDataSchema
+import com.linkedin.data.schema.{DataSchema,RecordDataSchema}
 import com.linkedin.sleipnir.generator.GeneratedClass
 import com.linkedin.sleipnir.generator.txt.RecordTemplate
 
@@ -38,12 +38,14 @@ case class RecordTypeGenerator(override val schema: RecordDataSchema) extends Na
 
   def fieldGenerator(field: RecordDataSchema.Field) = nestedGenerator(field.getType)
 
-  override def generateClasses: Seq[GeneratedClass] = {
+  override def referencedGeneratorsAcc(acc: Set[TypeGenerator]): Set[TypeGenerator] = {
+    if (acc contains this) acc
+    else schema.getFields.asScala.foldLeft(acc + this)((acc, field) => fieldGenerator(field).referencedGeneratorsAcc(acc))
+  }
+
+  override def generateClass: Option[GeneratedClass] = {
     logger.info(s"Generating $fullClassName")
     val source = RecordTemplate(this).toString()
-    val generated = GeneratedClass(fullClassName, source)
-    generated +: schema.getFields.asScala.flatMap { field =>
-      fieldGenerator(field).generateClasses
-    }
+    Some(GeneratedClass(fullClassName, source))
   }
 }

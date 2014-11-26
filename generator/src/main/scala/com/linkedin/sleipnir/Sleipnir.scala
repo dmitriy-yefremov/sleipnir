@@ -21,10 +21,10 @@ object Sleipnir extends Parser with Generator {
     }
   }
 
-  def run(resolverPath: String, sourceDir: File, targetDir: File): Seq[File] = {
+  def run(resolverPath: String, sourceDir: File, targetDir: File) = {
     val sourceFiles = expandSource(sourceDir)
     val schemas = parseSources(sourceFiles, resolverPath)
-    schemas.flatMap(schema => processSchema(schema, targetDir))
+    processSchemas(schemas, targetDir)
   }
 
 }

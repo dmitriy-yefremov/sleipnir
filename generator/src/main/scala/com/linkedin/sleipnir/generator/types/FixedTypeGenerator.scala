@@ -1,6 +1,6 @@
 package com.linkedin.sleipnir.generator.types
 
-import com.linkedin.data.schema.FixedDataSchema
+import com.linkedin.data.schema.{DataSchema, FixedDataSchema}
 import com.linkedin.sleipnir.generator.GeneratedClass
 import com.linkedin.sleipnir.generator.txt.FixedTemplate
 import grizzled.slf4j.Logging
@@ -12,10 +12,12 @@ import grizzled.slf4j.Logging
  */
 case class FixedTypeGenerator(override val schema: FixedDataSchema) extends NamedTypeGenerator with Logging {
 
-  override def generateClasses: Seq[GeneratedClass] = {
+  override def referencedGeneratorsAcc(acc: Set[TypeGenerator]): Set[TypeGenerator] =
+    acc + this
+
+  override def generateClass: Option[GeneratedClass] = {
     logger.info(s"Generating $fullClassName")
     val source = FixedTemplate(this).toString()
-    val generated = GeneratedClass(fullClassName, source)
-    Seq(generated)
+    Some(GeneratedClass(fullClassName, source))
   }
 }

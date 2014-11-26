@@ -27,11 +27,15 @@ case class ComplexMapTypeGenerator(override val schema: MapDataSchema) extends M
 
   override def packageName: String = valuesGenerator.packageName
 
-  override def generateClasses: Seq[GeneratedClass] = {
+  override def referencedGeneratorsAcc(acc: Set[TypeGenerator]): Set[TypeGenerator] = {
+    if (acc contains this) acc
+    else valuesGenerator.referencedGeneratorsAcc(acc + this)
+  }
+
+  override def generateClass: Option[GeneratedClass] = {
     logger.info(s"Generating $fullClassName")
     val source = MapTemplate(this).toString()
-    val generated = GeneratedClass(fullClassName, source)
-    generated +: valuesGenerator.generateClasses
+    Some(GeneratedClass(fullClassName, source))
   }
 
   def valuesClassName: String = valuesGenerator.shortClassName
@@ -54,5 +58,7 @@ case class PrimitiveMapTypeGenerator(override val schema: MapDataSchema) extends
 
   override def packageName: String = PrimitiveWrapperClasses(schema.getValues.getType).getPackage.getName
 
-  override def generateClasses: Seq[GeneratedClass] = Seq.empty
+  override def referencedGeneratorsAcc(acc: Set[TypeGenerator]): Set[TypeGenerator] = acc
+
+  override def generateClass: Option[GeneratedClass] = None
 }

@@ -9,14 +9,16 @@ import scala.util.control.NonFatal
 import scalariform.formatter.ScalaFormatter
 
 trait Generator extends Logging {
-  
-  def processSchema(schema: DataSchema, targetDir: File): Seq[File] = {
-    logger.info(s"Processing top level schema: $schema")
-    val generator = TypeGeneratorFactory.instance(schema)
-    val generated = generator.generateClasses
-    generated.map { generatedClass =>
-      writeToFile(generatedClass, targetDir)
-    }
+
+  def processSchemas(schemas: Seq[DataSchema], targetDir: File) = {
+    // get unique typeGenerators for the schemas, generate classes, write classes to file
+    schemas.foldLeft(Set[TypeGenerator]())((acc, schema) => TypeGeneratorFactory.instance(schema).referencedGenerators ++ acc)
+      .flatMap(generator =>
+        generator.generateClass
+      )
+      .map((generatedClass: GeneratedClass) => writeToFile(generatedClass, targetDir))
+      .toList
+
   }
 
   protected def writeToFile(generatedClass: GeneratedClass, targetDir: File): File = {

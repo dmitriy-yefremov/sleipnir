@@ -6,7 +6,7 @@ import grizzled.slf4j.Logging
 
 import scala.collection.JavaConverters._
 
-import com.linkedin.data.schema.{RecordDataSchema, UnionDataSchema}
+import com.linkedin.data.schema.{DataSchema, RecordDataSchema, UnionDataSchema}
 
 /**
  * A generator for [[UnionDataSchema]] types.
@@ -36,13 +36,15 @@ case class UnionTypeGenerator(override val schema: UnionDataSchema, parentSchema
 
   def memberValName(generator: TypeGenerator): String = s"Member${generator.shortClassName}"
 
-  override def generateClasses: Seq[GeneratedClass] = {
+  override def referencedGeneratorsAcc(acc: Set[TypeGenerator]): Set[TypeGenerator] = {
+    if (acc contains this) acc
+    else typeGenerators.foldLeft(acc + this)((acc, typeGenerator) => typeGenerator.referencedGeneratorsAcc(acc))
+  }
+
+  override def generateClass: Option[GeneratedClass] = {
     logger.info(s"Generating $fullClassName")
     val source = UnionTemplate(this).toString
-    val generated = GeneratedClass(fullClassName, source)
-    generated +: typeGenerators.flatMap { generator =>
-      generator.generateClasses
-    }
+    Some(GeneratedClass(fullClassName, source))
   }
 
 }

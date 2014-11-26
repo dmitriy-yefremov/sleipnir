@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "name": "SimpleRecord",
+  "namespace": "com.linkedin.sleipnir.test",
+  "doc": "Simple record type to be used in other tests",
+  "fields": [
+    {
+      "name": "field",
+      "type": "string"
+    }
+  ]
+}

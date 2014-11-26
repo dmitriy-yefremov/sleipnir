@@ -1,7 +1,6 @@
 package org.restli.example.fortune
 
 import java.io.StringReader
-import java.security.MessageDigest
 
 import com.linkedin.data.template.JacksonDataTemplateCodec
 
@@ -17,9 +16,7 @@ object Test extends App {
 
   val fortunes = Seq(fortune1, fortune2)
 
-  val expirationDate = BoxExpirationDateUnion(EpochDate(System.currentTimeMillis()))
-
-  val box = Box(fortunes, Map("1" -> 1, "2" -> 2), expirationDate)
+  val box = Box(fortunes, Map("1" -> 1, "2" -> 2))
   println(s"Box: $box")
 
   val json = dataTemplateCodec.dataTemplateToString(box)
@@ -28,11 +25,5 @@ object Test extends App {
   val boxData = dataTemplateCodec.readMap(new StringReader(json))
   val boxFromJson = new Box(boxData)
   println(s"Box from JSON: $boxFromJson")
-
-  val exp = boxFromJson.expirationDate match {
-    case BoxExpirationDateUnion(string: String) => s"Union value is a string: $string"
-    case BoxExpirationDateUnion(date: EpochDate) => s"Union value is a date: $date"
-  }
-  println(exp)
 
 }

@@ -1,0 +1,14 @@
+{
+  "type": "record",
+  "name": "UnionRecord",
+  "namespace": "com.linkedin.sleipnir.test.union",
+  "fields": [
+    {
+      "name": "union",
+      "type": [
+        "string",
+        "com.linkedin.sleipnir.test.SimpleRecord"
+      ]
+    }
+  ]
+}

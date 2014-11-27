@@ -14,6 +14,10 @@ import scala.reflect.ClassTag
  */
 trait SleipnirSpec extends Specification {
 
+  val StringValue = "string value"
+
+  val SimpleRecordValue = SimpleRecord(StringValue)
+
   val dataTemplateCodec = new JacksonDataTemplateCodec()
 
   def toJson(template: DataTemplate[_]): String = dataTemplateCodec.dataTemplateToString(template)

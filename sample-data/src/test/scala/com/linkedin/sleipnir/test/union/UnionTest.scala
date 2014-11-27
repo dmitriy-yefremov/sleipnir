@@ -4,17 +4,13 @@ import com.linkedin.sleipnir.test.{SimpleRecord, SleipnirSpec}
 
 class UnionTest extends SleipnirSpec {
 
-  private val StringValue = "string value"
-
-  private val RecordValue = SimpleRecord(StringValue)
-
   "Union types" should {
 
     "should support instantiating from all underlying types" in {
 
       val unionFromString = UnionRecordUnionUnion(StringValue)
       toJson(unionFromString) must beEqualTo("""{"string":"string value"}""")
-      val unionFromRecord = UnionRecordUnionUnion(RecordValue)
+      val unionFromRecord = UnionRecordUnionUnion(SimpleRecordValue)
       toJson(unionFromRecord) must beEqualTo("""{"com.linkedin.sleipnir.test.SimpleRecord":{"field":"string value"}}""")
     }
 
@@ -28,7 +24,7 @@ class UnionTest extends SleipnirSpec {
       }
 
       unbox(UnionRecordUnionUnion(StringValue)) must beEqualTo(StringValue)
-      unbox(UnionRecordUnionUnion(RecordValue)) must beEqualTo(RecordValue)
+      unbox(UnionRecordUnionUnion(SimpleRecordValue)) must beEqualTo(SimpleRecordValue)
     }
 
     "should work as a record field" in {

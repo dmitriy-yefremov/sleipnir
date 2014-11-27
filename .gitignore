@@ -11,6 +11,7 @@ lib_managed/
 src_managed/
 project/boot/
 project/plugins/project/
+.history
 
 # Intellij
 .idea/
@@ -19,20 +20,15 @@ project/plugins/project/
 *.iws
 *.ipr
 
+# Eclipse
+.classpath
+.project
+.settings/
+
 # Mac
 .DS_Store
 
 # test generated files
 test/gen/
-.project
-.settings
-.classpath
-.gradle
-.idea
-*.iml
-*.ipr
-*.iws
+
 /build
-*/build
-out/
-*/bin/

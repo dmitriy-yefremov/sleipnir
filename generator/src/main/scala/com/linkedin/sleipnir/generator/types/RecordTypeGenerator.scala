@@ -36,7 +36,7 @@ case class RecordTypeGenerator(override val schema: RecordDataSchema) extends Na
     if(field.getOptional) s"Option[$base]" else base
   }
 
-  private def fieldGenerator(field: RecordDataSchema.Field) = nestedGenerator(field.getType)
+  def fieldGenerator(field: RecordDataSchema.Field) = nestedGenerator(field.getType)
 
   override def generateClasses: Seq[GeneratedClass] = {
     logger.info(s"Generating $fullClassName")

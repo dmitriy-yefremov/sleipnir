@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "name": "OptionalPrimitiveRecord",
+  "namespace": "com.linkedin.sleipnir.test.record",
+  "fields": [
+    {
+      "name": "stringOption",
+      "type": "string",
+      "optional": true
+    }
+  ]
+}

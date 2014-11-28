@@ -20,7 +20,11 @@ class @(generator.shortClassName)(data: DataMap) extends ScalaRecordTemplate(dat
   def this(@(generator.constructorArgs)) = {
     this(new DataMap())
     @for(field <- generator.schema.getFields.asScala) {
-      set(@(generator.fieldValName(field)), @(field.getName))
+      @if(field.getOptional) {
+        setOptional(@(generator.fieldValName(field)), @(field.getName))
+      } else {
+        set(@(generator.fieldValName(field)), @(field.getName))
+      }
     }
   }
 
@@ -29,7 +33,13 @@ class @(generator.shortClassName)(data: DataMap) extends ScalaRecordTemplate(dat
   /**
    * @(field.getDoc)
    */
-  def @(field.getName): @(generator.recordTypeOf(field)) = get[@(generator.recordTypeOf(field))](@(generator.fieldValName(field)))
+  def @(field.getName): @(generator.recordTypeOf(field)) = {
+     @if(field.getOptional) {
+       getOptional[@(generator.fieldGenerator(field).externalClassName)](@(generator.fieldValName(field)))
+     } else {
+       get[@(generator.fieldGenerator(field).externalClassName)](@(generator.fieldValName(field)))
+     }
+   }
 
 }
 

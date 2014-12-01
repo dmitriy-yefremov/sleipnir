@@ -11,14 +11,16 @@ import scalariform.formatter.ScalaFormatter
 trait Generator extends Logging {
 
   def processSchemas(schemas: Seq[DataSchema], targetDir: File) = {
-    // get unique typeGenerators for the schemas, generate classes, write classes to file
-    schemas.foldLeft(Set[TypeGenerator]())((acc, schema) => TypeGeneratorFactory.instance(schema).referencedGenerators ++ acc)
-      .flatMap(generator =>
-        generator.generateClass
-      )
-      .map((generatedClass: GeneratedClass) => writeToFile(generatedClass, targetDir))
-      .toList
-
+    val uniqueGenerators = schemas.foldLeft(Set[TypeGenerator]()) { (acc, schema) =>
+      TypeGeneratorFactory.instance(schema).referencedGenerators ++ acc
+    }
+    val generatedClasses = uniqueGenerators.flatMap { generator =>
+      generator.generateClass
+    }
+    val files = generatedClasses.map { generatedClass =>
+      writeToFile(generatedClass, targetDir)
+    }
+    files.toList
   }
 
   protected def writeToFile(generatedClass: GeneratedClass, targetDir: File): File = {

@@ -8,32 +8,32 @@ class UnionTest extends SleipnirSpec {
 
     "should support instantiating from all underlying types" in {
 
-      val unionFromString = UnionRecordUnionUnion(StringValue)
+      val unionFromString = UnionRecordFieldUnion(StringValue)
       toJson(unionFromString) must beEqualTo("""{"string":"string value"}""")
-      val unionFromRecord = UnionRecordUnionUnion(SimpleRecordValue)
+      val unionFromRecord = UnionRecordFieldUnion(SimpleRecordValue)
       toJson(unionFromRecord) must beEqualTo("""{"com.linkedin.sleipnir.test.SimpleRecord":{"field":"string value"}}""")
     }
 
     "should support unboxing of the underlying type" in {
 
-      def unbox(union: UnionRecordUnionUnion): Any = {
+      def unbox(union: UnionRecordFieldUnion): Any = {
         union match {
-          case UnionRecordUnionUnion(string: String) => string
-          case UnionRecordUnionUnion(record: SimpleRecord) => record
+          case UnionRecordFieldUnion(string: String) => string
+          case UnionRecordFieldUnion(record: SimpleRecord) => record
         }
       }
 
-      unbox(UnionRecordUnionUnion(StringValue)) must beEqualTo(StringValue)
-      unbox(UnionRecordUnionUnion(SimpleRecordValue)) must beEqualTo(SimpleRecordValue)
+      unbox(UnionRecordFieldUnion(StringValue)) must beEqualTo(StringValue)
+      unbox(UnionRecordFieldUnion(SimpleRecordValue)) must beEqualTo(SimpleRecordValue)
     }
 
     "should work as a record field" in {
-      val union = UnionRecordUnionUnion(StringValue)
+      val union = UnionRecordFieldUnion(StringValue)
       val record = UnionRecord(union)
       val json = toJson(record)
       json must beEqualTo("""{"union":{"string":"string value"}}""")
       val recordFromJson = fromJson[UnionRecord](json)
-      recordFromJson.union must beEqualTo(union)
+      recordFromJson.field must beEqualTo(union)
     }
 
   }

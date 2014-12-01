@@ -4,7 +4,7 @@
   "namespace": "com.linkedin.sleipnir.test.union",
   "fields": [
     {
-      "name": "union",
+      "name": "field",
       "type": [
         "string",
         "com.linkedin.sleipnir.test.SimpleRecord"

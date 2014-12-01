@@ -1,6 +1,6 @@
 package com.linkedin.sleipnir.generator.types
 
-import com.linkedin.data.schema.{DataSchema, ArrayDataSchema}
+import com.linkedin.data.schema.{ArrayDataSchema, DataSchema}
 import com.linkedin.data.template._
 import com.linkedin.sleipnir.generator.GeneratedClass
 import com.linkedin.sleipnir.generator.txt.ArrayTemplate
@@ -60,7 +60,7 @@ case class PrimitiveArrayTypeGenerator(override val schema: ArrayDataSchema) ext
 
   override def packageName: String = PrimitiveWrapperClasses(schema.getItems.getType).getPackage.getName
 
-  override def referencedGenerators: Seq[TypeGenerator] = Seq()
+  override def referencedGenerators: Seq[TypeGenerator] = Seq.empty
 
   override def generateClass: Option[GeneratedClass] = None
 

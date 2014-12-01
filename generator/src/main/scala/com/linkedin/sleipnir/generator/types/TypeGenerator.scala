@@ -47,12 +47,12 @@ trait TypeGenerator {
   }
 
   /**
-   * The TypeGenerators of this schema, as well as any referenced schemas.
+   * The TypeGenerators referenced by the schema of this generator (e.g. a generator for a record schema references generators for the fields' schemas).
    */
   def referencedGenerators: Seq[TypeGenerator]
 
   /**
-   * Generates class for this schema
+   * Generates class for this schema. Some types do not require a new class to be generated.
    */
   def generateClass: Option[GeneratedClass]
 

@@ -6,7 +6,6 @@ import com.linkedin.sleipnir.generator.GeneratedClass
 import com.linkedin.sleipnir.generator.txt.MapTemplate
 import grizzled.slf4j.Logging
 
-
 /**
  * Common functionality for [[MapDataSchema]] generators.
  * @author Dmitriy Yefremov
@@ -55,7 +54,7 @@ case class PrimitiveMapTypeGenerator(override val schema: MapDataSchema) extends
 
   override def packageName: String = PrimitiveWrapperClasses(schema.getValues.getType).getPackage.getName
 
-  override def referencedGenerators: Seq[TypeGenerator] = Seq()
+  override def referencedGenerators: Seq[TypeGenerator] = Seq.empty
 
   override def generateClass: Option[GeneratedClass] = None
 }

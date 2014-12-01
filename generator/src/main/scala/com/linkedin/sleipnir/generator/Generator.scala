@@ -2,26 +2,26 @@ package com.linkedin.sleipnir.generator
 
 import java.io.{File, FileWriter, PrintWriter}
 
+import scala.util.control.NonFatal
+
 import com.linkedin.data.schema._
 import com.linkedin.sleipnir.generator.types._
 import grizzled.slf4j.Logging
-import scala.util.control.NonFatal
 import scalariform.formatter.ScalaFormatter
 
 trait Generator extends Logging {
 
-  def processSchemas(schemas: Seq[DataSchema], targetDir: File) = {
-
-    val generatedClasses = uniqueGenerators(schemas).flatMap { generator =>
+  def processSchemas(schemas: Seq[DataSchema], targetDir: File): Seq[File] = {
+    val generators = uniqueGenerators(schemas)
+    val generatedClasses = generators.flatMap { generator =>
       generator.generateClass
     }
-    val files = generatedClasses.map { generatedClass =>
+    generatedClasses.map { generatedClass =>
       writeToFile(generatedClass, targetDir)
     }
-    files
   }
 
-  def uniqueGenerators(schemas: Seq[DataSchema]) = {
+  private def uniqueGenerators(schemas: Seq[DataSchema]): Seq[TypeGenerator] = {
 
     def loop(generators: Seq[TypeGenerator], acc: Set[TypeGenerator]): Set[TypeGenerator] = {
       generators match {
@@ -39,7 +39,7 @@ trait Generator extends Logging {
     generators.toList
   }
 
-  protected def writeToFile(generatedClass: GeneratedClass, targetDir: File): File = {
+  private def writeToFile(generatedClass: GeneratedClass, targetDir: File): File = {
     val fullName = generatedClass.name.replace('.', File.separatorChar) + ".scala"
     val targetFile = new File(targetDir, fullName)
     val content = formatSourceCode(generatedClass.source)
@@ -48,7 +48,7 @@ trait Generator extends Logging {
     targetFile
   }
 
-  protected def writeToFile(file: File, content: String) {
+  private def writeToFile(file: File, content: String) {
     logger.info(s"Writing $file")
     // ensure directories exist
     file.getParentFile.mkdirs()
@@ -62,7 +62,7 @@ trait Generator extends Logging {
     }
   }
 
-  protected def formatSourceCode(content: String): String = {
+  private def formatSourceCode(content: String): String = {
     try {
       ScalaFormatter.format(content)
     } catch {

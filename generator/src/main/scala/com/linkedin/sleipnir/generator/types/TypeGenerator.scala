@@ -47,9 +47,20 @@ trait TypeGenerator {
   }
 
   /**
-   * Generates classes defined by the schema (and referenced schemas).
+   * The TypeGenerators of this schema, as well as any referenced schemas.
+   * The acc holds the already visited TypeGenerators.
    */
-  def generateClasses: Seq[GeneratedClass]
+  def referencedGeneratorsAcc(acc: Set[TypeGenerator]): Set[TypeGenerator]
+
+  /**
+   * The TypeGenerators of this schema, as well as any referenced schemas.
+   */
+  def referencedGenerators: Set[TypeGenerator] = referencedGeneratorsAcc(Set[TypeGenerator]())
+
+  /**
+   * Generates class for this schema
+   */
+  def generateClass: Option[GeneratedClass]
 
   /**
    * Creates an instance of the generator of the specified type. Current schema is used as parent when an instance is created.

@@ -6,7 +6,7 @@ import grizzled.slf4j.Logging
 
 import scala.collection.JavaConverters._
 
-import com.linkedin.data.schema.EnumDataSchema
+import com.linkedin.data.schema.{DataSchema, EnumDataSchema}
 
 /**
  * A generator for [[EnumDataSchema]] types.
@@ -21,10 +21,12 @@ case class EnumTypeGenerator(override val schema: EnumDataSchema) extends NamedT
     schema.getSymbols.asScala.mkString(", ")
   }
 
-  override def generateClasses: Seq[GeneratedClass] = {
+  override def referencedGeneratorsAcc(acc: Set[TypeGenerator]): Set[TypeGenerator] =
+    acc + this
+
+  override def generateClass: Option[GeneratedClass] = {
     logger.info(s"Generating $fullClassName")
     val source = EnumTemplate(this).toString()
-    val generated = GeneratedClass(fullClassName, source)
-    Seq(generated)
+    Some(GeneratedClass(fullClassName, source))
   }
 }

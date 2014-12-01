@@ -1,8 +1,10 @@
 package com.linkedin.sleipnir.data
 
-import scala.reflect.runtime.universe._
+import com.linkedin.data.DataMap
 
-import com.linkedin.data.schema.{DataSchema, UnionDataSchema}
+import scala.reflect.ClassTag
+
+import com.linkedin.data.schema._
 import com.linkedin.data.template.{DataTemplate, RecordTemplate, UnionTemplate}
 
 /**
@@ -12,34 +14,28 @@ import com.linkedin.data.template.{DataTemplate, RecordTemplate, UnionTemplate}
  */
 abstract class ScalaUnionTemplate(data: AnyRef, schema: UnionDataSchema) extends UnionTemplate(data, schema) {
 
-  private val mirror: Mirror = runtimeMirror(getClass.getClassLoader)
-
-  private def runtimeClass[T](tpe: Type): Class[T] = {
-    mirror.runtimeClass(tpe).asInstanceOf[Class[T]]
-  }
-
-  protected def set[T: TypeTag](memberSchema: DataSchema, value: T): Unit = {
-    typeOf[T] match {
-      case recordType if recordType <:< typeOf[RecordTemplate] =>
-        val record = value.asInstanceOf[RecordTemplate]
-        selectWrapped(memberSchema, runtimeClass[RecordTemplate](recordType), memberSchema.getUnionMemberKey, record)
+  protected def set[T: ClassTag](memberSchema: DataSchema, value: T): Unit = {
+    value match {
+      case record: RecordTemplate =>
+        selectWrapped(memberSchema, record.getClass.asInstanceOf[Class[DataTemplate[DataMap]]], memberSchema.getUnionMemberKey, record)
       case directType =>
-        selectDirect(memberSchema, runtimeClass[Any](directType), memberSchema.getUnionMemberKey, value)
+        selectDirect(memberSchema, directType.getClass.asInstanceOf[Class[T]], memberSchema.getUnionMemberKey, value)
     }
   }
 
-  protected def get[T: TypeTag](memberSchema: DataSchema): T = {
-    typeOf[T] match {
-      case dataType if dataType <:< typeOf[DataTemplate[_]] =>
-        obtainWrapped(memberSchema, runtimeClass[DataTemplate[_]](dataType), memberSchema.getUnionMemberKey).asInstanceOf[T]
-      case directType =>
-        obtainDirect(memberSchema, runtimeClass[Any](directType), memberSchema.getUnionMemberKey).asInstanceOf[T]
+  protected def get[T: ClassTag](memberSchema: DataSchema): T = {
+    val clazz = implicitly[ClassTag[T]].runtimeClass
+    memberSchema.getDereferencedDataSchema match {
+      case primitive: PrimitiveDataSchema =>
+        obtainDirect(memberSchema, clazz, memberSchema.getUnionMemberKey).asInstanceOf[T]
+      case _: RecordDataSchema | _: FixedDataSchema | _: UnionDataSchema =>
+        obtainWrapped(memberSchema, clazz.asInstanceOf[Class[DataTemplate[DataMap]]], memberSchema.getUnionMemberKey).asInstanceOf[T]
     }
   }
 
-  protected def maybeGet[T: TypeTag](memberSchema: DataSchema): Option[T] = {
+  protected def maybeGet[T: ClassTag](memberSchema: DataSchema): Option[T] = {
     if (memberIs(memberSchema.getUnionMemberKey)) {
-      Option(get(memberSchema))
+      Option(get[T](memberSchema))
     } else {
       None
     }

@@ -26,7 +26,6 @@ object Sleipnir extends Build {
         "external.slf4j-simple",
         "external.commons-lang",
         "external.scalariform",
-        "external.scala-reflect",
         "external.specs2" in "test",
         "product.pegasus.data"
       )

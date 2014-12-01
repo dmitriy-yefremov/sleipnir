@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "name": "RecordRecord",
+  "namespace": "com.linkedin.sleipnir.test.record",
+  "fields": [
+    {
+      "name": "recordField",
+      "type": "com.linkedin.sleipnir.test.SimpleRecord"
+    }
+  ]
+}

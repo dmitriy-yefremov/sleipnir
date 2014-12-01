@@ -50,6 +50,16 @@ class RecordTest extends SleipnirSpec {
 
   }
 
+  "Record fields" should {
+
+    "be supported" in {
+      val record = RecordRecord(SimpleRecordValue)
+      toJson(record) must beEqualTo("""{"recordField":{"field":"string value"}}""")
+      record.recordField must beEqualTo(SimpleRecordValue)
+    }
+
+  }
+
   "Optional fields" should {
 
     "support primitive types" in {

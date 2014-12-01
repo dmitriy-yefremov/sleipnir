@@ -4,16 +4,13 @@
   "namespace": "com.linkedin.sleipnir.test.record",
   "fields": [
     {
-      "name": "isEmpty",
-      "type": "boolean"
-    },
-    {
       "name": "head",
       "type": "int"
     },
     {
       "name": "tail",
-      "type": "RecursiveRecord"
+      "type": "RecursiveRecord",
+      "optional": true
     }
   ]
 }

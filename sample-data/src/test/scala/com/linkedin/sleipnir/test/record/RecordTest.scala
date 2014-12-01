@@ -110,4 +110,16 @@ class RecordTest extends SleipnirSpec {
 
   }
 
+  "Recursive references" should {
+
+    "be supported" in {
+      val tailRecord = RecursiveRecord(1, None)
+      val record = RecursiveRecord(2, Some(tailRecord))
+      record.tail must beEqualTo(Some(tailRecord))
+      val recordFromJson = checkSerialization(record, """{"head":2,"tail":{"head":1}}""")
+      recordFromJson.tail must beEqualTo(Some(tailRecord))
+    }
+
+  }
+
 }

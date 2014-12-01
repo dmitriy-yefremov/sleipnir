@@ -36,10 +36,7 @@ case class UnionTypeGenerator(override val schema: UnionDataSchema, parentSchema
 
   def memberValName(generator: TypeGenerator): String = s"Member${generator.shortClassName}"
 
-  override def referencedGeneratorsAcc(acc: Set[TypeGenerator]): Set[TypeGenerator] = {
-    if (acc contains this) acc
-    else typeGenerators.foldLeft(acc + this)((acc, typeGenerator) => typeGenerator.referencedGeneratorsAcc(acc))
-  }
+  override def referencedGenerators: Seq[TypeGenerator] = typeGenerators
 
   override def generateClass: Option[GeneratedClass] = {
     logger.info(s"Generating $fullClassName")

@@ -12,8 +12,7 @@ import grizzled.slf4j.Logging
  */
 case class FixedTypeGenerator(override val schema: FixedDataSchema) extends NamedTypeGenerator with Logging {
 
-  override def referencedGeneratorsAcc(acc: Set[TypeGenerator]): Set[TypeGenerator] =
-    acc + this
+  override def referencedGenerators: Seq[TypeGenerator] = Seq()
 
   override def generateClass: Option[GeneratedClass] = {
     logger.info(s"Generating $fullClassName")

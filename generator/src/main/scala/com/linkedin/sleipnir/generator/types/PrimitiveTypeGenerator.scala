@@ -28,7 +28,7 @@ case class PrimitiveTypeGenerator(override val schema: PrimitiveDataSchema) exte
 
   override def externalClassName: String = shortClassName
 
-  override def referencedGeneratorsAcc(acc: Set[TypeGenerator]): Set[TypeGenerator] = acc
+  override def referencedGenerators: Seq[TypeGenerator] = Seq()
 
   override def generateClass: Option[GeneratedClass] = None
 
@@ -44,7 +44,7 @@ case class BytesTypeGenerator(override val schema: BytesDataSchema) extends Type
 
   override def packageName: String = classOf[ByteString].getPackage.getName
 
-  override def referencedGeneratorsAcc(acc: Set[TypeGenerator]): Set[TypeGenerator] = acc
+  override def referencedGenerators: Seq[TypeGenerator] = Seq()
 
   override def generateClass: Option[GeneratedClass] = None
 

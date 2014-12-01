@@ -48,14 +48,8 @@ trait TypeGenerator {
 
   /**
    * The TypeGenerators of this schema, as well as any referenced schemas.
-   * The acc holds the already visited TypeGenerators.
    */
-  def referencedGeneratorsAcc(acc: Set[TypeGenerator]): Set[TypeGenerator]
-
-  /**
-   * The TypeGenerators of this schema, as well as any referenced schemas.
-   */
-  def referencedGenerators: Set[TypeGenerator] = referencedGeneratorsAcc(Set[TypeGenerator]())
+  def referencedGenerators: Seq[TypeGenerator]
 
   /**
    * Generates class for this schema

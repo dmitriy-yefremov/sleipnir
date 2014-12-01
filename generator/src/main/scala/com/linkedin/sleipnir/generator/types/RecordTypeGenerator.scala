@@ -38,9 +38,8 @@ case class RecordTypeGenerator(override val schema: RecordDataSchema) extends Na
 
   def fieldGenerator(field: RecordDataSchema.Field) = nestedGenerator(field.getType)
 
-  override def referencedGeneratorsAcc(acc: Set[TypeGenerator]): Set[TypeGenerator] = {
-    if (acc contains this) acc
-    else schema.getFields.asScala.foldLeft(acc + this)((acc, field) => fieldGenerator(field).referencedGeneratorsAcc(acc))
+  override def referencedGenerators: Seq[TypeGenerator] = {
+    schema.getFields.asScala.map(field => fieldGenerator(field))
   }
 
   override def generateClass: Option[GeneratedClass] = {

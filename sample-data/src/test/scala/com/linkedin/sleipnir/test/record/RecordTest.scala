@@ -16,14 +16,14 @@ class RecordTest extends SleipnirSpec {
 
   "Array fields" should {
 
-    "should support primitive types" in {
+    "support primitive types" in {
       val array = Seq(StringValue)
       val record = ArrayPrimitiveRecord(array)
       toJson(record) must beEqualTo("""{"arrayField":["string value"]}""")
       record.arrayField must beEqualTo(array)
     }
 
-    "should support complex types" in {
+    "support complex types" in {
       val array = Seq(SimpleRecordValue)
       val record = ArrayComplexRecord(array)
       toJson(record) must beEqualTo("""{"arrayField":[{"field":"string value"}]}""")
@@ -32,9 +32,27 @@ class RecordTest extends SleipnirSpec {
 
   }
 
+  "Map fields" should {
+
+    "support primitive types" in {
+      val map = Map("key" -> StringValue)
+      val record = MapPrimitiveRecord(map)
+      toJson(record) must beEqualTo("""{"mapField":{"key":"string value"}}""")
+      record.mapField must beEqualTo(map)
+    }
+
+    "support complex types" in {
+      val map = Map("key" -> SimpleRecordValue)
+      val record = MapComplexRecord(map)
+      toJson(record) must beEqualTo("""{"mapField":{"key":{"field":"string value"}}}""")
+      record.mapField must beEqualTo(map)
+    }
+
+  }
+
   "Optional fields" should {
 
-    "should support primitive types" in {
+    "support primitive types" in {
       val record = OptionalPrimitiveRecord(Some(StringValue))
       val json = toJson(record)
       json must beEqualTo("""{"stringOption":"string value"}""")
@@ -42,7 +60,7 @@ class RecordTest extends SleipnirSpec {
       recordFromJson.stringOption must beEqualTo(Some(StringValue))
     }
 
-    "should support primitive types not set" in {
+    "support primitive types not set" in {
       val record = OptionalPrimitiveRecord(None)
       val json = toJson(record)
       json must beEqualTo("{}")
@@ -50,7 +68,7 @@ class RecordTest extends SleipnirSpec {
       recordFromJson.stringOption must beEqualTo(None)
     }
 
-    "should support complex types" in {
+    "support complex types" in {
       val record = OptionalComplexRecord(Some(SimpleRecordValue))
       val json = toJson(record)
       json must beEqualTo("""{"recordOption":{"field":"string value"}}""")
@@ -58,7 +76,7 @@ class RecordTest extends SleipnirSpec {
       recordFromJson.recordOption must beEqualTo(Some(SimpleRecordValue))
     }
 
-    "should support complex types not set" in {
+    "support complex types not set" in {
       val record = OptionalComplexRecord(None)
       val json = toJson(record)
       json must beEqualTo("{}")

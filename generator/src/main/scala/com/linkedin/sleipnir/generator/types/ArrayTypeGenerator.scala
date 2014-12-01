@@ -55,7 +55,7 @@ case class PrimitiveArrayTypeGenerator(override val schema: ArrayDataSchema) ext
     DataSchema.Type.STRING -> classOf[StringArray]
   )
 
-  override def shortClassName: String = PrimitiveWrapperClasses(schema.getItems.getType).getName
+  override def shortClassName: String = PrimitiveWrapperClasses(schema.getItems.getType).getSimpleName
 
   override def packageName: String = PrimitiveWrapperClasses(schema.getItems.getType).getPackage.getName
 

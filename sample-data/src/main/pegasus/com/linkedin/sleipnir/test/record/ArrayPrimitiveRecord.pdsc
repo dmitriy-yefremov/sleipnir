@@ -1,0 +1,14 @@
+{
+  "type": "record",
+  "name": "ArrayPrimitiveRecord",
+  "namespace": "com.linkedin.sleipnir.test.record",
+  "fields": [
+    {
+      "name": "arrayField",
+      "type": {
+        "type": "array",
+        "items": "string"
+      }
+    }
+  ]
+}

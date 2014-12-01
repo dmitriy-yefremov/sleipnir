@@ -4,6 +4,34 @@ import com.linkedin.sleipnir.test.SleipnirSpec
 
 class RecordTest extends SleipnirSpec {
 
+  "Enum fields" should {
+
+    "be supported" in {
+      val record = EnumRecord(TestEnum.Foo)
+      toJson(record) must beEqualTo("""{"enum":"Foo"}""")
+      record.enum must beEqualTo(TestEnum.Foo)
+    }
+
+  }
+
+  "Array fields" should {
+
+    "should support primitive types" in {
+      val array = Seq(StringValue)
+      val record = ArrayPrimitiveRecord(array)
+      toJson(record) must beEqualTo("""{"arrayField":["string value"]}""")
+      record.arrayField must beEqualTo(array)
+    }
+
+    "should support complex types" in {
+      val array = Seq(SimpleRecordValue)
+      val record = ArrayComplexRecord(array)
+      toJson(record) must beEqualTo("""{"arrayField":[{"field":"string value"}]}""")
+      record.arrayField must beEqualTo(array)
+    }
+
+  }
+
   "Optional fields" should {
 
     "should support primitive types" in {

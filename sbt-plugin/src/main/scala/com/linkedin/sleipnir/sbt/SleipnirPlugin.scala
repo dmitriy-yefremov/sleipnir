@@ -27,7 +27,7 @@ object SleipnirPlugin extends Plugin {
       val libVersion = projectVersion.dropRight(9)
       val scalaBinary = "2.10"
       // TODO: remove hardcoded libVersion
-      "com.linkedin.sleipnir" % s"sleipnirgenerator_$scalaBinary" % "0.0.36"
+      "com.linkedin.sleipnir" % s"sleipnirgenerator_$scalaBinary" % "0.0.40"
     }
   )
 

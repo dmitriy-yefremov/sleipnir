@@ -70,8 +70,8 @@ object @(generator.name.shortClassName) {
 
 @setter(field: Field) = {
   @if(field.getOptional) {
-    @(field.getName).foreach {
-      @setterWithType(generator.fieldValName(field), "_", generator.fieldGenerator(field))
+    @(field.getName).foreach { @(field.getName)Value =>
+      @setterWithType(generator.fieldValName(field), field.getName +"Value", generator.fieldGenerator(field))
     }
   } else {
     @setterWithType(generator.fieldValName(field), field.getName, generator.fieldGenerator(field))
@@ -156,7 +156,10 @@ object @(generator.name.shortClassName) {
       @if(array.getItems.isComplex) {
         obtainWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)], @(getMode)).items
       } else {
-        obtainWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)], @(getMode)).asScala.toSeq
+        {
+          val result = obtainWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)], @(getMode))
+          if (result != null) result.asScala.toSeq else null
+        }
       }
     }
 

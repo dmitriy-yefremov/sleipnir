@@ -108,6 +108,21 @@ class RecordTest extends SleipnirSpec {
       recordFromJson.recordOption must beEqualTo(None)
     }
 
+    "support array types" in {
+      val arrayOption = Some(Seq(StringValue))
+      val record = OptionalArrayPrimitiveRecord(arrayOption)
+      record.arrayOption must beEqualTo(arrayOption)
+      val recordFromJson = checkSerialization(record, """{"arrayOption":["string value"]}""")
+      recordFromJson.arrayOption must beEqualTo(arrayOption)
+    }
+
+    "support array types not set" in {
+      val record = OptionalArrayPrimitiveRecord(None)
+      record.arrayOption must beEqualTo(None)
+      val recordFromJson = checkSerialization(record, "{}")
+      recordFromJson.arrayOption must beEqualTo(None)
+    }
+
   }
 
   "Recursive references" should {

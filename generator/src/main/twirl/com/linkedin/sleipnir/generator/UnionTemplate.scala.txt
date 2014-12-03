@@ -4,7 +4,7 @@
 @import _root_.com.linkedin.sleipnir.generator.types.TypeGeneratorFactory
 @import _root_.com.linkedin.sleipnir.generator.types.TypeGenerator
 
-package @(generator.packageName)
+package @(generator.name.packageName)
 
 import com.linkedin.data.DataMap
 import com.linkedin.data.schema.UnionDataSchema
@@ -12,23 +12,23 @@ import com.linkedin.data.template.DataTemplateUtil
 
 import com.linkedin.sleipnir.data.ScalaUnionTemplate
 
-import @(generator.shortClassName)._
+import @(generator.name.shortClassName)._
 
 
-class @(generator.shortClassName)(data: AnyRef) extends ScalaUnionTemplate(data, Schema) {
+class @(generator.name.shortClassName)(data: AnyRef) extends ScalaUnionTemplate(data, Schema) {
 
 @for(typeGenerator <- generator.typeGenerators) {
 
-  def is@(typeGenerator.shortClassName): Boolean = memberIs("@(typeGenerator.schema.getUnionMemberKey)")
+  def is@(typeGenerator.name.shortClassName): Boolean = memberIs("@(typeGenerator.schema.getUnionMemberKey)")
 
-  def as@(typeGenerator.shortClassName): Option[@(typeGenerator.externalClassName)] = maybeGet[@(typeGenerator.externalClassName)](@(generator.memberValName(typeGenerator)))
-
-}
+  def as@(typeGenerator.name.shortClassName): Option[@(typeGenerator.name.externalClassName)] = maybeGet[@(typeGenerator.name.externalClassName)](@(generator.memberValName(typeGenerator)))
 
 }
 
+}
 
-object @(generator.shortClassName) {
+
+object @(generator.name.shortClassName) {
 
   private val SchemaJson = "@(generator.schemaJson)"
 
@@ -38,19 +38,19 @@ object @(generator.shortClassName) {
 
   val @(generator.memberValName(typeGenerator)) = Schema.getType("@(typeGenerator.schema.getUnionMemberKey)")
 
-  def apply(value: @(typeGenerator.externalClassName)): @(generator.shortClassName) = {
-    val union = new @(generator.shortClassName)(new DataMap())
+  def apply(value: @(typeGenerator.name.externalClassName)): @(generator.name.shortClassName) = {
+    val union = new @(generator.name.shortClassName)(new DataMap())
     union.set(@(generator.memberValName(typeGenerator)), value)
     union
   }
 
 }
 
-  def unapply(union: @(generator.shortClassName)): Option[Any] = {
+  def unapply(union: @(generator.name.shortClassName)): Option[Any] = {
     union.memberType match {
 
     @for(typeGenerator <- generator.typeGenerators) {
-      case @(generator.memberValName(typeGenerator)) => union.as@(typeGenerator.shortClassName)
+      case @(generator.memberValName(typeGenerator)) => union.as@(typeGenerator.name.shortClassName)
     }
       case _ => None
     }

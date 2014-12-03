@@ -13,7 +13,7 @@ import com.linkedin.sleipnir.generator.txt.RecordTemplate
  * @param schema the type schema
  * @author Dmitriy Yefremov
  */
-class RecordTypeGenerator(override val schema: RecordDataSchema, override val parentGenerator: Option[TypeGenerator]) extends NamedTypeGenerator with Logging {
+class RecordTypeGenerator(override val schema: RecordDataSchema, override val parentGenerator: Option[TypeGenerator]) extends AbstractTypeGenerator {
 
   def fieldValName(field: RecordDataSchema.Field): String = {
     s"Field${field.getName.capitalize}"
@@ -32,19 +32,22 @@ class RecordTypeGenerator(override val schema: RecordDataSchema, override val pa
   }
 
   def recordTypeOf(field: RecordDataSchema.Field): String = {
-    val base = fieldGenerator(field).externalClassName
+    val base = fieldGenerator(field).name.externalClassName
     if(field.getOptional) s"Option[$base]" else base
   }
 
   def fieldGenerator(field: RecordDataSchema.Field) = nestedGenerator(field.getType)
+
+  override def name: TypeName = TypeName(schema.getName, schema.getNamespace)
 
   override def referencedGenerators: Seq[TypeGenerator] = {
     schema.getFields.asScala.map(field => fieldGenerator(field))
   }
 
   override def generateClass: Option[GeneratedClass] = {
-    logger.info(s"Generating $fullClassName")
+    logger.info(s"Generating ${name.fullClassName}")
     val source = RecordTemplate(this).toString()
-    Some(GeneratedClass(fullClassName, source))
+    generatedClass(source)
   }
+
 }

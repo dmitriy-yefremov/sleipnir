@@ -4,7 +4,6 @@ import com.linkedin.data.schema.{DataSchema, MapDataSchema}
 import com.linkedin.data.template._
 import com.linkedin.sleipnir.generator.GeneratedClass
 import com.linkedin.sleipnir.generator.txt.MapTemplate
-import grizzled.slf4j.Logging
 
 /**
  * Common functionality for [[MapDataSchema]] generators.
@@ -16,43 +15,42 @@ sealed trait MapTypeGenerator extends AbstractTypeGenerator {
 
   protected def valuesGenerator: TypeGenerator = nestedGenerator(schema.getValues)
 
-  override def externalClassName: String = s"Map[String, ${valuesGenerator.externalClassName}]"
+  protected def externalClassName: String = s"Map[String, ${valuesGenerator.name.externalClassName}]"
 
 }
 
-class ComplexMapTypeGenerator(override val schema: MapDataSchema, override val parentGenerator: Option[TypeGenerator]) extends MapTypeGenerator with Logging {
+class ComplexMapTypeGenerator(override val schema: MapDataSchema, override val parentGenerator: Option[TypeGenerator]) extends MapTypeGenerator {
 
-  override def shortClassName: String = valuesGenerator.shortClassName + "Map"
-
-  override def packageName: String = valuesGenerator.packageName
+  override def name: TypeName = {
+    val valuesName = valuesGenerator.name
+    TypeName(valuesName.shortClassName + "Map", valuesName.packageName, externalClassName)
+  }
 
   override def referencedGenerators: Seq[TypeGenerator] = Seq(valuesGenerator)
 
   override def generateClass: Option[GeneratedClass] = {
-    logger.info(s"Generating $fullClassName")
+    logger.info(s"Generating ${name.fullClassName}")
     val source = MapTemplate(this).toString()
-    Some(GeneratedClass(fullClassName, source))
+    generatedClass(source)
   }
 
-  def valuesClassName: String = valuesGenerator.shortClassName
+  def valuesClassName: String = valuesGenerator.name.shortClassName
 
 }
 
 class PrimitiveMapTypeGenerator(override val schema: MapDataSchema, override val parentGenerator: Option[TypeGenerator]) extends MapTypeGenerator {
 
   private val PrimitiveWrapperClasses = Map(
-    DataSchema.Type.BOOLEAN -> classOf[BooleanMap],
-    DataSchema.Type.INT -> classOf[IntegerMap],
-    DataSchema.Type.LONG -> classOf[LongMap],
-    DataSchema.Type.FLOAT -> classOf[FloatMap],
-    DataSchema.Type.DOUBLE -> classOf[DoubleMap],
-    DataSchema.Type.BYTES -> classOf[BytesMap],
-    DataSchema.Type.STRING -> classOf[StringMap]
+    DataSchema.Type.BOOLEAN -> TypeName(classOf[BooleanMap], externalClassName),
+    DataSchema.Type.INT -> TypeName(classOf[IntegerMap], externalClassName),
+    DataSchema.Type.LONG -> TypeName(classOf[LongMap], externalClassName),
+    DataSchema.Type.FLOAT -> TypeName(classOf[FloatMap], externalClassName),
+    DataSchema.Type.DOUBLE -> TypeName(classOf[DoubleMap], externalClassName),
+    DataSchema.Type.BYTES -> TypeName(classOf[BytesMap], externalClassName),
+    DataSchema.Type.STRING -> TypeName(classOf[StringMap], externalClassName)
   )
 
-  override def shortClassName: String = PrimitiveWrapperClasses(schema.getValues.getType).getSimpleName
-
-  override def packageName: String = PrimitiveWrapperClasses(schema.getValues.getType).getPackage.getName
+  override def name: TypeName = PrimitiveWrapperClasses(schema.getValues.getType)
 
   override def referencedGenerators: Seq[TypeGenerator] = Seq.empty
 

@@ -13,36 +13,17 @@ import com.linkedin.sleipnir.generator.GeneratedClass
 class PrimitiveTypeGenerator(override val schema: PrimitiveDataSchema, override val parentGenerator: Option[TypeGenerator]) extends AbstractTypeGenerator {
 
   private val PrimitiveClassNames = Map(
-    Type.BOOLEAN -> "Boolean",
-    Type.NULL -> "Null",
-    Type.FLOAT -> "Float",
-    Type.STRING -> "String",
-    Type.DOUBLE -> "Double",
-    Type.LONG -> "Long",
-    Type.INT -> "Int"
+    Type.BOOLEAN -> TypeName("Boolean", "scala", "Boolean"),
+    Type.NULL -> TypeName("Null", "scala", "Null"),
+    Type.FLOAT -> TypeName("Float", "scala", "Float"),
+    Type.STRING -> TypeName("String", "scala", "String"),
+    Type.DOUBLE -> TypeName("Double", "scala", "Double"),
+    Type.LONG -> TypeName("Long", "scala", "Long"),
+    Type.INT -> TypeName("Int", "scala", "Int"),
+    Type.BYTES -> TypeName(classOf[ByteString])
   )
 
-  override def shortClassName: String = PrimitiveClassNames(schema.getType)
-
-  override def packageName: String = "scala"
-
-  override def externalClassName: String = shortClassName
-
-  override def referencedGenerators: Seq[TypeGenerator] = Seq.empty
-
-  override def generateClass: Option[GeneratedClass] = None
-
-}
-
-/**
- * Even though [[BytesDataSchema]] represents primitive data types it needs to be handles separately.
- * @param schema the type schema
- */
-class BytesTypeGenerator(override val schema: BytesDataSchema, override val parentGenerator: Option[TypeGenerator]) extends AbstractTypeGenerator {
-
-  override def shortClassName: String = classOf[ByteString].getSimpleName
-
-  override def packageName: String = classOf[ByteString].getPackage.getName
+  override def name: TypeName = PrimitiveClassNames(schema.getType)
 
   override def referencedGenerators: Seq[TypeGenerator] = Seq.empty
 

@@ -1,20 +1,19 @@
 package com.linkedin.sleipnir.generator.types
 
+import scala.collection.JavaConverters._
+
 import com.linkedin.data.schema.EnumDataSchema
 import com.linkedin.sleipnir.generator.GeneratedClass
 import com.linkedin.sleipnir.generator.txt.EnumTemplate
-import grizzled.slf4j.Logging
-
-import scala.collection.JavaConverters._
 
 /**
  * A generator for [[EnumDataSchema]] types.
  * @param schema the type schema
  * @author Dmitriy Yefremov
  */
-class EnumTypeGenerator(override val schema: EnumDataSchema, override val parentGenerator: Option[TypeGenerator]) extends NamedTypeGenerator with Logging {
+class EnumTypeGenerator(override val schema: EnumDataSchema, override val parentGenerator: Option[TypeGenerator]) extends AbstractTypeGenerator {
 
-  override def externalClassName: String = fullClassName + ".Value"
+  override def name: TypeName = TypeName(schema.getName, schema.getNamespace, schema.getFullName, schema.getFullName + ".Value")
 
   def symbols: String = {
     schema.getSymbols.asScala.mkString(", ")
@@ -23,8 +22,8 @@ class EnumTypeGenerator(override val schema: EnumDataSchema, override val parent
   override def referencedGenerators: Seq[TypeGenerator] = Seq.empty
 
   override def generateClass: Option[GeneratedClass] = {
-    logger.info(s"Generating $fullClassName")
+    logger.info(s"Generating ${name.fullClassName}")
     val source = EnumTemplate(this).toString()
-    Some(GeneratedClass(fullClassName, source))
+    generatedClass(source)
   }
 }

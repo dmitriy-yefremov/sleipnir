@@ -12,7 +12,7 @@
 @import _root_.com.linkedin.sleipnir.generator.types.TypeGenerator
 @import _root_.com.linkedin.sleipnir.generator.types.TypeGeneratorFactory
 
-package @(generator.packageName)
+package @(generator.name.packageName)
 
 import scala.collection.JavaConverters._
 
@@ -23,12 +23,12 @@ import com.linkedin.data.template.GetMode
 import com.linkedin.sleipnir.data.ScalaRecordTemplate
 
 
-import @(generator.shortClassName)._
+import @(generator.name.shortClassName)._
 
 /**
  * @(generator.schema.getDoc)
  */
-class @(generator.shortClassName)(data: DataMap) extends ScalaRecordTemplate(data, Schema) {
+class @(generator.name.shortClassName)(data: DataMap) extends ScalaRecordTemplate(data, Schema) {
 
   def this(@(generator.constructorArgs)) = {
     this(new DataMap())
@@ -50,7 +50,7 @@ class @(generator.shortClassName)(data: DataMap) extends ScalaRecordTemplate(dat
 
 }
 
-object @(generator.shortClassName) {
+object @(generator.name.shortClassName) {
 
   private val SchemaJson = "@(generator.schemaJson)"
 
@@ -60,7 +60,7 @@ object @(generator.shortClassName) {
   private val @(generator.fieldValName(field)) = Schema.getField("@(field.getName)")
 }
 
-  def apply(@(generator.constructorArgs)) = new @(generator.shortClassName)(@generator.constructorParams)
+  def apply(@(generator.constructorArgs)) = new @(generator.name.shortClassName)(@generator.constructorParams)
 
 }
 
@@ -82,11 +82,11 @@ object @(generator.shortClassName) {
   @(fieldGenerator.schema.getDereferencedDataSchema) match {
 
     case _ : PrimitiveDataSchema => {
-      putDirect(@(fieldName), classOf[@(fieldGenerator.externalClassName)], @(valueName))
+      putDirect(@(fieldName), classOf[@(fieldGenerator.name.externalClassName)], @(valueName))
     }
 
     case _ : RecordDataSchema | _ : FixedDataSchema | _ : UnionDataSchema => {
-      putWrapped(@(fieldName), classOf[@(fieldGenerator.externalClassName)], @(valueName))
+      putWrapped(@(fieldName), classOf[@(fieldGenerator.name.externalClassName)], @(valueName))
     }
 
     case _ : EnumDataSchema => {
@@ -95,22 +95,22 @@ object @(generator.shortClassName) {
 
     case array : ArrayDataSchema => {
       @if(array.getItems.isComplex) {
-        putWrapped(@(fieldName), classOf[@(fieldGenerator.fullClassName)], @(fieldGenerator.fullClassName)(@(valueName)))
+        putWrapped(@(fieldName), classOf[@(fieldGenerator.name.fullClassName)], @(fieldGenerator.name.fullClassName)(@(valueName)))
       } else {
-        putWrapped(@(fieldName), classOf[@(fieldGenerator.fullClassName)], new @(fieldGenerator.fullClassName)(@(valueName).asJavaCollection))
+        putWrapped(@(fieldName), classOf[@(fieldGenerator.name.fullClassName)], new @(fieldGenerator.name.fullClassName)(@(valueName).asJavaCollection))
       }
     }
 
     case map : MapDataSchema => {
       @if(map.getValues.isComplex) {
-        val wrapper = @(fieldGenerator.fullClassName)(@(valueName))
-        putWrapped(@(fieldName), classOf[@(fieldGenerator.fullClassName)], wrapper)
+        val wrapper = @(fieldGenerator.name.fullClassName)(@(valueName))
+        putWrapped(@(fieldName), classOf[@(fieldGenerator.name.fullClassName)], wrapper)
       } else {
-        val wrapper = new @(fieldGenerator.fullClassName)(@(valueName).size)
+        val wrapper = new @(fieldGenerator.name.fullClassName)(@(valueName).size)
         @(valueName).foreach {
           case (key, value) => wrapper.put(key, value)
         }
-        putWrapped(@(fieldName), classOf[@(fieldGenerator.fullClassName)], wrapper)
+        putWrapped(@(fieldName), classOf[@(fieldGenerator.name.fullClassName)], wrapper)
       }
     }
 
@@ -140,36 +140,36 @@ object @(generator.shortClassName) {
   @(fieldGenerator.schema.getDereferencedDataSchema) match {
 
     case _ : PrimitiveDataSchema => {
-      obtainDirect(@(generator.fieldValName(field)), classOf[@(fieldGenerator.externalClassName)], @(getMode))
+      obtainDirect(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.externalClassName)], @(getMode))
     }
 
     case _ : RecordDataSchema | _ : FixedDataSchema | _ : UnionDataSchema => {
-      obtainWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.externalClassName)], @(getMode))
+      obtainWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.externalClassName)], @(getMode))
     }
 
     case _ : EnumDataSchema => {
       val name = obtainDirect(@(generator.fieldValName(field)), classOf[String], @(getMode))
-      @(fieldGenerator.fullClassName).withName(name)
+      @(fieldGenerator.name.fullClassName).withName(name)
     }
 
     case array : ArrayDataSchema => {
       @if(array.getItems.isComplex) {
-        obtainWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.fullClassName)], @(getMode)).items
+        obtainWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)], @(getMode)).items
       } else {
-        obtainWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.fullClassName)], @(getMode)).asScala.toSeq
+        obtainWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)], @(getMode)).asScala.toSeq
       }
     }
 
     case map : MapDataSchema => {
       @if(map.getValues.isComplex) {
-        obtainWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.fullClassName)], @(getMode)).map
+        obtainWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)], @(getMode)).map
       } else {
-        obtainWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.fullClassName)], @(getMode)).asScala.toMap.asInstanceOf[@(generator.recordTypeOf(field))]
+        obtainWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)], @(getMode)).asScala.toMap.asInstanceOf[@(generator.recordTypeOf(field))]
       }
     }
 
     case _ => {
-      get[@(fieldGenerator.externalClassName)](@(generator.fieldValName(field)))
+      get[@(fieldGenerator.name.externalClassName)](@(generator.fieldValName(field)))
     }
 
   }

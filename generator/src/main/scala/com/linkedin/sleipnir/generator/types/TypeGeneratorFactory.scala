@@ -24,8 +24,6 @@ object TypeGeneratorFactory {
 
   private def instance(schema: DataSchema, parentGeneratorOpt: Option[TypeGenerator]): TypeGenerator = {
     schema.getDereferencedDataSchema match {
-      case bytes: BytesDataSchema =>
-        new BytesTypeGenerator(bytes, parentGeneratorOpt)
       case primitive: PrimitiveDataSchema =>
         new PrimitiveTypeGenerator(primitive, parentGeneratorOpt)
       case enum: EnumDataSchema =>

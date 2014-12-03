@@ -2,14 +2,14 @@
 
 @import _root_.scala.collection.JavaConverters._
 
-package @(generator.packageName)
+package @(generator.name.packageName)
 
 /**
  * @(generator.schema.getDoc)
  */
-object @(generator.shortClassName) extends Enumeration {
+object @(generator.name.shortClassName) extends Enumeration {
 
-  type @(generator.shortClassName) = Value
+  type @(generator.name.shortClassName) = Value
 
   val @(generator.symbols) = Value
 

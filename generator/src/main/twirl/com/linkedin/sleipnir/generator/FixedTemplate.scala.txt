@@ -1,28 +1,28 @@
 @(generator: com.linkedin.sleipnir.generator.types.FixedTypeGenerator)
 
-package @(generator.packageName)
+package @(generator.name.packageName)
 
 import com.linkedin.data.ByteString
 import com.linkedin.data.schema.FixedDataSchema
 import com.linkedin.data.template.{DataTemplateUtil, FixedTemplate}
 
-import @(generator.shortClassName)._
+import @(generator.name.shortClassName)._
 
 /**
  * @(generator.schema.getDoc)
  */
-class @(generator.shortClassName)(data: AnyRef) extends FixedTemplate(data, Schema)
+class @(generator.name.shortClassName)(data: AnyRef) extends FixedTemplate(data, Schema)
 
-object @(generator.shortClassName) {
+object @(generator.name.shortClassName) {
 
   private val SchemaJson = "@(generator.schemaJson)"
 
   private val Schema = DataTemplateUtil.parseSchema(SchemaJson).asInstanceOf[FixedDataSchema]
 
-  def apply(string: String): @(generator.shortClassName) = new @(generator.shortClassName)(string)
+  def apply(string: String): @(generator.name.shortClassName) = new @(generator.name.shortClassName)(string)
 
-  def apply(byteString: ByteString): @(generator.shortClassName) = new @(generator.shortClassName)(byteString)
+  def apply(byteString: ByteString): @(generator.name.shortClassName) = new @(generator.name.shortClassName)(byteString)
 
-  def apply(bytes: Array[Byte]): @(generator.shortClassName) = new @(generator.shortClassName)(ByteString.copy(bytes))
+  def apply(bytes: Array[Byte]): @(generator.name.shortClassName) = new @(generator.name.shortClassName)(ByteString.copy(bytes))
 
 }

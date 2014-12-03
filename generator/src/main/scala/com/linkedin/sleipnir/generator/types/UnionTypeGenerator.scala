@@ -5,7 +5,6 @@ import scala.collection.JavaConverters._
 import com.linkedin.data.schema.{RecordDataSchema, UnionDataSchema}
 import com.linkedin.sleipnir.generator.GeneratedClass
 import com.linkedin.sleipnir.generator.txt.UnionTemplate
-import grizzled.slf4j.Logging
 
 /**
  * A generator for [[UnionDataSchema]] types.
@@ -13,13 +12,11 @@ import grizzled.slf4j.Logging
  * @param parentGenerator the parent generator
  * @author Dmitriy Yefremov
  */
-class UnionTypeGenerator(override val schema: UnionDataSchema, override val parentGenerator: Option[TypeGenerator]) extends AbstractTypeGenerator with Logging {
+class UnionTypeGenerator(override val schema: UnionDataSchema, override val parentGenerator: Option[TypeGenerator]) extends AbstractTypeGenerator {
 
-  private val referencesToParentRecord = findMatchingPatent(_.isInstanceOf[RecordTypeGenerator])
-
-  private val parentRecordSchema = referencesToParentRecord.head.schema.asInstanceOf[RecordDataSchema]
-
-  override def shortClassName: String = {
+  override def name: TypeName = {
+    val referencesToParentRecord = findMatchingPatent(_.isInstanceOf[RecordTypeGenerator])
+    val parentRecordSchema = referencesToParentRecord.head.schema.asInstanceOf[RecordDataSchema]
     // try to find the field of the parent record that refers to the current schema
     val firstReference = referencesToParentRecord(1)
     val fieldOption = parentRecordSchema.getFields.asScala.find(_.getType == firstReference.schema)
@@ -27,25 +24,21 @@ class UnionTypeGenerator(override val schema: UnionDataSchema, override val pare
       throw new IllegalArgumentException(s"${parentRecordSchema.getFullName} doesn't have a field of type ${schema.getType()}")
     }
     // build the name out of the parent's name and the field name
-    parentRecordSchema.getName + field.getName.capitalize + "Union"
+    val shortClassName = parentRecordSchema.getName + field.getName.capitalize + "Union"
+    val packageName: String = parentRecordSchema.getNamespace
+    TypeName(shortClassName, packageName)
   }
-
-  override def packageName: String = parentRecordSchema.getNamespace
-
-  override def fullClassName: String = packageName + "." + shortClassName
-
-  override def externalClassName: String = fullClassName
 
   def typeGenerators: Seq[TypeGenerator] = schema.getTypes.asScala.map(nestedGenerator)
 
-  def memberValName(generator: TypeGenerator): String = s"Member${generator.shortClassName}"
+  def memberValName(generator: TypeGenerator): String = s"Member${generator.name.shortClassName}"
 
   override def referencedGenerators: Seq[TypeGenerator] = typeGenerators
 
   override def generateClass: Option[GeneratedClass] = {
-    logger.info(s"Generating $fullClassName")
-    val source = UnionTemplate(this).toString
-    Some(GeneratedClass(fullClassName, source))
+    logger.info(s"Generating ${name.fullClassName}")
+    val source = UnionTemplate(this).toString()
+    generatedClass(source)
   }
 
 }

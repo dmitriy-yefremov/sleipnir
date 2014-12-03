@@ -16,7 +16,7 @@ sealed trait ArrayTypeGenerator extends AbstractTypeGenerator {
 
   protected def itemsGenerator: TypeGenerator = nestedGenerator(schema.getItems)
 
-  override def externalClassName: String = s"Seq[${itemsGenerator.externalClassName}]"
+  protected def externalClassName: String = s"Seq[${itemsGenerator.name.externalClassName}]"
 
 }
 
@@ -25,19 +25,20 @@ sealed trait ArrayTypeGenerator extends AbstractTypeGenerator {
  */
 class ComplexArrayTypeGenerator(override val schema: ArrayDataSchema, override val parentGenerator: Option[TypeGenerator]) extends ArrayTypeGenerator with Logging {
 
-  override def shortClassName: String = itemsGenerator.shortClassName + "Array"
-
-  override def packageName: String = itemsGenerator.packageName
+  override def name: TypeName = {
+    val itemsName: TypeName = itemsGenerator.name
+    TypeName(itemsName.shortClassName + "Array", itemsName.packageName, externalClassName)
+  }
 
   override def referencedGenerators: Seq[TypeGenerator] = Seq(itemsGenerator)
 
   override def generateClass: Option[GeneratedClass] = {
-    logger.info(s"Generating $fullClassName")
+    logger.info(s"Generating ${name.fullClassName}")
     val source = ArrayTemplate(this).toString()
-    Some(GeneratedClass(fullClassName, source))
+    generatedClass(source)
   }
 
-  def itemsClassName: String = itemsGenerator.shortClassName
+  def itemsClassName: String = itemsGenerator.name.shortClassName
 
 }
 
@@ -47,18 +48,16 @@ class ComplexArrayTypeGenerator(override val schema: ArrayDataSchema, override v
 class PrimitiveArrayTypeGenerator(override val schema: ArrayDataSchema, override val parentGenerator: Option[TypeGenerator]) extends ArrayTypeGenerator {
 
   private val PrimitiveWrapperClasses = Map(
-    DataSchema.Type.BOOLEAN -> classOf[BooleanArray],
-    DataSchema.Type.INT -> classOf[IntegerArray],
-    DataSchema.Type.LONG -> classOf[LongArray],
-    DataSchema.Type.FLOAT -> classOf[FloatArray],
-    DataSchema.Type.DOUBLE -> classOf[DoubleArray],
-    DataSchema.Type.BYTES -> classOf[BytesArray],
-    DataSchema.Type.STRING -> classOf[StringArray]
+    DataSchema.Type.BOOLEAN -> TypeName(classOf[BooleanArray], externalClassName),
+    DataSchema.Type.INT -> TypeName(classOf[IntegerArray], externalClassName),
+    DataSchema.Type.LONG -> TypeName(classOf[LongArray], externalClassName),
+    DataSchema.Type.FLOAT -> TypeName(classOf[FloatArray], externalClassName),
+    DataSchema.Type.DOUBLE -> TypeName(classOf[DoubleArray], externalClassName),
+    DataSchema.Type.BYTES -> TypeName(classOf[BytesArray], externalClassName),
+    DataSchema.Type.STRING -> TypeName(classOf[StringArray], externalClassName)
   )
 
-  override def shortClassName: String = PrimitiveWrapperClasses(schema.getItems.getType).getSimpleName
-
-  override def packageName: String = PrimitiveWrapperClasses(schema.getItems.getType).getPackage.getName
+  override def name: TypeName = PrimitiveWrapperClasses(schema.getItems.getType)
 
   override def referencedGenerators: Seq[TypeGenerator] = Seq.empty
 

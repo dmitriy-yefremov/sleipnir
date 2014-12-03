@@ -3,16 +3,16 @@
 @import _root_.scala.collection.JavaConverters._
 @import _root_.com.linkedin.data.schema.RecordDataSchema.Field
 
-package @(generator.packageName)
+package @(generator.name.packageName)
 
 import com.linkedin.data.DataList
 import com.linkedin.data.schema.ArrayDataSchema
 import com.linkedin.data.template.DataTemplateUtil
 import com.linkedin.sleipnir.data.ScalaArrayTemplate
 
-import @(generator.shortClassName)._
+import @(generator.name.shortClassName)._
 
-class @(generator.shortClassName)(val items: Seq[@(generator.itemsClassName)], itemsData: DataList) extends ScalaArrayTemplate(itemsData, Schema) {
+class @(generator.name.shortClassName)(val items: Seq[@(generator.itemsClassName)], itemsData: DataList) extends ScalaArrayTemplate(itemsData, Schema) {
 
   def this(items: Seq[@(generator.itemsClassName)]) = this(items, ScalaArrayTemplate.unwrapAll(items))
 
@@ -20,12 +20,12 @@ class @(generator.shortClassName)(val items: Seq[@(generator.itemsClassName)], i
 
 }
 
-object @(generator.shortClassName) {
+object @(generator.name.shortClassName) {
 
   private val SchemaJson = "@(generator.schemaJson)"
 
   private val Schema = DataTemplateUtil.parseSchema(SchemaJson).asInstanceOf[ArrayDataSchema]
 
-  def apply(items: Seq[@(generator.itemsClassName)]) = new @(generator.shortClassName)(items)
+  def apply(items: Seq[@(generator.itemsClassName)]) = new @(generator.name.shortClassName)(items)
 
 }

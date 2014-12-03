@@ -1,17 +1,15 @@
 package com.linkedin.sleipnir.generator.types
 
-import com.linkedin.data.schema.{NullDataSchema, DataSchema}
+import com.linkedin.data.schema.DataSchema
+import com.linkedin.sleipnir.generator.GeneratedClass
+import grizzled.slf4j.Logging
 import org.apache.commons.lang3.StringEscapeUtils
 
 /**
  * Some code shared between most of type generators.
  * @author Dmitriy Yefremov
  */
-trait AbstractTypeGenerator extends TypeGenerator {
-
-  override def fullClassName: String = packageName + "." + shortClassName
-
-  override def externalClassName: String = fullClassName
+trait AbstractTypeGenerator extends TypeGenerator with Logging {
 
   /**
    * Type's schema in JSON format with Java escaping.
@@ -25,6 +23,11 @@ trait AbstractTypeGenerator extends TypeGenerator {
    * Creates an instance of the generator of the specified type. Current generator is used as the parent when the instance is created.
    */
   protected def nestedGenerator(nestedSchema: DataSchema) = TypeGeneratorFactory.instance(nestedSchema, this)
+
+  /**
+   * A shortcut to return a [[GeneratedClass]] instance given the source code.
+   */
+  protected def generatedClass(source: String) = Some(GeneratedClass(name.fullClassName, source))
 
   /**
    * Finds a parent of this generator that matches the given predicate.
@@ -42,12 +45,12 @@ trait AbstractTypeGenerator extends TypeGenerator {
     case that: AbstractTypeGenerator =>
         getClass == that.getClass &&
         schema == that.schema &&
-        fullClassName == that.fullClassName
+        name == that.name
     case _ => false
   }
 
   override def hashCode(): Int = {
-    val state = Seq(schema, fullClassName)
+    val state = Seq(schema, name)
     state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
   }
 }

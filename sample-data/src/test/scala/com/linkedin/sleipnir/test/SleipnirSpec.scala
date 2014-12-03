@@ -2,9 +2,8 @@ package com.linkedin.sleipnir.test
 
 import scala.reflect.ClassTag
 
-import com.linkedin.data.DataMap
 import com.linkedin.data.schema.validation.{RequiredMode, ValidateDataAgainstSchema, ValidationOptions}
-import com.linkedin.data.template.{DataTemplate, JacksonDataTemplateCodec}
+import com.linkedin.data.template.{DataTemplate, DataTemplateUtil, JacksonDataTemplateCodec}
 import org.specs2.mutable._
 
 /**
@@ -29,10 +28,11 @@ trait SleipnirSpec extends Specification {
    * Deserializes a data template from the given JSON.
    * @return the deserialized instance
    */
-  def fromJson[T : ClassTag](json: String): T = {
+  def fromJson[T <: DataTemplate[_] : ClassTag](json: String): T = {
     val clazz = implicitly[ClassTag[T]].runtimeClass.asInstanceOf[Class[T]]
     val dataMap = dataTemplateCodec.stringToMap(json)
-    clazz.getConstructor(classOf[DataMap]).newInstance(dataMap)
+    val constructor = DataTemplateUtil.templateConstructor(clazz)
+    constructor.newInstance(dataMap)
   }
 
   /**

@@ -15,19 +15,22 @@ import grizzled.slf4j.Logging
  */
 class UnionTypeGenerator(override val schema: UnionDataSchema, override val parentGenerator: Option[TypeGenerator]) extends AbstractTypeGenerator with Logging {
 
-  private val parentSchema = UnionTypeGenerator.findParentRecord(this)
+  private val referencesToParentRecord = findMatchingPatent(_.isInstanceOf[RecordTypeGenerator])
+
+  private val parentRecordSchema = referencesToParentRecord.head.schema.asInstanceOf[RecordDataSchema]
 
   override def shortClassName: String = {
-    // try to find the field of the parent that the current schema represents
-    val fieldOption = parentSchema.getFields.asScala.find(_.getType == schema)
+    // try to find the field of the parent record that refers to the current schema
+    val firstReference = referencesToParentRecord(1)
+    val fieldOption = parentRecordSchema.getFields.asScala.find(_.getType == firstReference.schema)
     val field = fieldOption.getOrElse {
-      throw new IllegalArgumentException(s"${parentSchema.getFullName} doesn't have a field of type ${schema.getType()}")
+      throw new IllegalArgumentException(s"${parentRecordSchema.getFullName} doesn't have a field of type ${schema.getType()}")
     }
     // build the name out of the parent's name and the field name
-    parentSchema.getName + field.getName.capitalize + "Union"
+    parentRecordSchema.getName + field.getName.capitalize + "Union"
   }
 
-  override def packageName: String = parentSchema.getNamespace
+  override def packageName: String = parentRecordSchema.getNamespace
 
   override def fullClassName: String = packageName + "." + shortClassName
 
@@ -43,18 +46,6 @@ class UnionTypeGenerator(override val schema: UnionDataSchema, override val pare
     logger.info(s"Generating $fullClassName")
     val source = UnionTemplate(this).toString
     Some(GeneratedClass(fullClassName, source))
-  }
-
-}
-
-object UnionTypeGenerator {
-
-  def findParentRecord(generator: TypeGenerator): RecordDataSchema = {
-    generator.parentGenerator match {
-      case Some(parent: RecordTypeGenerator) => parent.schema
-      //case Some(parent) => findParentRecord(parent)
-      case None => throw new IllegalArgumentException(s"Can't find a parent record")
-    }
   }
 
 }

@@ -18,24 +18,32 @@ object TypeGeneratorFactory {
   /**
    * Returns an instance of [[TypeGenerator]] for the given type.
    * @param schema schema defining the type
-   * @param parentSchema schema defining the parent type
+   * @param parentGenerator generator for the parent type
    */
-  def instance(schema: DataSchema, parentSchema: DataSchema): TypeGenerator = instance(schema, Some(parentSchema))
+  def instance(schema: DataSchema, parentGenerator: TypeGenerator): TypeGenerator = instance(schema, Some(parentGenerator))
 
-  private def instance(schema: DataSchema, parentSchemaOpt: Option[DataSchema]): TypeGenerator = {
+  private def instance(schema: DataSchema, parentGeneratorOpt: Option[TypeGenerator]): TypeGenerator = {
     schema.getDereferencedDataSchema match {
-      case bytes: BytesDataSchema => BytesTypeGenerator(bytes)
-      case primitive: PrimitiveDataSchema => PrimitiveTypeGenerator(primitive)
-      case enum: EnumDataSchema => EnumTypeGenerator(enum)
-      case record: RecordDataSchema => RecordTypeGenerator(record)
-      case fixed: FixedDataSchema => FixedTypeGenerator(fixed)
-      case array: ArrayDataSchema if array.getItems.getDereferencedDataSchema.isComplex => ComplexArrayTypeGenerator(array)
-      case array: ArrayDataSchema if array.getItems.getDereferencedDataSchema.isPrimitive => PrimitiveArrayTypeGenerator(array)
-      case map: MapDataSchema if map.getValues.getDereferencedDataSchema.isComplex => ComplexMapTypeGenerator(map)
-      case map: MapDataSchema if map.getValues.getDereferencedDataSchema.isPrimitive => PrimitiveMapTypeGenerator(map)
-      case union: UnionDataSchema => parentSchemaOpt match {
-        case Some(record: RecordDataSchema) => UnionTypeGenerator(union, record)
-      }
+      case bytes: BytesDataSchema =>
+        new BytesTypeGenerator(bytes, parentGeneratorOpt)
+      case primitive: PrimitiveDataSchema =>
+        new PrimitiveTypeGenerator(primitive, parentGeneratorOpt)
+      case enum: EnumDataSchema =>
+        new EnumTypeGenerator(enum, parentGeneratorOpt)
+      case record: RecordDataSchema =>
+        new RecordTypeGenerator(record, parentGeneratorOpt)
+      case fixed: FixedDataSchema =>
+        new FixedTypeGenerator(fixed, parentGeneratorOpt)
+      case array: ArrayDataSchema if array.getItems.getDereferencedDataSchema.isComplex =>
+        new ComplexArrayTypeGenerator(array, parentGeneratorOpt)
+      case array: ArrayDataSchema if array.getItems.getDereferencedDataSchema.isPrimitive =>
+        new PrimitiveArrayTypeGenerator(array, parentGeneratorOpt)
+      case map: MapDataSchema if map.getValues.getDereferencedDataSchema.isComplex =>
+        new ComplexMapTypeGenerator(map, parentGeneratorOpt)
+      case map: MapDataSchema if map.getValues.getDereferencedDataSchema.isPrimitive =>
+        new PrimitiveMapTypeGenerator(map, parentGeneratorOpt)
+      case union: UnionDataSchema =>
+        new UnionTypeGenerator(union, parentGeneratorOpt)
     }
   }
 

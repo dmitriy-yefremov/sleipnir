@@ -13,7 +13,7 @@ import com.linkedin.sleipnir.generator.txt.RecordTemplate
  * @param schema the type schema
  * @author Dmitriy Yefremov
  */
-case class RecordTypeGenerator(override val schema: RecordDataSchema) extends NamedTypeGenerator with Logging {
+class RecordTypeGenerator(override val schema: RecordDataSchema, override val parentGenerator: Option[TypeGenerator]) extends NamedTypeGenerator with Logging {
 
   def fieldValName(field: RecordDataSchema.Field): String = {
     s"Field${field.getName.capitalize}"

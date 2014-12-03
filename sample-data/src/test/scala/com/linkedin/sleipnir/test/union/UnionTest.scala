@@ -31,7 +31,7 @@ class UnionTest extends SleipnirSpec {
       val union = UnionRecordFieldUnion(StringValue)
       val record = UnionRecord(union)
       val json = toJson(record)
-      json must beEqualTo("""{"union":{"string":"string value"}}""")
+      json must beEqualTo("""{"field":{"string":"string value"}}""")
       val recordFromJson = fromJson[UnionRecord](json)
       recordFromJson.field must beEqualTo(union)
     }

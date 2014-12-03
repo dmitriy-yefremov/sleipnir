@@ -29,37 +29,29 @@ trait TypeGenerator {
   /**
    * Full class name including the package (e.g. "com.linkedin.sleipnir.generator.types.TypeGenerator").
    */
-  def fullClassName: String = packageName + "." + shortClassName
+  def fullClassName: String
 
   /**
    * Full class name to be used for external references to this type (e.g. for arrays we will use
    * "Seq[com.linkedin.sleipnir.generator.types.TypeGenerator]" instead of the actual
    * "com.linkedin.sleipnir.generator.types.TypeGeneratorArray").
    */
-  def externalClassName: String = fullClassName
+  def externalClassName: String
 
   /**
-   * Type's schema in JSON format with Java escaping.
-   */
-  def schemaJson: String = {
-    val json = schema.toString
-    StringEscapeUtils.escapeJava(json)
-  }
-
-  /**
-   * The TypeGenerators referenced by the schema of this generator (e.g. a generator for a record schema references generators for the fields' schemas).
+   * The TypeGenerators referenced by the schema of this generator (e.g. the generator for a record schema references generators for the fields' schemas).
    */
   def referencedGenerators: Seq[TypeGenerator]
+
+  /**
+   * A reference to the parent generator. It is [[None]] for top level schemas.
+   */
+  def parentGenerator: Option[TypeGenerator]
+
 
   /**
    * Generates class for this schema. Some types do not require a new class to be generated.
    */
   def generateClass: Option[GeneratedClass]
-
-  /**
-   * Creates an instance of the generator of the specified type. Current schema is used as parent when an instance is created.
-   */
-  protected def nestedGenerator(nestedSchema: DataSchema) = TypeGeneratorFactory.instance(nestedSchema, schema)
-
 
 }

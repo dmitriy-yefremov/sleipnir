@@ -10,7 +10,7 @@ import grizzled.slf4j.Logging
  * Common functionality for [[MapDataSchema]] generators.
  * @author Dmitriy Yefremov
  */
-sealed trait MapTypeGenerator extends TypeGenerator {
+sealed trait MapTypeGenerator extends AbstractTypeGenerator {
 
   override def schema: MapDataSchema
 
@@ -20,7 +20,7 @@ sealed trait MapTypeGenerator extends TypeGenerator {
 
 }
 
-case class ComplexMapTypeGenerator(override val schema: MapDataSchema) extends MapTypeGenerator with Logging {
+class ComplexMapTypeGenerator(override val schema: MapDataSchema, override val parentGenerator: Option[TypeGenerator]) extends MapTypeGenerator with Logging {
 
   override def shortClassName: String = valuesGenerator.shortClassName + "Map"
 
@@ -38,7 +38,7 @@ case class ComplexMapTypeGenerator(override val schema: MapDataSchema) extends M
 
 }
 
-case class PrimitiveMapTypeGenerator(override val schema: MapDataSchema) extends MapTypeGenerator {
+class PrimitiveMapTypeGenerator(override val schema: MapDataSchema, override val parentGenerator: Option[TypeGenerator]) extends MapTypeGenerator {
 
   private val PrimitiveWrapperClasses = Map(
     DataSchema.Type.BOOLEAN -> classOf[BooleanMap],

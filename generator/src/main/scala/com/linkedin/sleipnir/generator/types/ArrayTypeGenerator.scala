@@ -10,7 +10,7 @@ import grizzled.slf4j.Logging
  * Common functionality for [[ArrayDataSchema]] generators.
  * @author Dmitriy Yefremov
  */
-sealed trait ArrayTypeGenerator extends TypeGenerator {
+sealed trait ArrayTypeGenerator extends AbstractTypeGenerator {
 
   override def schema: ArrayDataSchema
 
@@ -23,7 +23,7 @@ sealed trait ArrayTypeGenerator extends TypeGenerator {
 /**
  * A generator for arrays of primitive types (e.g. an array of integers).
  */
-case class ComplexArrayTypeGenerator(override val schema: ArrayDataSchema) extends ArrayTypeGenerator with Logging {
+class ComplexArrayTypeGenerator(override val schema: ArrayDataSchema, override val parentGenerator: Option[TypeGenerator]) extends ArrayTypeGenerator with Logging {
 
   override def shortClassName: String = itemsGenerator.shortClassName + "Array"
 
@@ -44,7 +44,7 @@ case class ComplexArrayTypeGenerator(override val schema: ArrayDataSchema) exten
 /**
  * A generator for arrays of complex types (e.g. an array of records).
  */
-case class PrimitiveArrayTypeGenerator(override val schema: ArrayDataSchema) extends ArrayTypeGenerator {
+class PrimitiveArrayTypeGenerator(override val schema: ArrayDataSchema, override val parentGenerator: Option[TypeGenerator]) extends ArrayTypeGenerator {
 
   private val PrimitiveWrapperClasses = Map(
     DataSchema.Type.BOOLEAN -> classOf[BooleanArray],

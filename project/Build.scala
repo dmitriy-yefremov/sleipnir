@@ -64,6 +64,7 @@ object Sleipnir extends Build {
       val src = sourceDirectory.value / "main" / "pegasus"
       val dst = sourceManaged.value
       val classpath = (dependencyClasspath in Runtime in sleipnirGenerator).value.files
+      streams.value.log.info("Generating PDSC bindings...")
       runForkedGenerator(src, dst, classpath)
     },
     sourceGenerators in Compile <+= (forkedVmSleipnirGenerator in Compile)

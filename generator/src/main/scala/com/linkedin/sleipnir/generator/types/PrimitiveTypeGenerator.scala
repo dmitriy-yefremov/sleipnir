@@ -10,7 +10,7 @@ import com.linkedin.sleipnir.generator.GeneratedClass
  * @param schema the type schema
  * @author Dmitriy Yefremov
  */
-case class PrimitiveTypeGenerator(override val schema: PrimitiveDataSchema) extends TypeGenerator {
+class PrimitiveTypeGenerator(override val schema: PrimitiveDataSchema, override val parentGenerator: Option[TypeGenerator]) extends AbstractTypeGenerator {
 
   private val PrimitiveClassNames = Map(
     Type.BOOLEAN -> "Boolean",
@@ -38,7 +38,7 @@ case class PrimitiveTypeGenerator(override val schema: PrimitiveDataSchema) exte
  * Even though [[BytesDataSchema]] represents primitive data types it needs to be handles separately.
  * @param schema the type schema
  */
-case class BytesTypeGenerator(override val schema: BytesDataSchema) extends TypeGenerator {
+class BytesTypeGenerator(override val schema: BytesDataSchema, override val parentGenerator: Option[TypeGenerator]) extends AbstractTypeGenerator {
 
   override def shortClassName: String = classOf[ByteString].getSimpleName
 

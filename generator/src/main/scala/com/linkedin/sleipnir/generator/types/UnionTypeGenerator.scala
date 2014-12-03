@@ -1,20 +1,21 @@
 package com.linkedin.sleipnir.generator.types
 
+import scala.collection.JavaConverters._
+
+import com.linkedin.data.schema.{RecordDataSchema, UnionDataSchema}
 import com.linkedin.sleipnir.generator.GeneratedClass
 import com.linkedin.sleipnir.generator.txt.UnionTemplate
 import grizzled.slf4j.Logging
 
-import scala.collection.JavaConverters._
-
-import com.linkedin.data.schema.{DataSchema, RecordDataSchema, UnionDataSchema}
-
 /**
  * A generator for [[UnionDataSchema]] types.
  * @param schema the type schema
- * @param parentSchema the parent type schema (e.g. a record that contains the union type as a field)
+ * @param parentGenerator the parent generator
  * @author Dmitriy Yefremov
  */
-case class UnionTypeGenerator(override val schema: UnionDataSchema, parentSchema: RecordDataSchema) extends TypeGenerator with Logging {
+class UnionTypeGenerator(override val schema: UnionDataSchema, override val parentGenerator: Option[TypeGenerator]) extends AbstractTypeGenerator with Logging {
+
+  private val parentSchema = UnionTypeGenerator.findParentRecord(this)
 
   override def shortClassName: String = {
     // try to find the field of the parent that the current schema represents
@@ -42,6 +43,18 @@ case class UnionTypeGenerator(override val schema: UnionDataSchema, parentSchema
     logger.info(s"Generating $fullClassName")
     val source = UnionTemplate(this).toString
     Some(GeneratedClass(fullClassName, source))
+  }
+
+}
+
+object UnionTypeGenerator {
+
+  def findParentRecord(generator: TypeGenerator): RecordDataSchema = {
+    generator.parentGenerator match {
+      case Some(parent: RecordTypeGenerator) => parent.schema
+      //case Some(parent) => findParentRecord(parent)
+      case None => throw new IllegalArgumentException(s"Can't find a parent record")
+    }
   }
 
 }

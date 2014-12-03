@@ -6,7 +6,7 @@ import com.linkedin.data.schema.NamedDataSchema
  * Common functionality for [[NamedDataSchema]] type generators.
  * @author Dmitriy Yefremov
  */
-trait NamedTypeGenerator extends TypeGenerator {
+trait NamedTypeGenerator extends AbstractTypeGenerator {
 
   override def schema: NamedDataSchema
 

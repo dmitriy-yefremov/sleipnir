@@ -10,7 +10,7 @@ import grizzled.slf4j.Logging
  * @param schema the type schema
  * @author Dmitriy Yefremov
  */
-case class FixedTypeGenerator(override val schema: FixedDataSchema) extends NamedTypeGenerator with Logging {
+class FixedTypeGenerator(override val schema: FixedDataSchema, override val parentGenerator: Option[TypeGenerator]) extends NamedTypeGenerator with Logging {
 
   override def referencedGenerators: Seq[TypeGenerator] = Seq.empty
 

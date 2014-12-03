@@ -12,7 +12,7 @@ import scala.collection.JavaConverters._
  * @param schema the type schema
  * @author Dmitriy Yefremov
  */
-case class EnumTypeGenerator(override val schema: EnumDataSchema) extends NamedTypeGenerator with Logging {
+class EnumTypeGenerator(override val schema: EnumDataSchema, override val parentGenerator: Option[TypeGenerator]) extends NamedTypeGenerator with Logging {
 
   override def externalClassName: String = fullClassName + ".Value"
 

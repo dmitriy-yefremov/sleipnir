@@ -17,7 +17,7 @@ import @(generator.name.shortClassName)._
 
 class @(generator.name.shortClassName)(data: AnyRef) extends ScalaUnionTemplate(data, Schema) {
 
-@for(typeGenerator <- generator.typeGenerators) {
+@for(typeGenerator <- generator.referencedGenerators) {
 
   def is@(typeGenerator.name.shortClassName): Boolean = memberIs("@(typeGenerator.schema.getUnionMemberKey)")
 
@@ -34,7 +34,7 @@ object @(generator.name.shortClassName) {
 
   private val Schema = DataTemplateUtil.parseSchema(SchemaJson).asInstanceOf[UnionDataSchema]
 
-@for(typeGenerator <- generator.typeGenerators) {
+@for(typeGenerator <- generator.referencedGenerators) {
 
   val @(generator.memberValName(typeGenerator)) = Schema.getType("@(typeGenerator.schema.getUnionMemberKey)")
 
@@ -49,7 +49,7 @@ object @(generator.name.shortClassName) {
   def unapply(union: @(generator.name.shortClassName)): Option[Any] = {
     union.memberType match {
 
-    @for(typeGenerator <- generator.typeGenerators) {
+    @for(typeGenerator <- generator.referencedGenerators) {
       case @(generator.memberValName(typeGenerator)) => union.as@(typeGenerator.name.shortClassName)
     }
       case _ => None

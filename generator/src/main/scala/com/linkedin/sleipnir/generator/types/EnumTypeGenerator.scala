@@ -13,9 +13,9 @@ import com.linkedin.sleipnir.generator.txt.EnumTemplate
  */
 class EnumTypeGenerator(override val schema: EnumDataSchema, override val parentGenerator: Option[TypeGenerator]) extends AbstractTypeGenerator {
 
-  override def name: TypeName = TypeName(schema.getName, schema.getNamespace, schema.getFullName, schema.getFullName + ".Value")
+  override val name: TypeName = TypeName(schema.getName, schema.getNamespace, schema.getFullName, schema.getFullName + ".Value")
 
-  def symbols: String = {
+  val symbols: String = {
     schema.getSymbols.asScala.mkString(", ")
   }
 

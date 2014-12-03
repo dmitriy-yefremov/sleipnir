@@ -21,7 +21,7 @@ sealed trait MapTypeGenerator extends AbstractTypeGenerator {
 
 class ComplexMapTypeGenerator(override val schema: MapDataSchema, override val parentGenerator: Option[TypeGenerator]) extends MapTypeGenerator {
 
-  override def name: TypeName = {
+  override val name: TypeName = {
     val valuesName = valuesGenerator.name
     TypeName(valuesName.shortClassName + "Map", valuesName.packageName, externalClassName)
   }
@@ -34,7 +34,7 @@ class ComplexMapTypeGenerator(override val schema: MapDataSchema, override val p
     generatedClass(source)
   }
 
-  def valuesClassName: String = valuesGenerator.name.shortClassName
+  val valuesClassName: String = valuesGenerator.name.shortClassName
 
 }
 
@@ -50,7 +50,7 @@ class PrimitiveMapTypeGenerator(override val schema: MapDataSchema, override val
     DataSchema.Type.STRING -> TypeName(classOf[StringMap], externalClassName)
   )
 
-  override def name: TypeName = PrimitiveWrapperClasses(schema.getValues.getType)
+  override val name: TypeName = PrimitiveWrapperClasses(schema.getValues.getType)
 
   override def referencedGenerators: Seq[TypeGenerator] = Seq.empty
 

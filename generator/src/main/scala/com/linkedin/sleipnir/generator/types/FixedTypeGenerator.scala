@@ -11,7 +11,7 @@ import com.linkedin.sleipnir.generator.txt.FixedTemplate
  */
 class FixedTypeGenerator(override val schema: FixedDataSchema, override val parentGenerator: Option[TypeGenerator]) extends AbstractTypeGenerator {
 
-  override def name: TypeName = TypeName(schema.getName, schema.getNamespace)
+  override val name: TypeName = TypeName(schema.getName, schema.getNamespace)
 
   override def referencedGenerators: Seq[TypeGenerator] = Seq.empty
 

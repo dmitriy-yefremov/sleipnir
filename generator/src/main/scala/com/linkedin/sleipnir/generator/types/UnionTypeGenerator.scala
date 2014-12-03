@@ -14,7 +14,7 @@ import com.linkedin.sleipnir.generator.txt.UnionTemplate
  */
 class UnionTypeGenerator(override val schema: UnionDataSchema, override val parentGenerator: Option[TypeGenerator]) extends AbstractTypeGenerator {
 
-  override def name: TypeName = {
+  override val name: TypeName = {
     val referencesToParentRecord = findMatchingParent(_.isInstanceOf[RecordTypeGenerator])
     val parentRecordSchema = referencesToParentRecord.head.schema.asInstanceOf[RecordDataSchema]
     // try to find the field of the parent record that refers to the current schema
@@ -29,11 +29,9 @@ class UnionTypeGenerator(override val schema: UnionDataSchema, override val pare
     TypeName(shortClassName, packageName)
   }
 
-  def typeGenerators: Seq[TypeGenerator] = schema.getTypes.asScala.map(nestedGenerator)
-
   def memberValName(generator: TypeGenerator): String = s"Member${generator.name.shortClassName}"
 
-  override def referencedGenerators: Seq[TypeGenerator] = typeGenerators
+  override def referencedGenerators: Seq[TypeGenerator] = schema.getTypes.asScala.map(nestedGenerator)
 
   override def generateClass: Option[GeneratedClass] = {
     logger.info(s"Generating ${name.fullClassName}")

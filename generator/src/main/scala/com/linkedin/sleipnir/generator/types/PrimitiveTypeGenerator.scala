@@ -23,7 +23,7 @@ class PrimitiveTypeGenerator(override val schema: PrimitiveDataSchema, override 
     Type.BYTES -> TypeName(classOf[ByteString])
   )
 
-  override def name: TypeName = PrimitiveClassNames(schema.getType)
+  override val name: TypeName = PrimitiveClassNames(schema.getType)
 
   override def referencedGenerators: Seq[TypeGenerator] = Seq.empty
 

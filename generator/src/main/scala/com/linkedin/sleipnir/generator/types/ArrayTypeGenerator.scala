@@ -12,11 +12,11 @@ import grizzled.slf4j.Logging
  */
 sealed trait ArrayTypeGenerator extends AbstractTypeGenerator {
 
-  override def schema: ArrayDataSchema
+  override val schema: ArrayDataSchema
 
-  protected def itemsGenerator: TypeGenerator = nestedGenerator(schema.getItems)
+  protected val itemsGenerator: TypeGenerator = nestedGenerator(schema.getItems)
 
-  protected def externalClassName: String = s"Seq[${itemsGenerator.name.externalClassName}]"
+  protected val externalClassName: String = s"Seq[${itemsGenerator.name.externalClassName}]"
 
 }
 
@@ -25,7 +25,7 @@ sealed trait ArrayTypeGenerator extends AbstractTypeGenerator {
  */
 class ComplexArrayTypeGenerator(override val schema: ArrayDataSchema, override val parentGenerator: Option[TypeGenerator]) extends ArrayTypeGenerator with Logging {
 
-  override def name: TypeName = {
+  override val name: TypeName = {
     val itemsName: TypeName = itemsGenerator.name
     TypeName(itemsName.shortClassName + "Array", itemsName.packageName, externalClassName)
   }
@@ -38,7 +38,7 @@ class ComplexArrayTypeGenerator(override val schema: ArrayDataSchema, override v
     generatedClass(source)
   }
 
-  def itemsClassName: String = itemsGenerator.name.shortClassName
+  val itemsClassName: String = itemsGenerator.name.shortClassName
 
 }
 
@@ -57,7 +57,7 @@ class PrimitiveArrayTypeGenerator(override val schema: ArrayDataSchema, override
     DataSchema.Type.STRING -> TypeName(classOf[StringArray], externalClassName)
   )
 
-  override def name: TypeName = PrimitiveWrapperClasses(schema.getItems.getType)
+  override val name: TypeName = PrimitiveWrapperClasses(schema.getItems.getType)
 
   override def referencedGenerators: Seq[TypeGenerator] = Seq.empty
 

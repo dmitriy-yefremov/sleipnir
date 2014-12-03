@@ -15,7 +15,7 @@ import com.linkedin.sleipnir.generator.txt.UnionTemplate
 class UnionTypeGenerator(override val schema: UnionDataSchema, override val parentGenerator: Option[TypeGenerator]) extends AbstractTypeGenerator {
 
   override def name: TypeName = {
-    val referencesToParentRecord = findMatchingPatent(_.isInstanceOf[RecordTypeGenerator])
+    val referencesToParentRecord = findMatchingParent(_.isInstanceOf[RecordTypeGenerator])
     val parentRecordSchema = referencesToParentRecord.head.schema.asInstanceOf[RecordDataSchema]
     // try to find the field of the parent record that refers to the current schema
     val firstReference = referencesToParentRecord(1)

@@ -28,10 +28,10 @@ trait AbstractTypeGenerator extends TypeGenerator {
 
   /**
    * Finds a parent of this generator that matches the given predicate.
-   * See [[AbstractTypeGenerator.findMatchingPatent(TypeGenerator, TypeGenerator => Boolean)]] for details.
+   * See [[AbstractTypeGenerator.findMatchingParent(TypeGenerator, TypeGenerator => Boolean)]] for details.
    */
-  protected def findMatchingPatent(predicate: TypeGenerator => Boolean): List[TypeGenerator] = {
-    AbstractTypeGenerator.findMatchingPatent(this, predicate)
+  protected def findMatchingParent(predicate: TypeGenerator => Boolean): List[TypeGenerator] = {
+    AbstractTypeGenerator.findMatchingParent(this, predicate)
   }
 
   /**
@@ -60,7 +60,7 @@ object AbstractTypeGenerator {
    *         list always has the matching parent in the head and the given generator in the tail
    * @throws IllegalArgumentException if no matching parent is found
    */
-  def findMatchingPatent(generator: TypeGenerator, predicate: TypeGenerator => Boolean): List[TypeGenerator] = {
+  def findMatchingParent(generator: TypeGenerator, predicate: TypeGenerator => Boolean): List[TypeGenerator] = {
 
     def find(acc: List[TypeGenerator]): List[TypeGenerator] = {
       acc.head.parentGenerator match {

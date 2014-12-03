@@ -15,7 +15,7 @@ import grizzled.slf4j.Logging
  */
 class UnionTypeGenerator(override val schema: UnionDataSchema, override val parentGenerator: Option[TypeGenerator]) extends AbstractTypeGenerator with Logging {
 
-  private val referencesToParentRecord = findMatchingPatent(_.isInstanceOf[RecordTypeGenerator])
+  private val referencesToParentRecord = findMatchingParent(_.isInstanceOf[RecordTypeGenerator])
 
   private val parentRecordSchema = referencesToParentRecord.head.schema.asInstanceOf[RecordDataSchema]
 

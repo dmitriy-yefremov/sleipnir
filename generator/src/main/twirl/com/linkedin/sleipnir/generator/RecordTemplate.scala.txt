@@ -129,11 +129,10 @@ object @(generator.name.shortClassName) {
 
 @getter(field: Field) = {
   @if(field.getOptional) {
-    Option(
-      @getterWithType(field, "GetMode.DEFAULT", generator.fieldGenerator(field))
-    )
+    @getterWithType(field, "GetMode.DEFAULT", generator.fieldGenerator(field))
   } else {
-    @getterWithType(field, "GetMode.STRICT", generator.fieldGenerator(field))
+    val option = @getterWithType(field, "GetMode.STRICT", generator.fieldGenerator(field))
+    option.get
   }
 }
 
@@ -141,41 +140,36 @@ object @(generator.name.shortClassName) {
   @(fieldGenerator.schema.getDereferencedDataSchema) match {
 
     case _ : PrimitiveDataSchema => {
-      obtainDirect(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.externalClassName)], @(getMode))
+      getDirect(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.externalClassName)], @(getMode))
     }
 
     case _ : RecordDataSchema | _ : FixedDataSchema | _ : UnionDataSchema => {
-      obtainWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.externalClassName)], @(getMode))
+      getWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.externalClassName)], @(getMode))
     }
 
     case _ : EnumDataSchema => {
       {
-        val name = obtainDirect(@(generator.fieldValName(field)), classOf[String], @(getMode))
-        @(fieldGenerator.name.fullClassName).withName(name)
+        val name = getDirect(@(generator.fieldValName(field)), classOf[String], @(getMode))
+        name.map(@(fieldGenerator.name.fullClassName).withName(_))
       }
     }
 
     case array : ArrayDataSchema => {
       @if(array.getItems.isComplex) {
-        obtainWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)], @(getMode)).items
+        getWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)], @(getMode)).map(_.items)
       } else {
-        {
-          val result = obtainWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)], @(getMode))
-          if (result != null) result.asScala.toSeq else null
-        }
+        getWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)], @(getMode)).map(_.asScala.toSeq)
       }
     }
 
     case map : MapDataSchema => {
       @if(map.getValues.isComplex) {
-        obtainWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)], @(getMode)).map
+        getWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)], @(getMode)).map(_.map)
       } else {
         @if(map.getValues.getType == DataSchema.Type.INT) {
-          obtainWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)], @(getMode))
-            .asScala.toMap.mapValues(_.intValue)
+          getWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)], @(getMode)).map(_.asScala.toMap.mapValues(_.intValue))
         } else {
-          obtainWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)], @(getMode))
-            .asScala.toMap
+          getWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)], @(getMode)).map(_.asScala.toMap)
         }
       }
     }

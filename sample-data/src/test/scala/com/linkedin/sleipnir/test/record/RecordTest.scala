@@ -180,7 +180,7 @@ class RecordTest extends SleipnirSpec {
     "support enum types not set" in {
       val record = OptionalEnumRecord(None)
       record.enumOption must beEqualTo(None)
-      val recordFromJson = checkSerialization(record, "")
+      val recordFromJson = checkSerialization(record, "{}")
       recordFromJson.enumOption must beEqualTo(None)
     }
 

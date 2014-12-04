@@ -38,7 +38,7 @@ class ComplexArrayTypeGenerator(override val schema: ArrayDataSchema, override v
     generatedClass(source)
   }
 
-  val itemsClassName: String = itemsGenerator.name.shortClassName
+  val itemsClassName: String = itemsGenerator.name.externalClassName
 
 }
 

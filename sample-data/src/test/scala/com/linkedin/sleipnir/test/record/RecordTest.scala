@@ -1,16 +1,17 @@
 package com.linkedin.sleipnir.test.record
 
 import com.linkedin.sleipnir.test.SleipnirSpec
+import com.linkedin.sleipnir.test.SimpleEnum
 
 class RecordTest extends SleipnirSpec {
 
   "Enum fields" should {
 
     "be supported" in {
-      val record = EnumRecord(TestEnum.Foo)
-      record.enum must beEqualTo(TestEnum.Foo)
+      val record = EnumRecord(SimpleEnum.Foo)
+      record.enum must beEqualTo(SimpleEnum.Foo)
       val recordFromJson = checkSerialization(record, """{"enum":"Foo"}""")
-      recordFromJson.enum must beEqualTo(TestEnum.Foo)
+      recordFromJson.enum must beEqualTo(SimpleEnum.Foo)
     }
 
   }
@@ -108,7 +109,7 @@ class RecordTest extends SleipnirSpec {
       recordFromJson.recordOption must beEqualTo(None)
     }
 
-    "support array types" in {
+    "support primitive array types" in {
       val arrayOption = Some(Seq(StringValue))
       val record = OptionalArrayPrimitiveRecord(arrayOption)
       record.arrayOption must beEqualTo(arrayOption)
@@ -116,11 +117,71 @@ class RecordTest extends SleipnirSpec {
       recordFromJson.arrayOption must beEqualTo(arrayOption)
     }
 
-    "support array types not set" in {
+    "support primitive array types not set" in {
       val record = OptionalArrayPrimitiveRecord(None)
       record.arrayOption must beEqualTo(None)
       val recordFromJson = checkSerialization(record, "{}")
       recordFromJson.arrayOption must beEqualTo(None)
+    }
+
+    "support complex array types" in {
+      val arrayOption = Some(Seq(SimpleRecordValue))
+      val record = OptionalArrayComplexRecord(arrayOption)
+      record.arrayOption must beEqualTo(arrayOption)
+      val recordFromJson = checkSerialization(record, """{"arrayOption":[{"field":"string value"}]}""")
+      recordFromJson.arrayOption must beEqualTo(arrayOption)
+    }
+
+    "support complex array types not set" in {
+      val record = OptionalArrayComplexRecord(None)
+      record.arrayOption must beEqualTo(None)
+      val recordFromJson = checkSerialization(record, "{}")
+      recordFromJson.arrayOption must beEqualTo(None)
+    }
+
+    "support primitive map types" in {
+      val map = Some(Map("key" -> StringValue))
+      val record = OptionalMapPrimitiveRecord(map)
+      record.mapOption must beEqualTo(map)
+      val recordFromJson = checkSerialization(record, """{"mapOption":{"key":"string value"}}""")
+      recordFromJson.mapOption must beEqualTo(map)
+    }
+
+    "support primitive map types not set" in {
+      val record = OptionalMapPrimitiveRecord(None)
+      record.mapOption must beEqualTo(None)
+      val recordFromJson = checkSerialization(record, "{}")
+      recordFromJson.mapOption must beEqualTo(None)
+    }
+
+    "support complex map types" in {
+      val map = Some(Map("key" -> SimpleRecordValue))
+      val record = OptionalMapComplexRecord(map)
+      record.mapOption must beEqualTo(map)
+      val recordFromJson = checkSerialization(record, """{"mapOption":{"key":{"field":"string value"}}}""")
+      recordFromJson.mapOption must beEqualTo(map)
+    }
+
+    "support complex map types not set" in {
+      val record = OptionalMapComplexRecord(None)
+      record.mapOption must beEqualTo(None)
+      val recordFromJson = checkSerialization(record, "{}")
+      recordFromJson.mapOption must beEqualTo(None)
+    }
+
+    "support enum types" in {
+      val enum = Some(SimpleEnum.Foo)
+      val record = OptionalEnumRecord(enum)
+      record.enumOption must beEqualTo(enum)
+      val recordFromJson = checkSerialization(record, """{"enumOption":"Foo"}""")
+      recordFromJson.enumOption must beEqualTo(enum)
+    }
+
+    "support enum types not set" in {
+      val record = OptionalEnumRecord(None)
+      record.enumOption must beEqualTo(None)
+      val recordFromJson = checkSerialization(record, "")
+      recordFromJson.enumOption must beEqualTo(None)
     }
 
   }

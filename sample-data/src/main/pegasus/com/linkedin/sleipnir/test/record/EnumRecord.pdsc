@@ -5,11 +5,7 @@
   "fields": [
     {
       "name": "enum",
-      "type": {
-        "name": "TestEnum",
-        "type" : "enum",
-        "symbols" : [ "Foo", "Bar" ]
-      }
+      "type": "com.linkedin.sleipnir.test.SimpleEnum"
     }
   ]
 }

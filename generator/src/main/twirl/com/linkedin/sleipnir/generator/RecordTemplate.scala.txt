@@ -2,6 +2,7 @@
 
 @import _root_.scala.collection.JavaConverters._
 @import _root_.com.linkedin.data.schema.RecordDataSchema.Field
+@import _root_.com.linkedin.data.schema.DataSchema
 @import _root_.com.linkedin.data.schema.PrimitiveDataSchema
 @import _root_.com.linkedin.data.schema.RecordDataSchema
 @import _root_.com.linkedin.data.schema.UnionDataSchema
@@ -17,7 +18,7 @@ package @(generator.name.packageName)
 import scala.collection.JavaConverters._
 
 import com.linkedin.data.DataMap
-import com.linkedin.data.schema.RecordDataSchema
+import com.linkedin.data.schema.{DataSchema,RecordDataSchema}
 import com.linkedin.data.template.DataTemplateUtil
 import com.linkedin.data.template.GetMode
 import com.linkedin.sleipnir.data.ScalaRecordTemplate
@@ -148,8 +149,10 @@ object @(generator.name.shortClassName) {
     }
 
     case _ : EnumDataSchema => {
-      val name = obtainDirect(@(generator.fieldValName(field)), classOf[String], @(getMode))
-      @(fieldGenerator.name.fullClassName).withName(name)
+      {
+        val name = obtainDirect(@(generator.fieldValName(field)), classOf[String], @(getMode))
+        @(fieldGenerator.name.fullClassName).withName(name)
+      }
     }
 
     case array : ArrayDataSchema => {
@@ -167,7 +170,13 @@ object @(generator.name.shortClassName) {
       @if(map.getValues.isComplex) {
         obtainWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)], @(getMode)).map
       } else {
-        obtainWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)], @(getMode)).asScala.toMap.asInstanceOf[@(generator.recordTypeOf(field))]
+        @if(map.getValues.getType == DataSchema.Type.INT) {
+          obtainWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)], @(getMode))
+            .asScala.toMap.mapValues(_.intValue)
+        } else {
+          obtainWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)], @(getMode))
+            .asScala.toMap
+        }
       }
     }
 

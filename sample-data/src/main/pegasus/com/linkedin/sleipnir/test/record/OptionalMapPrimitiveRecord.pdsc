@@ -1,0 +1,15 @@
+{
+  "type": "record",
+  "name": "OptionalMapPrimitiveRecord",
+  "namespace": "com.linkedin.sleipnir.test.record",
+  "fields": [
+    {
+      "name": "mapOption",
+      "type": {
+        "type": "map",
+        "values": "string"
+      },
+      "optional": true
+    }
+  ]
+}

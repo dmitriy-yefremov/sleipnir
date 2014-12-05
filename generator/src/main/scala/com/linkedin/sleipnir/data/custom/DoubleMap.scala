@@ -4,8 +4,8 @@ import com.linkedin.data.DataMap
 import com.linkedin.data.schema.MapDataSchema
 import com.linkedin.data.template.DataTemplateUtil
 import com.linkedin.sleipnir.data.ScalaMapTemplate
-
-import DoubleMap._
+import com.linkedin.sleipnir.data.ScalaMapTemplate._
+import com.linkedin.sleipnir.data.custom.DoubleMap._
 
 /**
  * Custom wrapper for Map[String, Double].
@@ -13,9 +13,9 @@ import DoubleMap._
  */
 class DoubleMap(override val map: Map[String, Double], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
 
-  def this(map: Map[String, Double]) = this(map, ScalaMapTemplate.unwrapAll(map, ScalaMapTemplate.emptyPartialFunction))
+  def this(map: Map[String, Double]) = this(map, unwrapAll(map, PrimitiveInputCoercer))
 
-  def this(data: DataMap) = this(ScalaMapTemplate.wrapAll(data, Coercer), data)
+  def this(data: DataMap) = this(wrapAll(data, Coercer), data)
 
 }
 
@@ -25,7 +25,7 @@ object DoubleMap {
 
   private val Schema: MapDataSchema = DataTemplateUtil.parseSchema(SchemaJson).asInstanceOf[MapDataSchema]
 
-  private val Coercer: PartialFunction[Any, Double] = { case x: Double => x }
+  private val Coercer: OutputCoercer[Double] = { case x: Double => x }
 
   def apply(map: Map[String, Double]) = new DoubleMap(map)
 

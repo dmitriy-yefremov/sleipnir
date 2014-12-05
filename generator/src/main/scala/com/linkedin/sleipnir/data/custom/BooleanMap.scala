@@ -4,8 +4,8 @@ import com.linkedin.data.DataMap
 import com.linkedin.data.schema.MapDataSchema
 import com.linkedin.data.template.DataTemplateUtil
 import com.linkedin.sleipnir.data.ScalaMapTemplate
-
-import BooleanMap._
+import com.linkedin.sleipnir.data.ScalaMapTemplate._
+import com.linkedin.sleipnir.data.custom.BooleanMap._
 
 /**
  * Custom wrapper for Map[String, Boolean].
@@ -13,9 +13,9 @@ import BooleanMap._
  */
 class BooleanMap(override val map: Map[String, Boolean], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
 
-  def this(map: Map[String, Boolean]) = this(map, ScalaMapTemplate.unwrapAll(map, ScalaMapTemplate.emptyPartialFunction))
+  def this(map: Map[String, Boolean]) = this(map, unwrapAll(map, PrimitiveInputCoercer))
 
-  def this(data: DataMap) = this(ScalaMapTemplate.wrapAll(data, Coercer), data)
+  def this(data: DataMap) = this(wrapAll(data, Coercer), data)
 
 }
 
@@ -25,7 +25,7 @@ object BooleanMap {
 
   private val Schema: MapDataSchema = DataTemplateUtil.parseSchema(SchemaJson).asInstanceOf[MapDataSchema]
 
-  private val Coercer: PartialFunction[Any, Boolean] = { case x: Boolean => x }
+  private val Coercer: OutputCoercer[Boolean] = { case x: Boolean => x }
 
   def apply(map: Map[String, Boolean]) = new BooleanMap(map)
 

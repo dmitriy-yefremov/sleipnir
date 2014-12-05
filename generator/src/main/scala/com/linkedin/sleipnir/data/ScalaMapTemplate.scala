@@ -26,24 +26,37 @@ abstract class ScalaMapTemplate(mapData: DataMap, dataSchema: MapDataSchema) ext
 object ScalaMapTemplate {
 
   /**
+   * Converts Scala types into the Pegasus types.
+   */
+  type InputCoercer[T] = PartialFunction[T, AnyRef]
+
+  /**
+   * Converts Pegasus types into Scala types.
+   */
+  type OutputCoercer[T] = PartialFunction[Any, T]
+
+  /**
+   * A pass through input coercer that converts Scala primitive types into their Java counterparts.
+   */
+  val PrimitiveInputCoercer: InputCoercer[Any] = {
+    case x: AnyRef => x
+  }
+  
+  /**
    * Converts a Scala [[Map]] into a Pegasus [[DataMap]]. Values in the map are unwrapped. Unwrapping is only applicable
    * to complex types. It converts instances of Scala classes (wrappers) into underlying data objects. Simple types are
    * returned as is.
    *
    * This method is needed to serialize a Scala [[Map]] to Pegasus JSON.
    */
-  def unwrapAll[T](map: Map[String, T], coercer: PartialFunction[T, AnyRef]): DataMap = {
+  def unwrapAll[T](map: Map[String, T], coercer: InputCoercer[T]): DataMap = {
     val dataMap = new DataMap(map.mapValues(unwrap(coercer)).asJava)
     dataMap.setReadOnly()
     dataMap
   }
 
-  def unwrap[T](coercer: PartialFunction[T, AnyRef])(value: T): AnyRef = {
+  private def unwrap[T](coercer: InputCoercer[T])(value: T): AnyRef = {
     coercer(value)
-  }
-
-  def emptyPartialFunction[T]: PartialFunction[Any, T] = {
-    case x: T => x
   }
 
   /**
@@ -53,11 +66,11 @@ object ScalaMapTemplate {
    *
    * This method is needed to deserialize a Scala [[Map]] from Pegasus JSON.
    */
-  def wrapAll[T](mapData: DataMap, coercer: PartialFunction[Any, T]) : Map[String, T] = {
+  def wrapAll[T](mapData: DataMap, coercer: OutputCoercer[T]) : Map[String, T] = {
     mapData.asScala.mapValues(wrap(coercer)).toMap
   }
 
-  private def wrap[T](coercer: PartialFunction[Any, T])(raw: Any): T  = {
+  private def wrap[T](coercer: OutputCoercer[T])(raw: Any): T  = {
     coercer(raw)
   }
 

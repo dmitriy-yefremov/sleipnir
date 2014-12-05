@@ -15,9 +15,9 @@ import @(generator.name.shortClassName)._
 
 class @(generator.name.shortClassName)(val map: Map[String,@(generator.valuesClassName)], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
 
-  def this(map: Map[String,@(generator.valuesClassName)]) = this(map, ScalaMapTemplate.unwrapAll(map, PegasusCoercer))
+  def this(map: Map[String,@(generator.valuesClassName)]) = this(map, ScalaMapTemplate.unwrapAll(map, OutputCoercer))
 
-  def this(data: DataMap) = this(ScalaMapTemplate.wrapAll(data, Coercer), data)
+  def this(data: DataMap) = this(ScalaMapTemplate.wrapAll(data, InputCoercer), data)
 
 }
 
@@ -27,7 +27,7 @@ object @(generator.name.shortClassName) {
 
   private val Schema: MapDataSchema = DataTemplateUtil.parseSchema(SchemaJson).asInstanceOf[MapDataSchema]
 
-  private val Coercer: PartialFunction[Any, @(generator.valuesClassName)] = {
+  private val InputCoercer: PartialFunction[Any, @(generator.valuesClassName)] = {
     @(generator.valuesGenerator.schema.getDereferencedDataSchema) match {
       case _: EnumDataSchema => {
         case enum: String => @(generator.valuesGenerator.name.fullClassName).withName(enum)
@@ -41,7 +41,7 @@ object @(generator.name.shortClassName) {
 
   }
 
-  private val PegasusCoercer: PartialFunction[@(generator.valuesClassName), AnyRef] = {
+  private val OutputCoercer: PartialFunction[@(generator.valuesClassName), AnyRef] = {
     @(generator.valuesGenerator.schema.getDereferencedDataSchema) match {
       case _: EnumDataSchema => {
         case enum: @(generator.valuesClassName) => enum.toString

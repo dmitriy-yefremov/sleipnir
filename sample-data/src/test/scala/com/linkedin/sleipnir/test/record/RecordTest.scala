@@ -1,7 +1,7 @@
 package com.linkedin.sleipnir.test.record
 
 import com.linkedin.sleipnir.test.SleipnirSpec
-import com.linkedin.sleipnir.test.SimpleEnum
+import com.linkedin.sleipnir.test.{SimpleEnum,SimpleEnumMap}
 
 class RecordTest extends SleipnirSpec {
 
@@ -54,6 +54,13 @@ class RecordTest extends SleipnirSpec {
       recordFromJson.mapField must beEqualTo(map)
     }
 
+    "support enum types" in {
+      val map = Map("key" -> SimpleEnum.Foo)
+      val record = MapEnumRecord(map)
+      record.mapField must beEqualTo(map)
+      val recordFromJson = checkSerialization(record, """{"mapField":{"key":"Foo"}}""")
+      recordFromJson.mapField must beEqualTo(map)
+    }
   }
 
   "Record fields" should {

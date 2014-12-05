@@ -13,7 +13,7 @@ import BytesMap._
  */
 class BytesMap(override val map: Map[String, ByteString], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
 
-  def this(map: Map[String, ByteString]) = this(map, ScalaMapTemplate.unwrapAll(map))
+  def this(map: Map[String, ByteString]) = this(map, ScalaMapTemplate.unwrapAll(map, ScalaMapTemplate.emptyPartialFunction))
 
   def this(data: DataMap) = this(ScalaMapTemplate.wrapAll(data, Coercer), data)
 

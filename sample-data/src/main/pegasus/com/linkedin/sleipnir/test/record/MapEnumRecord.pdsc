@@ -1,0 +1,14 @@
+{
+  "type": "record",
+  "name": "MapEnumRecord",
+  "namespace": "com.linkedin.sleipnir.test.record",
+  "fields": [
+    {
+      "name": "mapField",
+      "type": {
+        "type": "map",
+        "values": "com.linkedin.sleipnir.test.SimpleEnum"
+      }
+    }
+  ]
+}

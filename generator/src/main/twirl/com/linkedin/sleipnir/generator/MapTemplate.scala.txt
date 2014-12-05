@@ -2,19 +2,20 @@
 
 @import _root_.scala.collection.JavaConverters._
 @import _root_.com.linkedin.data.schema.RecordDataSchema.Field
+@import _root_.com.linkedin.data.schema.EnumDataSchema
 
 package @(generator.name.packageName)
 
 import com.linkedin.data.DataMap
 import com.linkedin.data.schema.MapDataSchema
-import com.linkedin.data.template.DataTemplateUtil
+import com.linkedin.data.template.{DataTemplate,DataTemplateUtil}
 import com.linkedin.sleipnir.data.ScalaMapTemplate
 
 import @(generator.name.shortClassName)._
 
 class @(generator.name.shortClassName)(val map: Map[String,@(generator.valuesClassName)], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
 
-  def this(map: Map[String,@(generator.valuesClassName)]) = this(map, ScalaMapTemplate.unwrapAll(map))
+  def this(map: Map[String,@(generator.valuesClassName)]) = this(map, ScalaMapTemplate.unwrapAll(map, PegasusCoercer))
 
   def this(data: DataMap) = this(ScalaMapTemplate.wrapAll(data, Coercer), data)
 
@@ -26,7 +27,33 @@ object @(generator.name.shortClassName) {
 
   private val Schema: MapDataSchema = DataTemplateUtil.parseSchema(SchemaJson).asInstanceOf[MapDataSchema]
 
-  private val Coercer: PartialFunction[Any, @(generator.valuesClassName)] = { case data: DataMap => new @(generator.valuesClassName)(data) }
+  private val Coercer: PartialFunction[Any, @(generator.valuesClassName)] = {
+    @(generator.valuesGenerator.schema.getDereferencedDataSchema) match {
+      case _: EnumDataSchema => {
+        case enum: String => @(generator.valuesGenerator.name.fullClassName).withName(enum)
+      }
+
+      case _ => {
+        case data: DataMap => new @(generator.valuesClassName)(data)
+      }
+
+    }
+
+  }
+
+  private val PegasusCoercer: PartialFunction[@(generator.valuesClassName), AnyRef] = {
+    @(generator.valuesGenerator.schema.getDereferencedDataSchema) match {
+      case _: EnumDataSchema => {
+        case enum: @(generator.valuesClassName) => enum.toString
+      }
+
+      case _ => {
+        case dataTemplate: DataTemplate[AnyRef] => dataTemplate.data()
+      }
+
+    }
+
+  }
 
   def apply(map: Map[String,@(generator.valuesClassName)]) = new @(generator.name.shortClassName)(map)
 

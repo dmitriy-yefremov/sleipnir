@@ -32,17 +32,25 @@ object ScalaMapTemplate {
    *
    * This method is needed to serialize a Scala [[Map]] to Pegasus JSON.
    */
-  def unwrapAll[T](map: Map[String, T]): DataMap = {
-    val dataMap = new DataMap(map.mapValues(unwrap).asJava)
+  def unwrapAll[T](map: Map[String, T], coercer: PartialFunction[T, AnyRef]): DataMap = {
+    val dataMap = new DataMap(map.mapValues(unwrap(coercer)).asJava)
     dataMap.setReadOnly()
     dataMap
   }
 
-  private def unwrap[T](value: T): AnyRef = {
-    value match {
-      case dataTemplate: DataTemplate[AnyRef] => dataTemplate.data()
-      case other: AnyRef => other
-    }
+  def unwrap[T](coercer: PartialFunction[T, AnyRef])(value: T): AnyRef = {
+//    value match {
+//      case dataTemplate: DataTemplate[AnyRef] => dataTemplate.data()
+//      case other: AnyRef => other
+//    }
+    coercer(value)
+  }
+
+  def emptyPartialFunction[T]: PartialFunction[Any, T] = new PartialFunction[Any, T] {
+    def apply(d: Any) = ???
+
+    def isDefinedAt(d: Any) = false
+
   }
 
   /**

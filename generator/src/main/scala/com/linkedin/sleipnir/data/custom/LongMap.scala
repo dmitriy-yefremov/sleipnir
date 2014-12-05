@@ -13,7 +13,7 @@ import LongMap._
  */
 class LongMap(override val map: Map[String, Long], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
 
-   def this(map: Map[String, Long]) = this(map, ScalaMapTemplate.unwrapAll(map))
+   def this(map: Map[String, Long]) = this(map, ScalaMapTemplate.unwrapAll(map, ScalaMapTemplate.emptyPartialFunction))
 
    def this(data: DataMap) = this(ScalaMapTemplate.wrapAll(data, Coercer), data)
 

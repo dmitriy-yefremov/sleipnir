@@ -1,5 +1,7 @@
 package com.linkedin.sleipnir.generator.types
 
+import java.util
+
 import com.linkedin.data.schema.{DataSchema, MapDataSchema}
 import com.linkedin.sleipnir.data.custom._
 import com.linkedin.sleipnir.generator.GeneratedClass
@@ -13,7 +15,7 @@ sealed trait MapTypeGenerator extends AbstractTypeGenerator {
 
   override def schema: MapDataSchema
 
-  protected def valuesGenerator: TypeGenerator = nestedGenerator(schema.getValues)
+  def valuesGenerator: TypeGenerator = nestedGenerator(schema.getValues)
 
   protected def externalClassName: String = s"Map[String, ${valuesGenerator.name.externalClassName}]"
 
@@ -34,7 +36,7 @@ class ComplexMapTypeGenerator(override val schema: MapDataSchema, override val p
     generatedClass(source)
   }
 
-  val valuesClassName: String = valuesGenerator.name.shortClassName
+  val valuesClassName: String = valuesGenerator.name.externalClassName
 
 }
 

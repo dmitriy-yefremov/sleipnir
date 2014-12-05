@@ -13,7 +13,7 @@ import FloatMap._
  */
 class FloatMap(override val map: Map[String, Float], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
 
-  def this(map: Map[String, Float]) = this(map, ScalaMapTemplate.unwrapAll(map))
+  def this(map: Map[String, Float]) = this(map, ScalaMapTemplate.unwrapAll(map, ScalaMapTemplate.emptyPartialFunction))
 
   def this(data: DataMap) = this(ScalaMapTemplate.wrapAll(data, Coercer), data)
 

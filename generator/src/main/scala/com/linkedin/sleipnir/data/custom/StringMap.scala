@@ -13,7 +13,7 @@ import StringMap._
  */
 class StringMap(override val map: Map[String, String], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
 
-  def this(map: Map[String, String]) = this(map, ScalaMapTemplate.unwrapAll(map))
+  def this(map: Map[String, String]) = this(map, ScalaMapTemplate.unwrapAll(map, ScalaMapTemplate.emptyPartialFunction))
 
   def this(data: DataMap) = this(ScalaMapTemplate.wrapAll(data, Coercer), data)
 

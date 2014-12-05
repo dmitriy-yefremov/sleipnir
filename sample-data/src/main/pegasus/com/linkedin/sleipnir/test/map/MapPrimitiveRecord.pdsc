@@ -1,7 +1,7 @@
 {
   "type": "record",
   "name": "MapPrimitiveRecord",
-  "namespace": "com.linkedin.sleipnir.test.record",
+  "namespace": "com.linkedin.sleipnir.test.map",
   "fields": [
     {
       "name": "mapField",

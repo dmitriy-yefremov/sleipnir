@@ -1,7 +1,6 @@
 package com.linkedin.sleipnir.test.record
 
-import com.linkedin.sleipnir.test.SleipnirSpec
-import com.linkedin.sleipnir.test.{SimpleEnum,SimpleEnumMap}
+import com.linkedin.sleipnir.test.{SimpleEnum, SleipnirSpec}
 
 class RecordTest extends SleipnirSpec {
 
@@ -38,29 +37,14 @@ class RecordTest extends SleipnirSpec {
 
   "Map fields" should {
 
-    "support primitive types" in {
-      val map = Map("key" -> StringValue)
-      val record = MapPrimitiveRecord(map)
-      record.mapField must beEqualTo(map)
-      val recordFromJson = checkSerialization(record, """{"mapField":{"key":"string value"}}""")
-      recordFromJson.mapField must beEqualTo(map)
-    }
-
-    "support complex types" in {
+    "be supported" in {
       val map = Map("key" -> SimpleRecordValue)
-      val record = MapComplexRecord(map)
+      val record = MapRecord(map)
       record.mapField must beEqualTo(map)
       val recordFromJson = checkSerialization(record, """{"mapField":{"key":{"field":"string value"}}}""")
       recordFromJson.mapField must beEqualTo(map)
     }
 
-    "support enum types" in {
-      val map = Map("key" -> SimpleEnum.Foo)
-      val record = MapEnumRecord(map)
-      record.mapField must beEqualTo(map)
-      val recordFromJson = checkSerialization(record, """{"mapField":{"key":"Foo"}}""")
-      recordFromJson.mapField must beEqualTo(map)
-    }
   }
 
   "Record fields" should {

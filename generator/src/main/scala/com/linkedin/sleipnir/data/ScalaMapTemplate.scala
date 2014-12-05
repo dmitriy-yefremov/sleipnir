@@ -50,13 +50,9 @@ object ScalaMapTemplate {
    * This method is needed to serialize a Scala [[Map]] to Pegasus JSON.
    */
   def unwrapAll[T](map: Map[String, T], coercer: InputCoercer[T]): DataMap = {
-    val dataMap = new DataMap(map.mapValues(unwrap(coercer)).asJava)
+    val dataMap = new DataMap(map.mapValues(coercer).asJava)
     dataMap.setReadOnly()
     dataMap
-  }
-
-  private def unwrap[T](coercer: InputCoercer[T])(value: T): AnyRef = {
-    coercer(value)
   }
 
   /**
@@ -67,11 +63,7 @@ object ScalaMapTemplate {
    * This method is needed to deserialize a Scala [[Map]] from Pegasus JSON.
    */
   def wrapAll[T](mapData: DataMap, coercer: OutputCoercer[T]) : Map[String, T] = {
-    mapData.asScala.mapValues(wrap(coercer)).toMap
-  }
-
-  private def wrap[T](coercer: OutputCoercer[T])(raw: Any): T  = {
-    coercer(raw)
+    mapData.asScala.mapValues(coercer).toMap
   }
 
 }

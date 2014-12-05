@@ -1,0 +1,14 @@
+{
+  "type": "record",
+  "name": "MapBytesRecord",
+  "namespace": "com.linkedin.sleipnir.test.map",
+  "fields": [
+    {
+      "name": "mapField",
+      "type": {
+        "type": "map",
+        "values": "bytes"
+      }
+    }
+  ]
+}

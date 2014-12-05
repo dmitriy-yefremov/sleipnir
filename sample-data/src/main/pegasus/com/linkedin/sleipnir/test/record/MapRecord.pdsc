@@ -1,6 +1,6 @@
 {
   "type": "record",
-  "name": "MapComplexRecord",
+  "name": "MapRecord",
   "namespace": "com.linkedin.sleipnir.test.record",
   "fields": [
     {

@@ -39,18 +39,11 @@ object ScalaMapTemplate {
   }
 
   def unwrap[T](coercer: PartialFunction[T, AnyRef])(value: T): AnyRef = {
-//    value match {
-//      case dataTemplate: DataTemplate[AnyRef] => dataTemplate.data()
-//      case other: AnyRef => other
-//    }
     coercer(value)
   }
 
-  def emptyPartialFunction[T]: PartialFunction[Any, T] = new PartialFunction[Any, T] {
-    def apply(d: Any) = ???
-
-    def isDefinedAt(d: Any) = false
-
+  def emptyPartialFunction[T]: PartialFunction[Any, T] = {
+    case x: T => x
   }
 
   /**

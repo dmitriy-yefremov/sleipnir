@@ -48,7 +48,7 @@ object @(generator.name.shortClassName) {
       }
 
       case _ => {
-        case dataTemplate: DataTemplate[AnyRef] => dataTemplate.data()
+        case dataTemplate: @(generator.valuesClassName) => dataTemplate.data()
       }
 
     }

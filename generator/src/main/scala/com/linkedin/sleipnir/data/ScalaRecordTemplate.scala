@@ -11,10 +11,13 @@ import com.linkedin.data.template._
  */
 abstract class ScalaRecordTemplate(data: DataMap, schema: RecordDataSchema) extends RecordTemplate(data, schema) {
 
-  def getDirect[T](field: RecordDataSchema.Field, valueClass: Class[T], mode: GetMode): Option[T] =
-    Option(obtainDirect(field, valueClass, mode))
+  def getRequired[T](field: RecordDataSchema.Field, value: Option[T]) =
+    value.getOrElse(throw new RequiredFieldNotPresentException(field.getName))
 
-  def getWrapped[T <: DataTemplate[_]](field: RecordDataSchema.Field, valueClass: Class[T], mode: GetMode): Option[T] =
-    Option(obtainWrapped(field, valueClass, mode))
+  def getDirect[T](field: RecordDataSchema.Field, valueClass: Class[T]): Option[T] =
+    Option(obtainDirect(field, valueClass, GetMode.DEFAULT))
+
+  def getWrapped[T <: DataTemplate[_]](field: RecordDataSchema.Field, valueClass: Class[T]): Option[T] =
+    Option(obtainWrapped(field, valueClass, GetMode.DEFAULT))
 
 }

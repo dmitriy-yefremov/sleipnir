@@ -19,33 +19,45 @@ abstract class ScalaMapTemplate(mapData: DataMap, dataSchema: MapDataSchema) ext
   // everything is immutable, so no need to copy
   override def copy: DataTemplate[DataMap] = this
 
-  def map: Map[String, AnyRef]
+  def map: Map[String, Any]
 
 }
 
 object ScalaMapTemplate {
 
-  def unwrapAll[T <: AnyRef](map: Map[String, AnyRef]): DataMap = {
+  /**
+   * Converts a Scala [[Map]] into a Pegasus [[DataMap]]. Values in the map are unwrapped. Unwrapping is only applicable
+   * to complex types. It converts instances of Scala classes (wrappers) into underlying data objects. Simple types are
+   * returned as is.
+   *
+   * This method is needed to serialize a Scala [[Map]] to Pegasus JSON.
+   */
+  def unwrapAll[T](map: Map[String, T]): DataMap = {
     val dataMap = new DataMap(map.mapValues(unwrap).asJava)
     dataMap.setReadOnly()
     dataMap
   }
 
-  def unwrap[T <: AnyRef](value: T): AnyRef = {
+  private def unwrap[T](value: T): AnyRef = {
     value match {
       case dataTemplate: DataTemplate[AnyRef] => dataTemplate.data()
-      case other => other
+      case other: AnyRef => other
     }
   }
 
-  def wrapAll[T <: AnyRef](mapData: DataMap, constructor: DataMap => T) : Map[String, T] = {
-    mapData.asScala.mapValues(wrap(constructor)).toMap
+  /**
+   * Converts a Pegasus [[DataMap]] into a Scala [[Map]]. Values in the map are wrapped. Wrapping is only applicable
+   * to complex types. It converts Pegasus data objects into corresponding Scala classes (wrappers). Simple types are
+   * returned as is.
+   *
+   * This method is needed to deserialize a Scala [[Map]] from Pegasus JSON.
+   */
+  def wrapAll[T](mapData: DataMap, coercer: PartialFunction[Any, T]) : Map[String, T] = {
+    mapData.asScala.mapValues(wrap(coercer)).toMap
   }
 
-  def wrap[T <: AnyRef](constructor: DataMap => T)(raw: AnyRef): T  = {
-    raw match {
-      case data: DataMap => constructor(data)
-    }
+  private def wrap[T](coercer: PartialFunction[Any, T])(raw: Any): T  = {
+    coercer(raw)
   }
 
 }

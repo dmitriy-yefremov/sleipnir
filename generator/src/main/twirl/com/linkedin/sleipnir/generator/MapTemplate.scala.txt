@@ -16,15 +16,17 @@ class @(generator.name.shortClassName)(val map: Map[String,@(generator.valuesCla
 
   def this(map: Map[String,@(generator.valuesClassName)]) = this(map, ScalaMapTemplate.unwrapAll(map))
 
-  def this(data: DataMap) = this(ScalaMapTemplate.wrapAll(data, data => new @(generator.valuesClassName)(data)), data)
+  def this(data: DataMap) = this(ScalaMapTemplate.wrapAll(data, Coercer), data)
 
 }
 
 object @(generator.name.shortClassName) {
 
-  private val SchemaJson = "@(generator.schemaJson)"
+  private val SchemaJson: String = "@(generator.schemaJson)"
 
-  private val Schema = DataTemplateUtil.parseSchema(SchemaJson).asInstanceOf[MapDataSchema]
+  private val Schema: MapDataSchema = DataTemplateUtil.parseSchema(SchemaJson).asInstanceOf[MapDataSchema]
+
+  private val Coercer: PartialFunction[Any, @(generator.valuesClassName)] = { case data: DataMap => new @(generator.valuesClassName)(data) }
 
   def apply(map: Map[String,@(generator.valuesClassName)]) = new @(generator.name.shortClassName)(map)
 

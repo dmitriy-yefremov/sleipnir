@@ -103,16 +103,8 @@ object @(generator.name.shortClassName) {
     }
 
     case map : MapDataSchema => {
-      @if(map.getValues.isComplex) {
-        val wrapper = @(fieldGenerator.name.fullClassName)(@(valueName))
-        putWrapped(@(fieldName), classOf[@(fieldGenerator.name.fullClassName)], wrapper)
-      } else {
-        val wrapper = new @(fieldGenerator.name.fullClassName)(@(valueName).size)
-        @(valueName).foreach {
-          case (key, value) => wrapper.put(key, value)
-        }
-        putWrapped(@(fieldName), classOf[@(fieldGenerator.name.fullClassName)], wrapper)
-      }
+      val wrapper = @(fieldGenerator.name.fullClassName)(@(valueName))
+      putWrapped(@(fieldName), classOf[@(fieldGenerator.name.fullClassName)], wrapper)
     }
 
     case _ => {
@@ -163,15 +155,7 @@ object @(generator.name.shortClassName) {
     }
 
     case map : MapDataSchema => {
-      @if(map.getValues.isComplex) {
-        getWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)], @(getMode)).map(_.map)
-      } else {
-        @if(map.getValues.getType == DataSchema.Type.INT) {
-          getWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)], @(getMode)).map(_.asScala.toMap.mapValues(_.intValue))
-        } else {
-          getWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)], @(getMode)).map(_.asScala.toMap)
-        }
-      }
+      getWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)], @(getMode)).map(_.map)
     }
 
     case _ => {

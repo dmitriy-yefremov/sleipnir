@@ -1,7 +1,7 @@
 package com.linkedin.sleipnir.generator.types
 
 import com.linkedin.data.schema.{DataSchema, MapDataSchema}
-import com.linkedin.data.template._
+import com.linkedin.sleipnir.data.custom._
 import com.linkedin.sleipnir.generator.GeneratedClass
 import com.linkedin.sleipnir.generator.txt.MapTemplate
 
@@ -42,7 +42,7 @@ class PrimitiveMapTypeGenerator(override val schema: MapDataSchema, override val
 
   private val PrimitiveWrapperClasses = Map(
     DataSchema.Type.BOOLEAN -> TypeName(classOf[BooleanMap], externalClassName),
-    DataSchema.Type.INT -> TypeName(classOf[IntegerMap], externalClassName),
+    DataSchema.Type.INT -> TypeName(classOf[IntMap], externalClassName),
     DataSchema.Type.LONG -> TypeName(classOf[LongMap], externalClassName),
     DataSchema.Type.FLOAT -> TypeName(classOf[FloatMap], externalClassName),
     DataSchema.Type.DOUBLE -> TypeName(classOf[DoubleMap], externalClassName),

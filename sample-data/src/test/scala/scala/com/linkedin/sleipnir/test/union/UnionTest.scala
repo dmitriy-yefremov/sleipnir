@@ -1,6 +1,6 @@
-package com.linkedin.sleipnir.test.union
+package scala.com.linkedin.sleipnir.test.union
 
-import com.linkedin.sleipnir.test.{SimpleRecord, SleipnirSpec}
+import scala.com.linkedin.sleipnir.test.{SimpleRecord, SleipnirSpec}
 
 class UnionTest extends SleipnirSpec {
 

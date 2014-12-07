@@ -1,4 +1,4 @@
-package com.linkedin.sleipnir.test
+package scala.com.linkedin.sleipnir.test
 
 import scala.reflect.ClassTag
 

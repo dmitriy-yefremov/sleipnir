@@ -1,7 +1,7 @@
-package com.linkedin.sleipnir.test.map
+package scala.com.linkedin.sleipnir.test.map
 
 import com.linkedin.data.ByteString
-import com.linkedin.sleipnir.test.{SimpleEnum, SleipnirSpec}
+import scala.com.linkedin.sleipnir.test.{SimpleEnum, SleipnirSpec}
 
 class MapTest extends SleipnirSpec {
 

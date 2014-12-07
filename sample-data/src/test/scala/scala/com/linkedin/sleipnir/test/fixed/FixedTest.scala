@@ -1,9 +1,10 @@
-package com.linkedin.sleipnir.test.fixed
+package scala.com.linkedin.sleipnir.test.fixed
 
 import java.security.MessageDigest
 
 import com.linkedin.data.ByteString
-import com.linkedin.sleipnir.test.SleipnirSpec
+
+import scala.com.linkedin.sleipnir.test.SleipnirSpec
 
 class FixedTest extends SleipnirSpec {
 

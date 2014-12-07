@@ -72,7 +72,7 @@ object Sleipnir extends Build {
 
   def runForkedGenerator(src: File, dst: File, classpath: Seq[File]): Seq[File] = {
     val mainClass = "com.linkedin.sleipnir.Sleipnir"
-    val args = Seq(src.toString, src.toString, dst.toString)
+    val args = Seq(src.toString, src.toString, dst.toString, "scala")
     val jvmOptions = Seq("-Dorg.slf4j.simpleLogger.logFile=System.out")
     IO.withTemporaryFile("sleipnir", "output") { tmpFile =>
       val outStream = new java.io.FileOutputStream(tmpFile)

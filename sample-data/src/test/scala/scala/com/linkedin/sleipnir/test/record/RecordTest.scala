@@ -1,6 +1,6 @@
-package com.linkedin.sleipnir.test.record
+package scala.com.linkedin.sleipnir.test.record
 
-import com.linkedin.sleipnir.test.{SimpleEnum, SleipnirSpec}
+import scala.com.linkedin.sleipnir.test.{SimpleEnum, SleipnirSpec}
 
 class RecordTest extends SleipnirSpec {
 

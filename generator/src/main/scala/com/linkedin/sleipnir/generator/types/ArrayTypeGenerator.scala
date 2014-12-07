@@ -12,22 +12,24 @@ import grizzled.slf4j.Logging
  */
 sealed trait ArrayTypeGenerator extends AbstractTypeGenerator {
 
-  override val schema: ArrayDataSchema
+  override def schema: ArrayDataSchema
 
-  protected val itemsGenerator: TypeGenerator = nestedGenerator(schema.getItems)
+  protected def itemsGenerator: TypeGenerator = nestedGenerator(schema.getItems)
 
-  protected val externalClassName: String = s"Seq[${itemsGenerator.name.externalClassName}]"
+  protected def externalClassName: String = s"Seq[${itemsGenerator.name.externalClassName}]"
 
 }
 
 /**
- * A generator for arrays of primitive types (e.g. an array of integers).
+ * A generator for arrays of complex types (e.g. an array of records).
  */
-class ComplexArrayTypeGenerator(override val schema: ArrayDataSchema, override val parentGenerator: Option[TypeGenerator]) extends ArrayTypeGenerator with Logging {
+class ComplexArrayTypeGenerator(override val schema: ArrayDataSchema,
+                                override val parentGenerator: Option[TypeGenerator],
+                                override val namespacePrefix: Option[String]) extends ArrayTypeGenerator with Logging {
 
   override val name: TypeName = {
     val itemsName: TypeName = itemsGenerator.name
-    TypeName(itemsName.shortClassName + "Array", itemsName.packageName, externalClassName)
+    TypeName(itemsName.shortClassName + "Array", namespace(itemsName.packageName), externalClassName)
   }
 
   override def referencedGenerators: Seq[TypeGenerator] = Seq(itemsGenerator)
@@ -43,9 +45,11 @@ class ComplexArrayTypeGenerator(override val schema: ArrayDataSchema, override v
 }
 
 /**
- * A generator for arrays of complex types (e.g. an array of records).
+ * A generator for arrays of primitive types (e.g. an array of integers).
  */
-class PrimitiveArrayTypeGenerator(override val schema: ArrayDataSchema, override val parentGenerator: Option[TypeGenerator]) extends ArrayTypeGenerator {
+class PrimitiveArrayTypeGenerator(override val schema: ArrayDataSchema,
+                                  override val parentGenerator: Option[TypeGenerator],
+                                  override val namespacePrefix: Option[String]) extends ArrayTypeGenerator {
 
   private val PrimitiveWrapperClasses = Map(
     DataSchema.Type.BOOLEAN -> TypeName(classOf[BooleanArray], externalClassName),

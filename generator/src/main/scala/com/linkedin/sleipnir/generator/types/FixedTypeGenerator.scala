@@ -6,14 +6,15 @@ import com.linkedin.sleipnir.generator.txt.FixedTemplate
 
 /**
  * A generator for [[FixedDataSchema]] types.
- * @param schema the type schema
  * @author Dmitriy Yefremov
  */
-class FixedTypeGenerator(override val schema: FixedDataSchema, override val parentGenerator: Option[TypeGenerator]) extends AbstractTypeGenerator {
+class FixedTypeGenerator(override val schema: FixedDataSchema,
+                         override val parentGenerator: Option[TypeGenerator],
+                         override val namespacePrefix: Option[String]) extends AbstractTypeGenerator {
 
-  override val name: TypeName = TypeName(schema.getName, schema.getNamespace)
+  override val name: TypeName = TypeName(schema.getName, namespace(schema.getNamespace))
 
-  override def referencedGenerators: Seq[TypeGenerator] = Seq.empty
+  override val referencedGenerators: Seq[TypeGenerator] = Seq.empty
 
   override def generateClass: Option[GeneratedClass] = {
     logger.info(s"Generating ${name.fullClassName}")

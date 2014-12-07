@@ -12,7 +12,9 @@ import com.linkedin.sleipnir.generator.txt.UnionTemplate
  * @param parentGenerator the parent generator
  * @author Dmitriy Yefremov
  */
-class UnionTypeGenerator(override val schema: UnionDataSchema, override val parentGenerator: Option[TypeGenerator]) extends AbstractTypeGenerator {
+class UnionTypeGenerator(override val schema: UnionDataSchema,
+                         override val parentGenerator: Option[TypeGenerator],
+                         override val namespacePrefix: Option[String]) extends AbstractTypeGenerator {
 
   override val name: TypeName = {
     val referencesToParentRecord = findMatchingParent(_.isInstanceOf[RecordTypeGenerator])
@@ -26,7 +28,7 @@ class UnionTypeGenerator(override val schema: UnionDataSchema, override val pare
     // build the name out of the parent's name and the field name
     val shortClassName = parentRecordSchema.getName + field.getName.capitalize + "Union"
     val packageName: String = parentRecordSchema.getNamespace
-    TypeName(shortClassName, packageName)
+    TypeName(shortClassName, namespace(packageName))
   }
 
   def memberValName(generator: TypeGenerator): String = s"Member${generator.name.shortClassName}"

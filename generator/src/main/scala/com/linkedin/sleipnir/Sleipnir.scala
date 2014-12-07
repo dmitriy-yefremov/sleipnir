@@ -21,7 +21,7 @@ object Sleipnir extends Parser with Generator {
     }
   }
 
-  def run(resolverPath: String, sourceDir: File, targetDir: File) = {
+  def run(resolverPath: String, sourceDir: File, targetDir: File, namespacePrefix: Option[String] = None) = {
     val sourceFiles = expandSource(sourceDir)
     val schemas = parseSources(sourceFiles, resolverPath)
     processSchemas(schemas, targetDir)

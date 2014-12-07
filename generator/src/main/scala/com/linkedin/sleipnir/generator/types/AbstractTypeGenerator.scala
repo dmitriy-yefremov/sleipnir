@@ -12,6 +12,21 @@ import org.apache.commons.lang3.StringEscapeUtils
 trait AbstractTypeGenerator extends TypeGenerator with Logging {
 
   /**
+   * Optional prefix that is added to name space of the generated types.
+   */
+  def namespacePrefix: Option[String]
+
+  /**
+   * Constructs a full name space given the expected package name.
+   */
+  protected def namespace(packageName: String): String = {
+    namespacePrefix match {
+      case None => packageName
+      case Some(prefix) => s"$prefix.$packageName"
+    }
+  }
+
+  /**
    * Type's schema in JSON format with Java escaping.
    */
   def schemaJson: String = {
@@ -22,7 +37,7 @@ trait AbstractTypeGenerator extends TypeGenerator with Logging {
   /**
    * Creates an instance of the generator of the specified type. Current generator is used as the parent when the instance is created.
    */
-  protected def nestedGenerator(nestedSchema: DataSchema) = TypeGeneratorFactory.instance(nestedSchema, this)
+  protected def nestedGenerator(nestedSchema: DataSchema) = TypeGeneratorFactory.instance(nestedSchema, this, namespacePrefix)
 
   /**
    * A shortcut to return a [[GeneratedClass]] instance given the source code.

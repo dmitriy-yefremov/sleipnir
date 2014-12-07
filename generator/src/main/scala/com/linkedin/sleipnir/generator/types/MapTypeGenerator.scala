@@ -1,7 +1,5 @@
 package com.linkedin.sleipnir.generator.types
 
-import java.util
-
 import com.linkedin.data.schema.{DataSchema, MapDataSchema}
 import com.linkedin.sleipnir.data.custom._
 import com.linkedin.sleipnir.generator.GeneratedClass
@@ -21,11 +19,16 @@ sealed trait MapTypeGenerator extends AbstractTypeGenerator {
 
 }
 
-class ComplexMapTypeGenerator(override val schema: MapDataSchema, override val parentGenerator: Option[TypeGenerator]) extends MapTypeGenerator {
+/**
+ * A generator for maps of complex types (e.g. a map of records).
+ */
+class ComplexMapTypeGenerator(override val schema: MapDataSchema,
+                              override val parentGenerator: Option[TypeGenerator],
+                              override val namespacePrefix: Option[String]) extends MapTypeGenerator {
 
   override val name: TypeName = {
     val valuesName = valuesGenerator.name
-    TypeName(valuesName.shortClassName + "Map", valuesName.packageName, externalClassName)
+    TypeName(valuesName.shortClassName + "Map", namespace(valuesName.packageName), externalClassName)
   }
 
   override def referencedGenerators: Seq[TypeGenerator] = Seq(valuesGenerator)
@@ -40,7 +43,12 @@ class ComplexMapTypeGenerator(override val schema: MapDataSchema, override val p
 
 }
 
-class PrimitiveMapTypeGenerator(override val schema: MapDataSchema, override val parentGenerator: Option[TypeGenerator]) extends MapTypeGenerator {
+/**
+ * A generator for maps of primitive types (e.g. a map of integers).
+ */
+class PrimitiveMapTypeGenerator(override val schema: MapDataSchema,
+                                override val parentGenerator: Option[TypeGenerator],
+                                override val namespacePrefix: Option[String]) extends MapTypeGenerator {
 
   private val PrimitiveWrapperClasses = Map(
     DataSchema.Type.BOOLEAN -> TypeName(classOf[BooleanMap], externalClassName),
@@ -54,7 +62,7 @@ class PrimitiveMapTypeGenerator(override val schema: MapDataSchema, override val
 
   override val name: TypeName = PrimitiveWrapperClasses(schema.getValues.getType)
 
-  override def referencedGenerators: Seq[TypeGenerator] = Seq.empty
+  override val referencedGenerators: Seq[TypeGenerator] = Seq.empty
 
   override def generateClass: Option[GeneratedClass] = None
 }

@@ -10,10 +10,11 @@ import com.linkedin.sleipnir.generator.txt.RecordTemplate
 
 /**
  * A generator for [[RecordDataSchema]] types.
- * @param schema the type schema
  * @author Dmitriy Yefremov
  */
-class RecordTypeGenerator(override val schema: RecordDataSchema, override val parentGenerator: Option[TypeGenerator]) extends AbstractTypeGenerator {
+class RecordTypeGenerator(override val schema: RecordDataSchema,
+                          override val parentGenerator: Option[TypeGenerator],
+                          override val namespacePrefix: Option[String]) extends AbstractTypeGenerator {
 
   def fieldValName(field: RecordDataSchema.Field): String = {
     s"Field${field.getName.capitalize}"
@@ -38,7 +39,7 @@ class RecordTypeGenerator(override val schema: RecordDataSchema, override val pa
 
   def fieldGenerator(field: RecordDataSchema.Field) = nestedGenerator(field.getType)
 
-  override val name: TypeName = TypeName(schema.getName, schema.getNamespace)
+  override val name: TypeName = TypeName(schema.getName, namespace(schema.getNamespace))
 
   override def referencedGenerators: Seq[TypeGenerator] = {
     schema.getFields.asScala.map(field => fieldGenerator(field))

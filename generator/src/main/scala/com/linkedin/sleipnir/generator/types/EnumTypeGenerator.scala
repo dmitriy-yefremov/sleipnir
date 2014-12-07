@@ -8,18 +8,19 @@ import com.linkedin.sleipnir.generator.txt.EnumTemplate
 
 /**
  * A generator for [[EnumDataSchema]] types.
- * @param schema the type schema
  * @author Dmitriy Yefremov
  */
-class EnumTypeGenerator(override val schema: EnumDataSchema, override val parentGenerator: Option[TypeGenerator]) extends AbstractTypeGenerator {
+class EnumTypeGenerator(override val schema: EnumDataSchema,
+                        override val parentGenerator: Option[TypeGenerator],
+                        override val namespacePrefix: Option[String]) extends AbstractTypeGenerator {
 
-  override val name: TypeName = TypeName(schema.getName, schema.getNamespace, schema.getFullName, schema.getFullName + ".Value")
+  override val name: TypeName = TypeName(schema.getName, namespace(schema.getNamespace), schema.getFullName, schema.getFullName + ".Value")
 
   val symbols: String = {
     schema.getSymbols.asScala.mkString(", ")
   }
 
-  override def referencedGenerators: Seq[TypeGenerator] = Seq.empty
+  override val referencedGenerators: Seq[TypeGenerator] = Seq.empty
 
   override def generateClass: Option[GeneratedClass] = {
     logger.info(s"Generating ${name.fullClassName}")

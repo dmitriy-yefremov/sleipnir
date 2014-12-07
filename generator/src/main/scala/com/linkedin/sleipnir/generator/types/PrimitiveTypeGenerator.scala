@@ -7,10 +7,11 @@ import com.linkedin.sleipnir.generator.GeneratedClass
 
 /**
  * A universal generator for all primitive data types.
- * @param schema the type schema
  * @author Dmitriy Yefremov
  */
-class PrimitiveTypeGenerator(override val schema: PrimitiveDataSchema, override val parentGenerator: Option[TypeGenerator]) extends AbstractTypeGenerator {
+class PrimitiveTypeGenerator(override val schema: PrimitiveDataSchema,
+                             override val parentGenerator: Option[TypeGenerator],
+                             override val namespacePrefix: Option[String]) extends AbstractTypeGenerator {
 
   private val PrimitiveClassNames = Map(
     Type.BOOLEAN -> TypeName("Boolean", "scala", "Boolean"),
@@ -25,7 +26,7 @@ class PrimitiveTypeGenerator(override val schema: PrimitiveDataSchema, override 
 
   override val name: TypeName = PrimitiveClassNames(schema.getType)
 
-  override def referencedGenerators: Seq[TypeGenerator] = Seq.empty
+  override val referencedGenerators: Seq[TypeGenerator] = Seq.empty
 
   override def generateClass: Option[GeneratedClass] = None
 

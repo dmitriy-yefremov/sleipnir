@@ -9,9 +9,20 @@ import com.linkedin.sleipnir.generator.types._
 import grizzled.slf4j.Logging
 import scalariform.formatter.ScalaFormatter
 
+/**
+ * This mix-in is responsible for generation of Scala source code.
+ * @author Dmitriy Yefremov
+ */
 trait Generator extends Logging {
 
-  def processSchemas(schemas: Seq[DataSchema], targetDir: File): Seq[File] = {
+  /**
+   * Generates Scala bindings for the given data schemas.
+   * @param schemas top level schemas to process
+   * @param targetDir output directory
+   * @param namespacePrefix optional prefix that is added to name space of the generated types
+   * @return files that were generated
+   */
+  def processSchemas(schemas: Seq[DataSchema], targetDir: File, namespacePrefix: Option[String] = None): Seq[File] = {
     val generators = uniqueGenerators(schemas)
     val generatedClasses = generators.flatMap { generator =>
       generator.generateClass
@@ -21,7 +32,7 @@ trait Generator extends Logging {
     }
   }
 
-  private def uniqueGenerators(schemas: Seq[DataSchema]): Seq[TypeGenerator] = {
+  private def uniqueGenerators(schemas: Seq[DataSchema], namespacePrefix: Option[String] = None): Seq[TypeGenerator] = {
 
     def loop(generators: Seq[TypeGenerator], acc: Set[TypeGenerator]): Set[TypeGenerator] = {
       generators match {
@@ -33,7 +44,7 @@ trait Generator extends Logging {
     }
 
     val generators = schemas.foldLeft(Set[TypeGenerator]()) { (acc, schema) =>
-      loop(Seq(TypeGeneratorFactory.instance(schema)), acc)
+      loop(Seq(TypeGeneratorFactory.instance(schema, namespacePrefix)), acc)
     }
 
     generators.toList

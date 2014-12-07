@@ -182,9 +182,8 @@ class RecordTest extends SleipnirSpec {
     "be supported" in {
       val union = UnionRecordFieldUnion(StringValue)
       val record = UnionRecord(union)
-      val json = toJson(record)
-      json must beEqualTo("""{"field":{"string":"string value"}}""")
-      val recordFromJson = fromJson[UnionRecord](json)
+      record.field must beEqualTo(union)
+      val recordFromJson = checkSerialization(record, """{"field":{"string":"string value"}}""")
       recordFromJson.field must beEqualTo(union)
     }
 

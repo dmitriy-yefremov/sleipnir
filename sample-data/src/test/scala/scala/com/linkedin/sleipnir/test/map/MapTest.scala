@@ -38,6 +38,14 @@ class MapTest extends SleipnirSpec {
       val recordFromJson = checkSerialization(record, """{"mapField":{"key":"d"}}""")
       recordFromJson.mapField must beEqualTo(map)
     }
+
+    "support custom names through typerefs" in {
+      val map = Map("key" -> SimpleRecordValue)
+      val wrapper = CustomNamedMap(map)
+      wrapper.map must beEqualTo(map)
+      val wrapperFromJson = checkSerialization(wrapper, """{"key":{"field":"string value"}}""")
+      wrapperFromJson.map must beEqualTo(map)
+    }
   }
 
 }

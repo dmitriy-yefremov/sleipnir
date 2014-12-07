@@ -26,7 +26,7 @@ class ComplexMapTypeGenerator(override val schema: MapDataSchema,
                               override val parentGenerator: Option[TypeGenerator],
                               override val namespacePrefix: Option[String]) extends MapTypeGenerator {
 
-  override val name: TypeName = {
+  override val name: TypeName = alias.getOrElse {
     val valuesName = valuesGenerator.name
     TypeName(valuesName.shortClassName + "Map", valuesName.packageName, externalClassName)
   }

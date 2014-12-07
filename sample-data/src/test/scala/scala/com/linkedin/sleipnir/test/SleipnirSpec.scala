@@ -1,5 +1,9 @@
 package scala.com.linkedin.sleipnir.test
 
+import java.lang.reflect.Constructor
+
+import com.linkedin.data.schema.DataSchema
+
 import scala.reflect.ClassTag
 
 import com.linkedin.data.schema.validation.{RequiredMode, ValidateDataAgainstSchema, ValidationOptions}
@@ -28,11 +32,10 @@ trait SleipnirSpec extends Specification {
    * Deserializes a data template from the given JSON.
    * @return the deserialized instance
    */
-  def fromJson[T <: DataTemplate[_] : ClassTag](json: String): T = {
+  def fromJson[T <: DataTemplate[_] : ClassTag](json: String, schema: DataSchema): T = {
     val clazz = implicitly[ClassTag[T]].runtimeClass.asInstanceOf[Class[T]]
     val dataMap = dataTemplateCodec.stringToMap(json)
-    val constructor = DataTemplateUtil.templateConstructor(clazz)
-    constructor.newInstance(dataMap)
+    DataTemplateUtil.wrap(dataMap, schema, clazz)
   }
 
   /**
@@ -44,7 +47,7 @@ trait SleipnirSpec extends Specification {
   def checkSerialization[T <: DataTemplate[_] : ClassTag](template: T, expectedJson: String): T = {
     val json = toJson(template)
     json must beEqualTo(expectedJson)
-    val templateFromJson = fromJson[T](json)
+    val templateFromJson = fromJson[T](json, template.schema())
     fixUpData(templateFromJson)
     templateFromJson must beEqualTo(template)
     templateFromJson

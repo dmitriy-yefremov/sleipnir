@@ -18,8 +18,9 @@ object SleipnirPlugin extends Plugin {
         (managedClasspath in Compile).value.map(_.data.getAbsolutePath) ++
         (internalDependencyClasspath in Compile).value.map(_.data.getAbsolutePath) // adds in .pdscs from projects that this project .dependsOn
       val resolverPath = resolverPathFiles.mkString(pathSeparator)
-
-      runSleipnirGenerator(resolverPath, src, dst)
+      //TODO: make namespace prefix configurable
+      val namespacePrefix = Some("scala")
+      Sleipnir.run(resolverPath, src, dst, namespacePrefix)
     },
     sourceGenerators in Compile <+= (sleipnirGenerator in Compile),
     libraryDependencies  <+= (version) { projectVersion =>
@@ -27,11 +28,8 @@ object SleipnirPlugin extends Plugin {
       val libVersion = projectVersion.dropRight(9)
       val scalaBinary = "2.10"
       // TODO: remove hardcoded libVersion
-      "com.linkedin.sleipnir" % s"sleipnirgenerator_$scalaBinary" % "0.0.44"
+      "com.linkedin.sleipnir" % s"sleipnirgenerator_$scalaBinary" % "0.0.52"
     }
   )
 
-  def runSleipnirGenerator(resolverPath: String, src: File, dst: File): Seq[File] = {
-    Sleipnir.run(resolverPath, src, dst)
-  }
 }

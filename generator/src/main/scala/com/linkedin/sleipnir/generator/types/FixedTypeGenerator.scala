@@ -12,7 +12,9 @@ class FixedTypeGenerator(override val schema: FixedDataSchema,
                          override val parentGenerator: Option[TypeGenerator],
                          override val namespacePrefix: Option[String]) extends AbstractTypeGenerator {
 
-  override val name: TypeName = TypeName(schema.getName, namespace(schema.getNamespace))
+  override val name: TypeName = alias.getOrElse {
+    TypeName(schema.getName, namespace(schema.getNamespace))
+  }
 
   override val referencedGenerators: Seq[TypeGenerator] = Seq.empty
 

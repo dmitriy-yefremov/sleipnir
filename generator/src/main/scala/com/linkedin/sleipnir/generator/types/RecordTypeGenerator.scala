@@ -39,7 +39,9 @@ class RecordTypeGenerator(override val schema: RecordDataSchema,
 
   def fieldGenerator(field: RecordDataSchema.Field) = nestedGenerator(field.getType)
 
-  override val name: TypeName = TypeName(schema.getName, namespace(schema.getNamespace))
+  override val name: TypeName = alias.getOrElse {
+    TypeName(schema.getName, namespace(schema.getNamespace))
+  }
 
   override def referencedGenerators: Seq[TypeGenerator] = {
     schema.getFields.asScala.map(field => fieldGenerator(field))

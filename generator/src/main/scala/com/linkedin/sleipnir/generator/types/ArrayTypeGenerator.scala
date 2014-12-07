@@ -27,7 +27,7 @@ class ComplexArrayTypeGenerator(override val schema: ArrayDataSchema,
                                 override val parentGenerator: Option[TypeGenerator],
                                 override val namespacePrefix: Option[String]) extends ArrayTypeGenerator with Logging {
 
-  override val name: TypeName = {
+  override val name: TypeName = alias.getOrElse {
     val itemsName: TypeName = itemsGenerator.name
     TypeName(itemsName.shortClassName + "Array", itemsName.packageName, externalClassName)
   }

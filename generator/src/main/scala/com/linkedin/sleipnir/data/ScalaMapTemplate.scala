@@ -21,6 +21,15 @@ abstract class ScalaMapTemplate(mapData: DataMap, dataSchema: MapDataSchema) ext
 
   def map: Map[String, Any]
 
+  override def hashCode(): Int = data.entrySet().hashCode()
+
+  override def equals(other: Any): Boolean = {
+    other match {
+      case otherTemplate: ScalaMapTemplate => data.equals(otherTemplate.data)
+    }
+  }
+
+  override def toString: String = data.entrySet().toString
 }
 
 object ScalaMapTemplate {

@@ -1,7 +1,7 @@
 {
   "type": "record",
   "name": "UnionRecord",
-  "namespace": "com.linkedin.sleipnir.test.union",
+  "namespace": "com.linkedin.sleipnir.test.record",
   "fields": [
     {
       "name": "field",

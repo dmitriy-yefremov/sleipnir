@@ -29,7 +29,9 @@ object TypeGeneratorFactory {
   }
 
   private def instance(schema: DataSchema, parentGeneratorOpt: Option[TypeGenerator], namespacePrefix: Option[String]): TypeGenerator = {
-    schema.getDereferencedDataSchema match {
+    schema match {
+      case typeref: TyperefDataSchema =>
+        new ReferenceTypeGenerator(typeref, parentGeneratorOpt, namespacePrefix)
       case primitive: PrimitiveDataSchema =>
         new PrimitiveTypeGenerator(primitive, parentGeneratorOpt, namespacePrefix)
       case enum: EnumDataSchema =>

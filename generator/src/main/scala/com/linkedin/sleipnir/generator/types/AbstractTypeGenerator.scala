@@ -12,6 +12,15 @@ import org.apache.commons.lang3.StringEscapeUtils
 trait AbstractTypeGenerator extends TypeGenerator with Logging {
 
   /**
+   * Returns the alias of the current type if it is defined through a type reference.
+   */
+  def alias: Option[TypeName] = {
+    parentGenerator.collect {
+      case typerefGenerator: ReferenceTypeGenerator => typerefGenerator.name
+    }
+  }
+
+  /**
    * Optional prefix that is added to name space of the generated types.
    */
   def namespacePrefix: Option[String]
@@ -74,9 +83,8 @@ object AbstractTypeGenerator {
 
   /**
    * Finds a parent of the given generator that matches the given predicate.
-   * @return a list of references from the given generator to the first parent matching the predicate, the resulting
-   *         list always has the matching parent in the head and the given generator in the tail
-   * @throws IllegalArgumentException if no matching parent is found
+   * @return a list of references from the given generator to the first parent matching the predicate (the matching parent
+   *         is in the head and the given generator is in the tail), an empty list is returned if no matching parent found
    */
   def findMatchingParent(generator: TypeGenerator, predicate: TypeGenerator => Boolean): List[TypeGenerator] = {
 
@@ -84,7 +92,7 @@ object AbstractTypeGenerator {
       acc.head.parentGenerator match {
         case Some(parent) if predicate(parent) => parent::acc
         case Some(parent) => find(parent::acc)
-        case None => throw new IllegalArgumentException("Could not find a matching parent")
+        case None => List.empty
       }
     }
 

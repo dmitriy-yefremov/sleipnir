@@ -177,6 +177,19 @@ class RecordTest extends SleipnirSpec {
 
   }
 
+  "Union filds" should {
+
+    "be supported" in {
+      val union = UnionRecordFieldUnion(StringValue)
+      val record = UnionRecord(union)
+      val json = toJson(record)
+      json must beEqualTo("""{"field":{"string":"string value"}}""")
+      val recordFromJson = fromJson[UnionRecord](json)
+      recordFromJson.field must beEqualTo(union)
+    }
+
+  }
+
   "Recursive references" should {
 
     "be supported" in {

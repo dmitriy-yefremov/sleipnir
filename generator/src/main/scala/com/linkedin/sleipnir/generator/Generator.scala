@@ -27,6 +27,7 @@ trait Generator extends Logging {
     val generatedClasses = generators.flatMap { generator =>
       generator.generateClass
     }
+    validateUniqueClasses(generatedClasses)
     generatedClasses.map { generatedClass =>
       writeToFile(generatedClass, targetDir)
     }
@@ -48,6 +49,14 @@ trait Generator extends Logging {
     }
 
     generators.toList
+  }
+
+  private def validateUniqueClasses(generatedClasses: Seq[GeneratedClass]): Unit = {
+    val names = generatedClasses.map(_.name)
+    val uniqueNames = names.distinct
+    if (names.size != uniqueNames.size) {
+      throw new IllegalArgumentException("The same class name is used multiple times")
+    }
   }
 
   private def writeToFile(generatedClass: GeneratedClass, targetDir: File): File = {

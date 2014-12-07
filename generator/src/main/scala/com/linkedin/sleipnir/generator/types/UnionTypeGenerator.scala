@@ -8,8 +8,6 @@ import com.linkedin.sleipnir.generator.txt.UnionTemplate
 
 /**
  * A generator for [[UnionDataSchema]] types.
- * @param schema the type schema
- * @param parentGenerator the parent generator
  * @author Dmitriy Yefremov
  */
 class UnionTypeGenerator(override val schema: UnionDataSchema,

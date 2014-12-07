@@ -28,7 +28,7 @@ class ComplexMapTypeGenerator(override val schema: MapDataSchema,
 
   override val name: TypeName = {
     val valuesName = valuesGenerator.name
-    TypeName(valuesName.shortClassName + "Map", namespace(valuesName.packageName), externalClassName)
+    TypeName(valuesName.shortClassName + "Map", valuesName.packageName, externalClassName)
   }
 
   override def referencedGenerators: Seq[TypeGenerator] = Seq(valuesGenerator)

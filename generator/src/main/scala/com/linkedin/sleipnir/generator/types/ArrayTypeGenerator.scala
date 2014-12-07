@@ -29,7 +29,7 @@ class ComplexArrayTypeGenerator(override val schema: ArrayDataSchema,
 
   override val name: TypeName = {
     val itemsName: TypeName = itemsGenerator.name
-    TypeName(itemsName.shortClassName + "Array", namespace(itemsName.packageName), externalClassName)
+    TypeName(itemsName.shortClassName + "Array", itemsName.packageName, externalClassName)
   }
 
   override def referencedGenerators: Seq[TypeGenerator] = Seq(itemsGenerator)

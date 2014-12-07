@@ -22,8 +22,8 @@ trait Generator extends Logging {
    * @param namespacePrefix optional prefix that is added to name space of the generated types
    * @return files that were generated
    */
-  def processSchemas(schemas: Seq[DataSchema], targetDir: File, namespacePrefix: Option[String] = None): Seq[File] = {
-    val generators = uniqueGenerators(schemas)
+  def processSchemas(schemas: Seq[DataSchema], targetDir: File, namespacePrefix: Option[String]): Seq[File] = {
+    val generators = uniqueGenerators(schemas, namespacePrefix)
     val generatedClasses = generators.flatMap { generator =>
       generator.generateClass
     }
@@ -32,7 +32,7 @@ trait Generator extends Logging {
     }
   }
 
-  private def uniqueGenerators(schemas: Seq[DataSchema], namespacePrefix: Option[String] = None): Seq[TypeGenerator] = {
+  private def uniqueGenerators(schemas: Seq[DataSchema], namespacePrefix: Option[String]): Seq[TypeGenerator] = {
 
     def loop(generators: Seq[TypeGenerator], acc: Set[TypeGenerator]): Set[TypeGenerator] = {
       generators match {

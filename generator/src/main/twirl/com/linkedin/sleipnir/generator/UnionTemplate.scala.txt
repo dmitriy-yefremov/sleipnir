@@ -1,6 +1,7 @@
 @(generator: com.linkedin.sleipnir.generator.types.UnionTypeGenerator)
 
 @import _root_.scala.collection.JavaConverters._
+@import _root_.com.linkedin.data.schema.DataSchema.Type
 @import _root_.com.linkedin.sleipnir.generator.types.TypeGeneratorFactory
 @import _root_.com.linkedin.sleipnir.generator.types.TypeGenerator
 
@@ -17,7 +18,7 @@ import @(generator.name.shortClassName)._
 
 class @(generator.name.shortClassName)(data: AnyRef) extends ScalaUnionTemplate(data, Schema) {
 
-@for(typeGenerator <- generator.referencedGenerators) {
+@for(typeGenerator <- generator.referencedGenerators.filterNot(_.schema.getType == Type.NULL)) {
 
   def is@(typeGenerator.name.shortClassName): Boolean = memberIs("@(typeGenerator.schema.getUnionMemberKey)")
 
@@ -34,9 +35,9 @@ object @(generator.name.shortClassName) {
 
   private val Schema = DataTemplateUtil.parseSchema(SchemaJson).asInstanceOf[UnionDataSchema]
 
-@for(typeGenerator <- generator.referencedGenerators) {
+@for(typeGenerator <- generator.referencedGenerators.filterNot(_.schema.getType == Type.NULL)) {
 
-  val @(generator.memberValName(typeGenerator)) = Schema.getType("@(typeGenerator.schema.getUnionMemberKey)")
+  private val @(generator.memberValName(typeGenerator)) = Schema.getType("@(typeGenerator.schema.getUnionMemberKey)")
 
   def apply(value: @(typeGenerator.name.externalClassName)): @(generator.name.shortClassName) = {
     val union = new @(generator.name.shortClassName)(new DataMap())
@@ -46,10 +47,18 @@ object @(generator.name.shortClassName) {
 
 }
 
+
+  @if(generator.schema.contains("null")) {
+    /**
+     * This constant represents 'null' value of the union.
+     */
+    val NullInstance = new @(generator.name.shortClassName)(null)
+  }
+
   def unapply(union: @(generator.name.shortClassName)): Option[Any] = {
     union.memberType match {
 
-    @for(typeGenerator <- generator.referencedGenerators) {
+    @for(typeGenerator <- generator.referencedGenerators.filterNot(_.schema.getType == Type.NULL)) {
       case @(generator.memberValName(typeGenerator)) => union.as@(typeGenerator.name.shortClassName)
     }
       case _ => None

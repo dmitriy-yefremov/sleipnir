@@ -17,6 +17,7 @@ class UnionTest extends SleipnirSpec {
     "support unboxing of the underlying type" in {
 
       def unbox(union: StringOrSimpleRecord): Any = {
+        // an example of how to unbox union types
         union match {
           case StringOrSimpleRecord(string: String) => string
           case StringOrSimpleRecord(record: SimpleRecord) => record
@@ -33,6 +34,16 @@ class UnionTest extends SleipnirSpec {
       val record = UnionInArrayRecord(array)
       val recordFromJson = checkSerialization(record, """{"field":[{"string":"string value"}]}""")
       recordFromJson.field must beEqualTo(array)
+    }
+
+    "support null" in {
+      val union = UnionWithNull.NullInstance
+      toJson(union) must beEqualTo("""null""")
+      union.isNull must beTrue
+      union match {
+        case UnionWithNull(string: String) => failure
+        case nullUnion if nullUnion.isNull => success
+      }
     }
 
   }

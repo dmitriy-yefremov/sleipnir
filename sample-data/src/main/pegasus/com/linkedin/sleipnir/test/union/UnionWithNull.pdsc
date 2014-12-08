@@ -1,0 +1,8 @@
+{
+  "type": "typeref",
+  "name": "com.linkedin.sleipnir.test.union.UnionWithNull",
+  "ref": [
+    "string",
+    "null"
+  ]
+}

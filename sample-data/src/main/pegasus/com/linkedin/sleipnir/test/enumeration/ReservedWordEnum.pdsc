@@ -1,0 +1,6 @@
+{
+  "name": "ReservedWordEnum",
+  "namespace": "com.linkedin.sleipnir.test.enumeration",
+  "type" : "enum",
+  "symbols" : [ "if", "else" ]
+}

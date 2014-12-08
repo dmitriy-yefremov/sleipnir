@@ -35,6 +35,16 @@ trait AbstractTypeGenerator extends TypeGenerator with Logging {
     }
   }
 
+  protected def isReserved(word: String) = AbstractTypeGenerator.ReservedWords(word)
+
+  protected def escapeReserved(word: String) = {
+    if (isReserved(word)) {
+      s"`$word`"
+    } else {
+      word
+    }
+  }
+
   /**
    * Type's schema in JSON format with Java escaping.
    */
@@ -80,6 +90,16 @@ trait AbstractTypeGenerator extends TypeGenerator with Logging {
 }
 
 object AbstractTypeGenerator {
+
+  /**
+   * The set shows the reserved words in Scala. These reserved words may not be used as constant or variable or any
+   * other identifier names.
+   */
+  val ReservedWords: Set[String] = Set(
+    "abstract", "case", "catch", "class", "def", "do", "else", "extends", "false", "final", "finally", "for", "forSome",
+    "if", "implicit", "import", "lazy", "match", "new", "null", "object", "override", "package", "private", "protected",
+    "return", "sealed", "super", "this", "throw", "trait", "try", "true", "type", "val", "var", "while", "with", "yield"
+  )
 
   /**
    * Finds a parent of the given generator that matches the given predicate.

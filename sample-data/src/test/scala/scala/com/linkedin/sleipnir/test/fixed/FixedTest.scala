@@ -18,19 +18,19 @@ class FixedTest extends SleipnirSpec {
 
   "Fixed types" should {
 
-    "should support instantiating from an array of bytes" in {
+    "support instantiating from an array of bytes" in {
       val fixed = Fixed16(Bytes)
       fixed.bytes must beEqualTo(BytesString)
       toJson(fixed) must beEqualTo(JsonString)
     }
 
-    "should support instantiating from a ByteString object" in {
+    "support instantiating from a ByteString object" in {
       val fixed = Fixed16(BytesString)
       fixed.bytes must beEqualTo(BytesString)
       toJson(fixed) must beEqualTo(JsonString)
     }
 
-    "should support instantiating from a string" in {
+    "support instantiating from a string" in {
       val fixed = Fixed16(AvroString)
       fixed.bytes must beEqualTo(BytesString)
       toJson(fixed) must beEqualTo(JsonString)

@@ -1,7 +1,7 @@
 package com.linkedin.sleipnir.generator.types
 
 import com.linkedin.data.schema.{ArrayDataSchema, DataSchema}
-import com.linkedin.data.template._
+import com.linkedin.sleipnir.data.custom._
 import com.linkedin.sleipnir.generator.GeneratedClass
 import com.linkedin.sleipnir.generator.txt.ArrayTemplate
 import grizzled.slf4j.Logging
@@ -53,7 +53,7 @@ class PrimitiveArrayTypeGenerator(override val schema: ArrayDataSchema,
 
   private val PrimitiveWrapperClasses = Map(
     DataSchema.Type.BOOLEAN -> TypeName(classOf[BooleanArray], externalClassName),
-    DataSchema.Type.INT -> TypeName(classOf[IntegerArray], externalClassName),
+    DataSchema.Type.INT -> TypeName(classOf[IntArray], externalClassName),
     DataSchema.Type.LONG -> TypeName(classOf[LongArray], externalClassName),
     DataSchema.Type.FLOAT -> TypeName(classOf[FloatArray], externalClassName),
     DataSchema.Type.DOUBLE -> TypeName(classOf[DoubleArray], externalClassName),

@@ -17,17 +17,9 @@ class RecordTest extends SleipnirSpec {
 
   "Array fields" should {
 
-    "support primitive types" in {
-      val array = Seq(StringValue)
-      val record = ArrayPrimitiveRecord(array)
-      record.arrayField must beEqualTo(array)
-      val recordFromJson = checkSerialization(record, """{"arrayField":["string value"]}""")
-      recordFromJson.arrayField must beEqualTo(array)
-    }
-
-    "support complex types" in {
+    "be supported" in {
       val array = Seq(SimpleRecordValue)
-      val record = ArrayComplexRecord(array)
+      val record = ArrayRecord(array)
       record.arrayField must beEqualTo(array)
       val recordFromJson = checkSerialization(record, """{"arrayField":[{"field":"string value"}]}""")
       recordFromJson.arrayField must beEqualTo(array)

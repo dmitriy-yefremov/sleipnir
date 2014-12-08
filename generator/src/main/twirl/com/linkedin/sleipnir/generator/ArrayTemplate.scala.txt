@@ -5,6 +5,7 @@
 
 package @(generator.name.packageName)
 
+import com.linkedin.data.DataMap
 import com.linkedin.data.DataList
 import com.linkedin.data.schema.ArrayDataSchema
 import com.linkedin.data.template.DataTemplateUtil
@@ -16,15 +17,17 @@ class @(generator.name.shortClassName) protected(val items: Seq[@(generator.item
 
   def this(items: Seq[@(generator.itemsClassName)]) = this(items, ScalaArrayTemplate.unwrapAll(items))
 
-  def this(data: DataList) = this(ScalaArrayTemplate.wrapAll(data, data => new @(generator.itemsClassName)(data)), data)
+  def this(data: DataList) = this(ScalaArrayTemplate.wrapAll(data, Coercer), data)
 
 }
 
 object @(generator.name.shortClassName) {
 
-  private val SchemaJson = "@(generator.schemaJson)"
+  private val SchemaJson: String = "@(generator.schemaJson)"
 
-  private val Schema = DataTemplateUtil.parseSchema(SchemaJson).asInstanceOf[ArrayDataSchema]
+  private val Schema: ArrayDataSchema = DataTemplateUtil.parseSchema(SchemaJson).asInstanceOf[ArrayDataSchema]
+
+  private val Coercer: PartialFunction[Any, @(generator.itemsClassName)] = { case data: DataMap => new @(generator.itemsClassName)(data) }
 
   def apply(items: Seq[@(generator.itemsClassName)]) = new @(generator.name.shortClassName)(items)
 

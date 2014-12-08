@@ -19,33 +19,41 @@ abstract class ScalaArrayTemplate protected(itemsData: DataList, dataSchema: Arr
   // everything is immutable, so no need to copy
   override def copy: DataTemplate[DataList] = this
 
-  def items: Seq[AnyRef]
+  def items: Seq[Any]
 
 }
 
 object ScalaArrayTemplate {
 
-  def unwrapAll[T <: AnyRef](items: Seq[T]): DataList = {
+  /**
+   * Converts a Scala [[Seq]] into a Pegasus [[DataList]]. Values in the seq are unwrapped.
+   *
+   * This method is needed to serialize a Scala [[Seq]] to Pegasus JSON.
+   */
+  def unwrapAll[T](items: Seq[T]): DataList = {
     val dataList = new DataList(items.map(unwrap).asJava)
     dataList.setReadOnly()
     dataList
   }
 
-  def unwrap[T <: AnyRef](item: T): AnyRef = {
+  private def unwrap[T](item: T): AnyRef = {
     item match {
       case dataTemplate: DataTemplate[AnyRef] => dataTemplate.data()
-      case other => other
+      case other: AnyRef => other
     }
   }
 
-  def wrapAll[T <: AnyRef](itemsData: DataList, constructor: DataMap => T): Seq[T] = {
-    itemsData.asScala.map(itemData => wrap(itemData, constructor)).toVector
+  /**
+   * Converts a Pegasus [[DataList]] into a Scala [[Seq]]. Values in the list are wrapped.
+   *
+   * This method is needed to deserialize a Scala [[Seq]] from Pegasus JSON.
+   */
+  def wrapAll[T](itemsData: DataList, coercer: PartialFunction[Any, T]): Seq[T] = {
+    itemsData.asScala.map(wrap(coercer)).toVector
   }
 
-  def wrap[T <: AnyRef](raw: AnyRef, constructor: DataMap => T): T = {
-    raw match {
-      case data: DataMap => constructor(data)
-    }
+  private def wrap[T](coercer: PartialFunction[Any, T])(raw: Any): T = {
+    coercer(raw)
   }
 
 }

@@ -1,7 +1,7 @@
 {
   "type": "record",
   "name": "ArrayComplexRecord",
-  "namespace": "com.linkedin.sleipnir.test.record",
+  "namespace": "com.linkedin.sleipnir.test.array",
   "fields": [
     {
       "name": "arrayField",

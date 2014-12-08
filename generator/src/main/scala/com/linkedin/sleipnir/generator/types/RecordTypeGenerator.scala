@@ -16,12 +16,16 @@ class RecordTypeGenerator(override val schema: RecordDataSchema,
                           override val parentGenerator: Option[TypeGenerator],
                           override val namespacePrefix: Option[String]) extends AbstractTypeGenerator {
 
+  def escapedFieldName(field: RecordDataSchema.Field): String = {
+    escapeReserved(field.getName)
+  }
+
   def fieldValName(field: RecordDataSchema.Field): String = {
     s"Field${field.getName.capitalize}"
   }
 
   def constructorArg(field: RecordDataSchema.Field): String = {
-    s"${field.getName}: ${recordTypeOf(field)}"
+    s"${escapedFieldName(field)}: ${recordTypeOf(field)}"
   }
 
   def constructorArgs: String = {
@@ -29,7 +33,9 @@ class RecordTypeGenerator(override val schema: RecordDataSchema,
   }
 
   def constructorParams: String = {
-    schema.getFields.asScala.map(_.getName).mkString(", ")
+    val fields = schema.getFields.asScala
+    val escaped = fields.map(escapedFieldName)
+    escaped.mkString(", ")
   }
 
   def recordTypeOf(field: RecordDataSchema.Field): String = {

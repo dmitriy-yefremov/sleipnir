@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "name": "ReservedWordsRecord",
+  "namespace": "com.linkedin.sleipnir.test.record",
+  "fields": [
+    {
+      "name": "object",
+      "type": "string"
+    }
+  ]
+}

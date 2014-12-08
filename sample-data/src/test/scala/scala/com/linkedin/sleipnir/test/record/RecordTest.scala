@@ -201,4 +201,15 @@ class RecordTest extends SleipnirSpec {
 
   }
 
+  "Reserved words" should {
+
+    "be escaped" in {
+      val record = ReservedWordsRecord(StringValue)
+      record.`object` must beEqualTo(StringValue)
+      val recordFromJson = checkSerialization(record, """{"object":"string value"}""")
+      recordFromJson.`object` must beEqualTo(StringValue)
+    }
+
+  }
+
 }

@@ -23,12 +23,9 @@ object SleipnirPlugin extends Plugin {
       Sleipnir.run(resolverPath, src, dst, namespacePrefix)
     },
     sourceGenerators in Compile <+= (sleipnirGenerator in Compile),
-    libraryDependencies  <+= (version) { projectVersion =>
-      require(projectVersion.endsWith("-SNAPSHOT"))
-      val libVersion = projectVersion.dropRight(9)
-      val scalaBinary = "2.10"
-      // TODO: remove hardcoded libVersion
-      "com.linkedin.sleipnir" % s"sleipnirgenerator_$scalaBinary" % "0.0.52"
+    libraryDependencies  += {
+      val version = SleipnirPlugin.getClass.getPackage.getImplementationVersion
+      "com.linkedin.sleipnir" % s"sleipnirgenerator_2.10" % version
     }
   )
 

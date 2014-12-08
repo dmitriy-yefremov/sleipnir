@@ -11,7 +11,7 @@ import com.linkedin.data.template.{DataTemplate, UnionTemplate}
  * really lightweight. It in turn simplifies the logic to generate those classes.
  * @author Dmitriy Yefremov
  */
-abstract class ScalaUnionTemplate(data: AnyRef, schema: UnionDataSchema) extends UnionTemplate(data, schema) {
+abstract class ScalaUnionTemplate protected(data: AnyRef, schema: UnionDataSchema) extends UnionTemplate(data, schema) {
 
   protected def set[T: ClassTag](memberSchema: DataSchema, value: T): Unit = {
     val clazz = implicitly[ClassTag[T]].runtimeClass

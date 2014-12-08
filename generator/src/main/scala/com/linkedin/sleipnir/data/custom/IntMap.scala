@@ -11,7 +11,7 @@ import com.linkedin.sleipnir.data.custom.IntMap._
  * Custom wrapper for Map[String, Int].
  * @author Dmitriy Yefremov
  */
-class IntMap(override val map: Map[String, Int], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
+class IntMap protected(override val map: Map[String, Int], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
 
   def this(map: Map[String, Int]) = this(map, unwrapAll(map, PrimitiveInputCoercer))
 

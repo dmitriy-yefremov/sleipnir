@@ -11,7 +11,7 @@ import com.linkedin.sleipnir.data.custom.LongMap._
  * Custom wrapper for Map[String, Long].
  * @author Dmitriy Yefremov
  */
-class LongMap(override val map: Map[String, Long], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
+class LongMap protected(override val map: Map[String, Long], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
 
    def this(map: Map[String, Long]) = this(map, ScalaMapTemplate.unwrapAll(map, PrimitiveInputCoercer))
 

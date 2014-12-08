@@ -12,7 +12,7 @@ import com.linkedin.sleipnir.data.ScalaArrayTemplate
 
 import @(generator.name.shortClassName)._
 
-class @(generator.name.shortClassName)(val items: Seq[@(generator.itemsClassName)], itemsData: DataList) extends ScalaArrayTemplate(itemsData, Schema) {
+class @(generator.name.shortClassName) protected(val items: Seq[@(generator.itemsClassName)], itemsData: DataList) extends ScalaArrayTemplate(itemsData, Schema) {
 
   def this(items: Seq[@(generator.itemsClassName)]) = this(items, ScalaArrayTemplate.unwrapAll(items))
 

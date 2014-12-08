@@ -11,7 +11,7 @@ import com.linkedin.sleipnir.data.custom.BooleanMap._
  * Custom wrapper for Map[String, Boolean].
  * @author Dmitriy Yefremov
  */
-class BooleanMap(override val map: Map[String, Boolean], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
+class BooleanMap protected(override val map: Map[String, Boolean], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
 
   def this(map: Map[String, Boolean]) = this(map, unwrapAll(map, PrimitiveInputCoercer))
 

@@ -10,7 +10,7 @@ import scala.collection.JavaConverters._
  * A super type for all map types
  * @author Anirudh Padmarao
  */
-abstract class ScalaMapTemplate(mapData: DataMap, dataSchema: MapDataSchema) extends DataTemplate[DataMap] {
+abstract class ScalaMapTemplate protected(mapData: DataMap, dataSchema: MapDataSchema) extends DataTemplate[DataMap] {
 
   override def schema: DataSchema = dataSchema
 

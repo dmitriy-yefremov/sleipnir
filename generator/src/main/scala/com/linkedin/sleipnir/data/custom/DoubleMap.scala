@@ -11,7 +11,7 @@ import com.linkedin.sleipnir.data.custom.DoubleMap._
  * Custom wrapper for Map[String, Double].
  * @author Dmitriy Yefremov
  */
-class DoubleMap(override val map: Map[String, Double], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
+class DoubleMap protected(override val map: Map[String, Double], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
 
   def this(map: Map[String, Double]) = this(map, unwrapAll(map, PrimitiveInputCoercer))
 

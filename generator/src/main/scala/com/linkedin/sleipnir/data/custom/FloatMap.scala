@@ -11,7 +11,7 @@ import com.linkedin.sleipnir.data.custom.FloatMap._
  * Custom wrapper for Map[String, Float].
  * @author Dmitriy Yefremov
  */
-class FloatMap(override val map: Map[String, Float], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
+class FloatMap protected(override val map: Map[String, Float], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
 
   def this(map: Map[String, Float]) = this(map, unwrapAll(map, PrimitiveInputCoercer))
 

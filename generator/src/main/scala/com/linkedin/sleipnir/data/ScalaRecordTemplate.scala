@@ -9,7 +9,7 @@ import com.linkedin.data.template._
  * lifting and make extending classes really lightweight. It in turn simplifies the logic to generate those classes.
  * @author Dmitriy Yefremov
  */
-abstract class ScalaRecordTemplate(data: DataMap, schema: RecordDataSchema) extends RecordTemplate(data, schema) {
+abstract class ScalaRecordTemplate protected(data: DataMap, schema: RecordDataSchema) extends RecordTemplate(data, schema) {
 
   def getRequired[T](field: RecordDataSchema.Field, value: Option[T]) =
     value.getOrElse(throw new RequiredFieldNotPresentException(field.getName))

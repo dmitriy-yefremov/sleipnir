@@ -11,7 +11,7 @@ import com.linkedin.sleipnir.data.custom.StringMap._
  * Custom wrapper for Map[String, String].
  * @author Dmitriy Yefremov
  */
-class StringMap(override val map: Map[String, String], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
+class StringMap protected(override val map: Map[String, String], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
 
   def this(map: Map[String, String]) = this(map, ScalaMapTemplate.unwrapAll(map, PrimitiveInputCoercer))
 

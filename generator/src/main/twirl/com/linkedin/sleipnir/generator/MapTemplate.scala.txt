@@ -13,7 +13,7 @@ import com.linkedin.sleipnir.data.ScalaMapTemplate
 
 import @(generator.name.shortClassName)._
 
-class @(generator.name.shortClassName)(val map: Map[String,@(generator.valuesClassName)], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
+class @(generator.name.shortClassName) protected(val map: Map[String,@(generator.valuesClassName)], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
 
   def this(map: Map[String,@(generator.valuesClassName)]) = this(map, ScalaMapTemplate.unwrapAll(map, InputCoercer))
 

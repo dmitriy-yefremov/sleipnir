@@ -10,7 +10,7 @@ import scala.collection.JavaConverters._
  * A super type for all array types.
  * @author Dmitriy Yefremov
  */
-abstract class ScalaArrayTemplate(itemsData: DataList, dataSchema: ArrayDataSchema) extends DataTemplate[DataList] {
+abstract class ScalaArrayTemplate protected(itemsData: DataList, dataSchema: ArrayDataSchema) extends DataTemplate[DataList] {
 
   override def schema: DataSchema = dataSchema
 

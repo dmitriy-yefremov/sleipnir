@@ -11,7 +11,7 @@ import com.linkedin.sleipnir.data.custom.BytesMap._
  * Custom wrapper for Map[String, ByteString].
  * @author Dmitriy Yefremov
  */
-class BytesMap(override val map: Map[String, ByteString], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
+class BytesMap protected(override val map: Map[String, ByteString], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
 
   def this(map: Map[String, ByteString]) = this(map, unwrapAll(map, PrimitiveInputCoercer))
 

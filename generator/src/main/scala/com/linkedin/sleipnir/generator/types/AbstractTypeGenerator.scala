@@ -35,10 +35,11 @@ trait AbstractTypeGenerator extends TypeGenerator with Logging {
     }
   }
 
-  protected def isReserved(word: String) = AbstractTypeGenerator.ReservedWords(word)
-
+  /**
+   * Escapes the given string if it is a Scala reserved word.
+   */
   protected def escapeReserved(word: String) = {
-    if (isReserved(word)) {
+    if (AbstractTypeGenerator.ReservedWords(word)) {
       s"`$word`"
     } else {
       word

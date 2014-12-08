@@ -10,7 +10,7 @@ import com.linkedin.sleipnir.data.custom.DoubleArray._
 /**
  * Custom wrapper for Seq[Double]
  */
-class DoubleArray(override val items: Seq[Double], itemsData: DataList) extends ScalaArrayTemplate(itemsData, Schema) {
+class DoubleArray protected(override val items: Seq[Double], itemsData: DataList) extends ScalaArrayTemplate(itemsData, Schema) {
 
   def this(items: Seq[Double]) = this(items, unwrapAll(items))
 

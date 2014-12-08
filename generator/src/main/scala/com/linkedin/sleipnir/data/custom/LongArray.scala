@@ -10,7 +10,7 @@ import com.linkedin.sleipnir.data.custom.LongArray._
 /**
  * Custom wrapper for Seq[Long].
  */
-class LongArray(override val items: Seq[Long], itemsData: DataList) extends ScalaArrayTemplate(itemsData, Schema) {
+class LongArray protected(override val items: Seq[Long], itemsData: DataList) extends ScalaArrayTemplate(itemsData, Schema) {
 
   def this(items: Seq[Long]) = this(items, unwrapAll(items))
 

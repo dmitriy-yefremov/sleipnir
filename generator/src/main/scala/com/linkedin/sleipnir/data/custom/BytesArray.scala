@@ -11,7 +11,7 @@ import com.linkedin.sleipnir.data.custom.BytesArray._
 /**
  * Custom wrapper for Seq[ByteString]
  */
-class BytesArray(override val items: Seq[ByteString], itemsData: DataList) extends ScalaArrayTemplate(itemsData, Schema) {
+class BytesArray protected(override val items: Seq[ByteString], itemsData: DataList) extends ScalaArrayTemplate(itemsData, Schema) {
 
   def this(items: Seq[ByteString]) = this(items, unwrapAll(items))
 

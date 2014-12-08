@@ -10,7 +10,7 @@ import com.linkedin.sleipnir.data.custom.StringArray._
 /**
  * Custom wrapper for Seq[String]
  */
-class StringArray(override val items: Seq[String], itemsData: DataList) extends ScalaArrayTemplate(itemsData, Schema) {
+class StringArray protected(override val items: Seq[String], itemsData: DataList) extends ScalaArrayTemplate(itemsData, Schema) {
 
   def this(items: Seq[String]) = this(items, unwrapAll(items))
 

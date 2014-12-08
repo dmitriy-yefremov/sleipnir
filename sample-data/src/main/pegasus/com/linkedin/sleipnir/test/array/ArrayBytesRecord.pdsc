@@ -1,13 +1,13 @@
 {
   "type": "record",
-  "name": "ArrayPrimitiveRecord",
-  "namespace": "com.linkedin.sleipnir.test.record",
+  "name": "ArrayBytesRecord",
+  "namespace": "com.linkedin.sleipnir.test.array",
   "fields": [
     {
       "name": "arrayField",
       "type": {
         "type": "array",
-        "items": "string"
+        "items": "bytes"
       }
     }
   ]

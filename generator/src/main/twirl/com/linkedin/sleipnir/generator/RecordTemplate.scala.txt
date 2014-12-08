@@ -95,11 +95,7 @@ object @(generator.name.shortClassName) {
     }
 
     case array : ArrayDataSchema => {
-      @if(array.getItems.isComplex) {
-        putWrapped(@(fieldName), classOf[@(fieldGenerator.name.fullClassName)], @(fieldGenerator.name.fullClassName)(@(valueName)))
-      } else {
-        putWrapped(@(fieldName), classOf[@(fieldGenerator.name.fullClassName)], new @(fieldGenerator.name.fullClassName)(@(valueName).asJavaCollection))
-      }
+      putWrapped(@(fieldName), classOf[@(fieldGenerator.name.fullClassName)], @(fieldGenerator.name.fullClassName)(@(valueName)))
     }
 
     case map : MapDataSchema => {
@@ -146,11 +142,7 @@ object @(generator.name.shortClassName) {
     }
 
     case array : ArrayDataSchema => {
-      @if(array.getItems.isComplex) {
-        getWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)]).map(_.items)
-      } else {
-        getWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)]).map(_.asScala.toSeq)
-      }
+      getWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)]).map(_.items)
     }
 
     case map : MapDataSchema => {

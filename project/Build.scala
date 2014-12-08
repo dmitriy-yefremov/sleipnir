@@ -23,7 +23,7 @@ object Sleipnir extends Build {
     .settings(
       productSpecDependencies ++= Seq(
         "external.grizzled-slf4j",
-        "external.slf4j-simple",
+        "external.logback",
         "external.commons-lang",
         "external.scalariform",
         "external.specs2" in "test",
@@ -65,7 +65,9 @@ object Sleipnir extends Build {
       val dst = sourceManaged.value
       val classpath = (dependencyClasspath in Runtime in sleipnirGenerator).value.files
       streams.value.log.info("Generating PDSC bindings...")
-      runForkedGenerator(src, dst, classpath)
+      val files = runForkedGenerator(src, dst, classpath)
+      streams.value.log.info(s"There are ${files.size} classes generated from PDSC")
+      files
     },
     sourceGenerators in Compile <+= (forkedVmSleipnirGenerator in Compile)
   )
@@ -73,7 +75,7 @@ object Sleipnir extends Build {
   def runForkedGenerator(src: File, dst: File, classpath: Seq[File]): Seq[File] = {
     val mainClass = "com.linkedin.sleipnir.Sleipnir"
     val args = Seq(src.toString, src.toString, dst.toString, "scala")
-    val jvmOptions = Seq("-Dorg.slf4j.simpleLogger.logFile=System.out")
+    val jvmOptions = Seq.empty //Seq("-Dorg.slf4j.simpleLogger.logFile=System.out")
     IO.withTemporaryFile("sleipnir", "output") { tmpFile =>
       val outStream = new java.io.FileOutputStream(tmpFile)
       try {

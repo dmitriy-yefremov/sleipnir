@@ -94,6 +94,8 @@ object AbstractTypeGenerator {
   /**
    * The set shows the reserved words in Scala. These reserved words may not be used as constant or variable or any
    * other identifier names.
+   *
+   * See the spec for details: http://www.scala-lang.org/files/archive/spec/2.11/01-lexical-syntax.html
    */
   val ReservedWords: Set[String] = Set(
     "abstract", "case", "catch", "class", "def", "do", "else", "extends", "false", "final", "finally", "for", "forSome",

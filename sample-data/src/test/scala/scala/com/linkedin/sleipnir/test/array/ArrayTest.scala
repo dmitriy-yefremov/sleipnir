@@ -1,7 +1,7 @@
 package scala.com.linkedin.sleipnir.test.array
 
 import com.linkedin.data.ByteString
-import scala.com.linkedin.sleipnir.test.SleipnirSpec
+import scala.com.linkedin.sleipnir.test.{SimpleEnum,SleipnirSpec}
 
 class ArrayTest extends SleipnirSpec {
 
@@ -20,6 +20,14 @@ class ArrayTest extends SleipnirSpec {
       val record = ArrayComplexRecord(array)
       record.arrayField must beEqualTo(array)
       val recordFromJson = checkSerialization(record, """{"arrayField":[{"field":"string value"}]}""")
+      recordFromJson.arrayField must beEqualTo(array)
+    }
+
+    "support enum values" in {
+      val array = Seq(SimpleEnum.Foo)
+      val record = ArrayEnumRecord(array)
+      record.arrayField must beEqualTo(array)
+      val recordFromJson = checkSerialization(record, """{"arrayField":["Foo"]}""")
       recordFromJson.arrayField must beEqualTo(array)
     }
 

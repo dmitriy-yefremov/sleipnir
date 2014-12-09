@@ -32,25 +32,8 @@ abstract class ScalaMapTemplate protected(mapData: DataMap, dataSchema: MapDataS
   override def toString: String = data.entrySet().toString
 }
 
-object ScalaMapTemplate {
+object ScalaMapTemplate extends TypeCoercer {
 
-  /**
-   * Converts Scala types into the Pegasus types.
-   */
-  type InputCoercer[T] = PartialFunction[T, AnyRef]
-
-  /**
-   * Converts Pegasus types into Scala types.
-   */
-  type OutputCoercer[T] = PartialFunction[Any, T]
-
-  /**
-   * A pass through input coercer that converts Scala primitive types into their Java counterparts.
-   */
-  val PrimitiveInputCoercer: InputCoercer[Any] = {
-    case x: AnyRef => x
-  }
-  
   /**
    * Converts a Scala [[Map]] into a Pegasus [[DataMap]]. Values in the map are unwrapped. Unwrapping is only applicable
    * to complex types. It converts instances of Scala classes (wrappers) into underlying data objects. Simple types are

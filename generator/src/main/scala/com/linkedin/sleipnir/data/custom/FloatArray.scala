@@ -12,7 +12,7 @@ import com.linkedin.sleipnir.data.custom.FloatArray._
  */
 class FloatArray protected(override val items: Seq[Float], itemsData: DataList) extends ScalaArrayTemplate(itemsData, Schema) {
 
-  def this(items: Seq[Float]) = this(items, unwrapAll(items))
+  def this(items: Seq[Float]) = this(items, unwrapAll(items, PrimitiveInputCoercer))
 
   def this(data: DataList) = this(wrapAll(data, Coercer), data)
 

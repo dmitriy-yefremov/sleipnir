@@ -12,7 +12,7 @@ import com.linkedin.sleipnir.data.custom.BooleanArray._
  */
 class BooleanArray protected(override val items: Seq[Boolean], itemsData: DataList) extends ScalaArrayTemplate(itemsData, Schema) {
 
-  def this(items: Seq[Boolean]) = this(items, unwrapAll(items))
+  def this(items: Seq[Boolean]) = this(items, unwrapAll(items, PrimitiveInputCoercer))
 
   def this(data: DataList) = this(wrapAll(data, Coercer), data)
 

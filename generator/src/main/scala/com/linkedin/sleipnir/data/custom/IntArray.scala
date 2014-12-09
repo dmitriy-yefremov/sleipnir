@@ -12,7 +12,7 @@ import com.linkedin.sleipnir.data.custom.IntArray._
  */
 class IntArray protected(override val items: Seq[Int], itemsData: DataList) extends ScalaArrayTemplate(itemsData, Schema) {
 
-  def this(items: Seq[Int]) = this(items, unwrapAll(items))
+  def this(items: Seq[Int]) = this(items, unwrapAll(items, PrimitiveInputCoercer))
 
   def this(data: DataList) = this(wrapAll(data, Coercer), data)
 

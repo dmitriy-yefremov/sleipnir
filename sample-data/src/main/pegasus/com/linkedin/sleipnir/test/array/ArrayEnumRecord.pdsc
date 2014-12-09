@@ -1,0 +1,14 @@
+{
+  "type": "record",
+  "name": "ArrayEnumRecord",
+  "namespace": "com.linkedin.sleipnir.test.array",
+  "fields": [
+    {
+      "name": "arrayField",
+      "type": {
+        "type": "array",
+        "items": "com.linkedin.sleipnir.test.SimpleEnum"
+      }
+    }
+  ]
+}

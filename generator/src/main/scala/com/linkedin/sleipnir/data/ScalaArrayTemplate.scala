@@ -23,37 +23,26 @@ abstract class ScalaArrayTemplate protected(itemsData: DataList, dataSchema: Arr
 
 }
 
-object ScalaArrayTemplate {
+object ScalaArrayTemplate extends TypeCoercer {
 
   /**
-   * Converts a Scala [[Seq]] into a Pegasus [[DataList]]. Values in the seq are unwrapped.
+   * Converts a Scala [[Seq]] into a Pegasus [[DataList]]. Values in the seq are unwrapped with the coercer.
    *
    * This method is needed to serialize a Scala [[Seq]] to Pegasus JSON.
    */
-  def unwrapAll[T](items: Seq[T]): DataList = {
-    val dataList = new DataList(items.map(unwrap).asJava)
+  def unwrapAll[T](items: Seq[T], coercer: InputCoercer[T]): DataList = {
+    val dataList = new DataList(items.map(coercer).asJava)
     dataList.setReadOnly()
     dataList
   }
 
-  private def unwrap[T](item: T): AnyRef = {
-    item match {
-      case dataTemplate: DataTemplate[AnyRef] => dataTemplate.data()
-      case other: AnyRef => other
-    }
-  }
-
   /**
-   * Converts a Pegasus [[DataList]] into a Scala [[Seq]]. Values in the list are wrapped.
+   * Converts a Pegasus [[DataList]] into a Scala [[Seq]]. Values in the list are wrapped with the coercer.
    *
    * This method is needed to deserialize a Scala [[Seq]] from Pegasus JSON.
    */
-  def wrapAll[T](itemsData: DataList, coercer: PartialFunction[Any, T]): Seq[T] = {
-    itemsData.asScala.map(wrap(coercer)).toVector
-  }
-
-  private def wrap[T](coercer: PartialFunction[Any, T])(raw: Any): T = {
-    coercer(raw)
+  def wrapAll[T](itemsData: DataList, coercer: OutputCoercer[T]): Seq[T] = {
+    itemsData.asScala.map(coercer).toVector
   }
 
 }

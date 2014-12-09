@@ -14,7 +14,7 @@ sealed trait ArrayTypeGenerator extends AbstractTypeGenerator {
 
   override def schema: ArrayDataSchema
 
-  protected def itemsGenerator: TypeGenerator = nestedGenerator(schema.getItems)
+  def itemsGenerator: TypeGenerator = nestedGenerator(schema.getItems)
 
   protected def externalClassName: String = s"Seq[${itemsGenerator.name.externalClassName}]"
 

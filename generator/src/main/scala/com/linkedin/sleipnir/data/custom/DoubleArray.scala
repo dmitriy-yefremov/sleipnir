@@ -12,7 +12,7 @@ import com.linkedin.sleipnir.data.custom.DoubleArray._
  */
 class DoubleArray protected(override val items: Seq[Double], itemsData: DataList) extends ScalaArrayTemplate(itemsData, Schema) {
 
-  def this(items: Seq[Double]) = this(items, unwrapAll(items))
+  def this(items: Seq[Double]) = this(items, unwrapAll(items, PrimitiveInputCoercer))
 
   def this(data: DataList) = this(wrapAll(data, Coercer), data)
 

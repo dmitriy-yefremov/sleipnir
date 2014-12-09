@@ -48,9 +48,9 @@ class ComplexMapTypeGenerator(override val schema: MapDataSchema,
  */
 class PrimitiveMapTypeGenerator(override val schema: MapDataSchema,
                                 override val parentGenerator: Option[TypeGenerator],
-                                override val namespacePrefix: Option[String]) extends MapTypeGenerator {
+                                override val namespacePrefix: Option[String]) extends MapTypeGenerator with PredefinedTypeGenerator {
 
-  private val PrimitiveWrapperClasses = Map(
+  override val typeNames = Map(
     DataSchema.Type.BOOLEAN -> TypeName(classOf[BooleanMap], externalClassName),
     DataSchema.Type.INT -> TypeName(classOf[IntMap], externalClassName),
     DataSchema.Type.LONG -> TypeName(classOf[LongMap], externalClassName),
@@ -60,9 +60,6 @@ class PrimitiveMapTypeGenerator(override val schema: MapDataSchema,
     DataSchema.Type.STRING -> TypeName(classOf[StringMap], externalClassName)
   )
 
-  override val name: TypeName = PrimitiveWrapperClasses(schema.getValues.getType)
+  override val name: TypeName = typeNames(schema.getValues.getType)
 
-  override val referencedGenerators: Seq[TypeGenerator] = Seq.empty
-
-  override def generateClass: Option[GeneratedClass] = None
 }

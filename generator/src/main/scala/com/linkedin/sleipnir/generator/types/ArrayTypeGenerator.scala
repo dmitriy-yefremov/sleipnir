@@ -49,9 +49,9 @@ class ComplexArrayTypeGenerator(override val schema: ArrayDataSchema,
  */
 class PrimitiveArrayTypeGenerator(override val schema: ArrayDataSchema,
                                   override val parentGenerator: Option[TypeGenerator],
-                                  override val namespacePrefix: Option[String]) extends ArrayTypeGenerator {
+                                  override val namespacePrefix: Option[String]) extends ArrayTypeGenerator with PredefinedTypeGenerator {
 
-  private val PrimitiveWrapperClasses = Map(
+  override val typeNames = Map(
     DataSchema.Type.BOOLEAN -> TypeName(classOf[BooleanArray], externalClassName),
     DataSchema.Type.INT -> TypeName(classOf[IntArray], externalClassName),
     DataSchema.Type.LONG -> TypeName(classOf[LongArray], externalClassName),
@@ -61,10 +61,6 @@ class PrimitiveArrayTypeGenerator(override val schema: ArrayDataSchema,
     DataSchema.Type.STRING -> TypeName(classOf[StringArray], externalClassName)
   )
 
-  override val name: TypeName = PrimitiveWrapperClasses(schema.getItems.getType)
-
-  override def referencedGenerators: Seq[TypeGenerator] = Seq.empty
-
-  override def generateClass: Option[GeneratedClass] = None
+  override val name: TypeName = typeNames(schema.getItems.getType)
 
 }

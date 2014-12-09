@@ -11,9 +11,9 @@ import com.linkedin.sleipnir.generator.GeneratedClass
  */
 class PrimitiveTypeGenerator(override val schema: PrimitiveDataSchema,
                              override val parentGenerator: Option[TypeGenerator],
-                             override val namespacePrefix: Option[String]) extends AbstractTypeGenerator {
+                             override val namespacePrefix: Option[String]) extends AbstractTypeGenerator with PredefinedTypeGenerator {
 
-  private val PrimitiveClassNames = Map(
+  override val typeNames = Map(
     Type.BOOLEAN -> TypeName("Boolean", "scala", "Boolean"),
     Type.NULL -> TypeName("Null", "scala", "Null"),
     Type.FLOAT -> TypeName("Float", "scala", "Float"),
@@ -24,10 +24,6 @@ class PrimitiveTypeGenerator(override val schema: PrimitiveDataSchema,
     Type.BYTES -> TypeName(classOf[ByteString])
   )
 
-  override val name: TypeName = PrimitiveClassNames(schema.getType)
-
-  override val referencedGenerators: Seq[TypeGenerator] = Seq.empty
-
-  override def generateClass: Option[GeneratedClass] = None
+  override val name: TypeName = typeNames(schema.getType)
 
 }

@@ -16,7 +16,8 @@ trait AbstractTypeGenerator extends TypeGenerator with Logging {
    */
   def alias: Option[TypeName] = {
     parentGenerator.collect {
-      case typerefGenerator: ReferenceTypeGenerator => typerefGenerator.name
+      case typeref: ReferenceTypeGenerator =>
+        TypeName(typeref.schema.getName, namespace(typeref.schema.getNamespace))
     }
   }
 
@@ -88,6 +89,8 @@ trait AbstractTypeGenerator extends TypeGenerator with Logging {
     val state = Seq(schema, name)
     state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
   }
+
+  override def toString: String = s"${getClass.getSimpleName} [${name.fullClassName}]"
 }
 
 object AbstractTypeGenerator {

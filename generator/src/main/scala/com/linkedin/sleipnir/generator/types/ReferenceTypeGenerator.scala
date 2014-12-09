@@ -11,9 +11,12 @@ class ReferenceTypeGenerator(override val schema: TyperefDataSchema,
                              override val parentGenerator: Option[TypeGenerator],
                              override val namespacePrefix: Option[String]) extends AbstractTypeGenerator {
 
-  override def name: TypeName = TypeName(schema.getName, namespace(schema.getNamespace))
+  // for predefined types we can not overwrite the name, so we always delegate the name decision to the referenced generator
+  override def name: TypeName = referencedGenerator.name
 
-  override def referencedGenerators: Seq[TypeGenerator] = Seq(nestedGenerator(schema.getRef))
+  private def referencedGenerator = nestedGenerator(schema.getRef)
+
+  override def referencedGenerators: Seq[TypeGenerator] = Seq(referencedGenerator)
 
   override val generateClass: Option[GeneratedClass] = None
 

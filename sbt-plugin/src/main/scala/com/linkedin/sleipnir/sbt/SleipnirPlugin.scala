@@ -21,7 +21,11 @@ object SleipnirPlugin extends Plugin {
       val resolverPath = resolverPathFiles.mkString(pathSeparator)
       //TODO: make namespace prefix configurable
       val namespacePrefix = Some("scala")
-      streams.value.log.info("Generating Scala bindings for PDSC...")
+      val log = streams.value.log
+      log.info("Generating Scala bindings for PDSC...")
+      log.debug(s"Resolver path: $resolverPath")
+      log.debug(s"Source path: $src")
+      log.debug(s"Destination path: $dst")
       Sleipnir.run(resolverPath, src, dst, namespacePrefix)
     },
 

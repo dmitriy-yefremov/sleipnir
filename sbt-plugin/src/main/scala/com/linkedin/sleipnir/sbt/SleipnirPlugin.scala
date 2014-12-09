@@ -11,6 +11,7 @@ object SleipnirPlugin extends Plugin {
   val sleipnirGenerator = taskKey[Seq[File]]("Sleipnir generator")
 
   lazy val sleipnirSettings: Seq[Def.Setting[_]] = Seq(
+
     sleipnirGenerator in Compile := {
       val src = sourceDirectory.value / "main" / "pegasus"
       val dst = sourceManaged.value
@@ -20,9 +21,12 @@ object SleipnirPlugin extends Plugin {
       val resolverPath = resolverPathFiles.mkString(pathSeparator)
       //TODO: make namespace prefix configurable
       val namespacePrefix = Some("scala")
+      streams.value.log.info("Generating Scala bindings for PDSC...")
       Sleipnir.run(resolverPath, src, dst, namespacePrefix)
     },
+
     sourceGenerators in Compile <+= (sleipnirGenerator in Compile),
+
     libraryDependencies  += {
       val version = SleipnirPlugin.getClass.getPackage.getImplementationVersion
       "com.linkedin.sleipnir" % s"sleipnirgenerator_2.10" % version

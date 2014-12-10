@@ -6,8 +6,6 @@ import com.linkedin.data.schema.EnumDataSchema
 import com.linkedin.sleipnir.generator.GeneratedClass
 import com.linkedin.sleipnir.generator.txt.EnumTemplate
 
-import scala.collection.mutable
-
 /**
  * A generator for [[EnumDataSchema]] types.
  * @author Dmitriy Yefremov
@@ -21,7 +19,6 @@ class EnumTypeGenerator(override val schema: EnumDataSchema,
       schema.getName,
       namespace(schema.getNamespace),
       namespace(schema.getFullName),
-      namespace(schema.getFullName + ".Value"),
       namespace(schema.getFullName + ".Value")
     )
   }

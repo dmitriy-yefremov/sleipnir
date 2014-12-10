@@ -21,6 +21,7 @@ class EnumTypeGenerator(override val schema: EnumDataSchema,
       schema.getName,
       namespace(schema.getNamespace),
       namespace(schema.getFullName),
+      namespace(schema.getFullName + ".Value"),
       namespace(schema.getFullName + ".Value")
     )
   }

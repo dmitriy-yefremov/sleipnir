@@ -4,6 +4,17 @@ import scala.com.linkedin.sleipnir.test.{SimpleEnum, SleipnirSpec}
 
 class RecordTest extends SleipnirSpec {
 
+  "Primitive fields" should {
+
+    "support boolean types" in {
+      val record = BooleanRecord(false)
+      record.field must beEqualTo(false)
+      val recordFromJson = checkSerialization(record, """{"field":false}""")
+      recordFromJson.field must beEqualTo(false)
+    }
+
+  }
+
   "Enum fields" should {
 
     "be supported" in {
@@ -169,7 +180,7 @@ class RecordTest extends SleipnirSpec {
 
   }
 
-  "Union filds" should {
+  "Union fields" should {
 
     "be supported" in {
       val union = UnionRecordFieldUnion(StringValue)

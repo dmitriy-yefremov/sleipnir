@@ -83,7 +83,7 @@ object @(generator.name.shortClassName) {
   @(fieldGenerator.schema.getDereferencedDataSchema) match {
 
     case _ : PrimitiveDataSchema => {
-      putDirect(@(fieldName), classOf[@(fieldGenerator.name.externalClassName)], @(valueName))
+      putDirect[@(fieldGenerator.name.internalClassName)](@(fieldName), classOf[@(fieldGenerator.name.internalClassName)], @(valueName))
     }
 
     case _ : RecordDataSchema | _ : FixedDataSchema | _ : UnionDataSchema => {

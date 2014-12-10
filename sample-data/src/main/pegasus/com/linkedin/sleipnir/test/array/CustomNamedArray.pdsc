@@ -1,0 +1,8 @@
+{
+  "type": "typeref",
+  "name": "com.linkedin.sleipnir.test.array.CustomNamedArray",
+  "ref": {
+    "type": "array",
+    "items": "com.linkedin.sleipnir.test.SimpleRecord"
+  }
+}

@@ -14,7 +14,7 @@ class PrimitiveTypeGenerator(override val schema: PrimitiveDataSchema,
                              override val namespacePrefix: Option[String]) extends AbstractTypeGenerator with PredefinedTypeGenerator {
 
   override val typeNames = Map(
-    Type.BOOLEAN -> TypeName("Boolean", "scala", "Boolean"),
+    Type.BOOLEAN -> TypeName("Boolean", "scala", "Boolean", "java.lang.Boolean"),
     Type.NULL -> TypeName("Null", "scala", "Null"),
     Type.FLOAT -> TypeName("Float", "scala", "Float"),
     Type.STRING -> TypeName("String", "scala", "String"),

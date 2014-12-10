@@ -23,9 +23,10 @@ object SleipnirPlugin extends Plugin {
       val namespacePrefix = Some("scala")
       val log = streams.value.log
       log.info("Generating Scala bindings for PDSC...")
-      log.debug(s"Resolver path: $resolverPath")
-      log.debug(s"Source path: $src")
-      log.debug(s"Destination path: $dst")
+      //TODO: remove this logging after the codebase is stabilized and not much debugging is needed
+      log.info("Sleipnir resolver path: " + resolverPath)
+      log.info("Sleipnir source path: " + src)
+      log.info("Sleipnir destination path: " + dst)
       Sleipnir.run(resolverPath, src, dst, namespacePrefix)
     },
 

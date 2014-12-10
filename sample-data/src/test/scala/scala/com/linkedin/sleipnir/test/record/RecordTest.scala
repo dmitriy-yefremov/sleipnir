@@ -75,6 +75,13 @@ class RecordTest extends SleipnirSpec {
 
   "Optional fields" should {
 
+    "default to None" in {
+      val record = OptionalPrimitiveRecord()
+      record.stringOption must beEqualTo(None)
+      val recordFromJson = checkSerialization(record, "{}")
+      recordFromJson.stringOption must beEqualTo(None)
+    }
+
     "support primitive types" in {
       val record = OptionalPrimitiveRecord(Some(StringValue))
       record.stringOption must beEqualTo(Some(StringValue))

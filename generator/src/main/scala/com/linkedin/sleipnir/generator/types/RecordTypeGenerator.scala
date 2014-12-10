@@ -25,7 +25,11 @@ class RecordTypeGenerator(override val schema: RecordDataSchema,
   }
 
   def constructorArg(field: RecordDataSchema.Field): String = {
-    s"${escapedFieldName(field)}: ${recordTypeOf(field)}"
+    val baseArg = s"${escapedFieldName(field)}: ${recordTypeOf(field)}"
+    if (field.getOptional)
+      baseArg + " = None"
+    else
+      baseArg
   }
 
   def constructorArgs: String = {

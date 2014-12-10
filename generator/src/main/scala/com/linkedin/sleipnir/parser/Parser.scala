@@ -41,12 +41,23 @@ trait Parser extends Logging {
       val schemaLocation = new FileDataSchemaLocation(source)
       if (resolver.locationResolved(schemaLocation)) {
         logger.info(s"Skipping $source, already resolved")
-        Seq.empty
+        findResolvedSchemas(schemaLocation, resolver)
       } else {
         logger.info(s"Parsing $source")
         parseSchema(schemaLocation, resolver)
       }
     }
+  }
+
+  private def findResolvedSchemas(schemaLocation: DataSchemaLocation, resolver: DataSchemaResolver): Seq[DataSchema] = {
+    val resolvedLocations = resolver.nameToDataSchemaLocations.asScala
+    val resolvedSchemas = for {
+      nameLocationPair <- resolvedLocations.filter(_._2 == schemaLocation)
+      existingSchema <- Option(resolver.existingDataSchema(nameLocationPair._1))
+    } yield {
+      existingSchema
+    }
+    resolvedSchemas.toSeq
   }
 
   private def parseSchema(schemaLocation: DataSchemaLocation, resolver: DataSchemaResolver): Seq[DataSchema] = {

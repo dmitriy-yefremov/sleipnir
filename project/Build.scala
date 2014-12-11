@@ -4,6 +4,7 @@ import sbt.IO
 
 import twirl.sbt.TwirlPlugin._
 import org.scalastyle.sbt.ScalastylePlugin
+import de.johoop.jacoco4sbt.JacocoPlugin._
 
 import com.linkedin.sbt.MintPlugin
 import com.linkedin.sbt.core.ext.LiKeys._
@@ -33,6 +34,7 @@ object Sleipnir extends Build {
     )
     .settings(Twirl.settings: _*)
     .settings(ScalastylePlugin.Settings: _*)
+    .settings(jacoco.settings: _*)
     .settings(commands ++= Seq(MintPlugin.buildCmd))
 
   /**
@@ -45,6 +47,7 @@ object Sleipnir extends Build {
       sbtPlugin := true
     )
     .settings(ScalastylePlugin.Settings: _*)
+    .settings(jacoco.settings: _*)
     .settings(commands ++= Seq(MintPlugin.buildCmd))
 
   /**
@@ -59,6 +62,7 @@ object Sleipnir extends Build {
         "external.specs2" in "test"
       )
     )
+    .settings(jacoco.settings: _*)
 
   lazy val forkedVmSleipnirGenerator = taskKey[Seq[File]]("Sleipnir generator executed in a forked VM")
 

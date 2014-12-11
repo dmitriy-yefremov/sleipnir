@@ -4,10 +4,12 @@
 
 package @(generator.name.packageName)
 
+import com.linkedin.sleipnir.data.ScalaEnumTemplate
+
 /**
  * @(generator.schema.getDoc)
  */
-object @(generator.name.shortClassName) extends Enumeration {
+object @(generator.name.shortClassName) extends ScalaEnumTemplate {
 
   type @(generator.name.shortClassName) = Value
 

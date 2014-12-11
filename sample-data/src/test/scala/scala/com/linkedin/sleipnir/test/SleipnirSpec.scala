@@ -1,7 +1,5 @@
 package scala.com.linkedin.sleipnir.test
 
-import java.lang.reflect.Constructor
-
 import com.linkedin.data.schema.DataSchema
 
 import scala.reflect.ClassTag

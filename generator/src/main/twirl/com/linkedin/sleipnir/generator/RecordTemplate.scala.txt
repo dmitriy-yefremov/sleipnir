@@ -137,7 +137,7 @@ object @(generator.name.shortClassName) {
     case _ : EnumDataSchema => {
       {
         val name = getDirect(@(generator.fieldValName(field)), classOf[String])
-        name.map(@(fieldGenerator.name.fullClassName).withName(_))
+        name.map(@(fieldGenerator.name.fullClassName).withNameOrUnknown(_))
       }
     }
 

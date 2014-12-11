@@ -31,6 +31,12 @@ class MapTest extends SleipnirSpec {
       recordFromJson.mapField must beEqualTo(map)
     }
 
+    "support unknown enum values" in {
+      val mapEnumRecordSchema = MapEnumRecord(Map()).schema()
+      val recordFromJson = fromJson[MapEnumRecord]("""{"mapField":{"key":"Baz"}}""", mapEnumRecordSchema)
+      recordFromJson.mapField must beEqualTo(Map("key" -> SimpleEnum.$Unknown))
+    }
+
     "support bytes values" in {
       val map = Map("key" -> ByteString.copy(Array[Byte](100)))
       val record = MapBytesRecord(map)

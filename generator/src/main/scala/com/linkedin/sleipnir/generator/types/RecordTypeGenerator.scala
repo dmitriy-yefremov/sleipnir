@@ -1,10 +1,8 @@
 package com.linkedin.sleipnir.generator.types
 
-import grizzled.slf4j.Logging
-
 import scala.collection.JavaConverters._
 
-import com.linkedin.data.schema.{DataSchema,RecordDataSchema}
+import com.linkedin.data.schema.RecordDataSchema
 import com.linkedin.sleipnir.generator.GeneratedClass
 import com.linkedin.sleipnir.generator.txt.RecordTemplate
 

@@ -31,6 +31,12 @@ class ArrayTest extends SleipnirSpec {
       recordFromJson.arrayField must beEqualTo(array)
     }
 
+    "support unknown enum values" in {
+      val arrayEnumRecordSchema = ArrayEnumRecord(Seq()).schema()
+      val recordFromJson = fromJson[ArrayEnumRecord]("""{"arrayField":["Baz"]}""", arrayEnumRecordSchema)
+      recordFromJson.arrayField must beEqualTo(Seq(SimpleEnum.$Unknown))
+    }
+
     "support bytes values" in {
       val array = Seq(ByteString.copy(Array[Byte](100)))
       val record = ArrayBytesRecord(array)

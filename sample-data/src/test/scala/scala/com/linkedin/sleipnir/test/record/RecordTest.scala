@@ -7,10 +7,11 @@ class RecordTest extends SleipnirSpec {
   "Primitive fields" should {
 
     "support boolean types" in {
-      val record = BooleanRecord(false)
-      record.field must beEqualTo(false)
+      val field = false
+      val record = BooleanRecord(field)
+      record.field must beEqualTo(field)
       val recordFromJson = checkSerialization(record, """{"field":false}""")
-      recordFromJson.field must beEqualTo(false)
+      recordFromJson.field must beEqualTo(field)
     }
 
   }
@@ -22,6 +23,12 @@ class RecordTest extends SleipnirSpec {
       record.enum must beEqualTo(SimpleEnum.Foo)
       val recordFromJson = checkSerialization(record, """{"enum":"Foo"}""")
       recordFromJson.enum must beEqualTo(SimpleEnum.Foo)
+    }
+
+    "support unknown values" in {
+      val enumRecordSchema = EnumRecord(SimpleEnum.Foo).schema()
+      val recordFromJson = fromJson[EnumRecord]("""{"enum":"Baz"}""", enumRecordSchema)
+      recordFromJson.enum must beEqualTo(SimpleEnum.$Unknown)
     }
 
   }

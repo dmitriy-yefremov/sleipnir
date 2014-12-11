@@ -30,7 +30,7 @@ object @(generator.name.shortClassName) {
   private val OutputCoercer: PartialFunction[Any, @(generator.valuesClassName)] = {
     @(generator.valuesGenerator.schema.getDereferencedDataSchema) match {
       case _: EnumDataSchema => {
-        case enum: String => @(generator.valuesGenerator.name.fullClassName).withName(enum)
+        case enum: String => @(generator.valuesGenerator.name.fullClassName).withNameOrUnknown(enum)
       }
 
       case _ => {

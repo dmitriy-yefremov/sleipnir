@@ -3,6 +3,7 @@ import Keys._
 import sbt.IO
 
 import twirl.sbt.TwirlPlugin._
+import org.scalastyle.sbt.ScalastylePlugin
 
 import com.linkedin.sbt.MintPlugin
 import com.linkedin.sbt.core.ext.LiKeys._
@@ -31,6 +32,7 @@ object Sleipnir extends Build {
       )
     )
     .settings(Twirl.settings: _*)
+    .settings(ScalastylePlugin.Settings: _*)
     .settings(commands ++= Seq(MintPlugin.buildCmd))
 
   /**
@@ -42,6 +44,7 @@ object Sleipnir extends Build {
     .settings(
       sbtPlugin := true
     )
+    .settings(ScalastylePlugin.Settings: _*)
     .settings(commands ++= Seq(MintPlugin.buildCmd))
 
   /**

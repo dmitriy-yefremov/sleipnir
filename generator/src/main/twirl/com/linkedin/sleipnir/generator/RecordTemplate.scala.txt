@@ -53,9 +53,9 @@ class @(generator.name.shortClassName)(data: DataMap) extends ScalaRecordTemplat
 
 object @(generator.name.shortClassName) {
 
-  private val SchemaJson = "@(generator.schemaJson)"
+  private val SchemaJson: String = "@(generator.schemaJson)"
 
-  private val Schema = DataTemplateUtil.parseSchema(SchemaJson).asInstanceOf[RecordDataSchema]
+  private val Schema: RecordDataSchema = DataTemplateUtil.parseSchema(SchemaJson).asInstanceOf[RecordDataSchema]
 
 @for(field <- generator.schema.getFields.asScala) {
   private val @(generator.fieldValName(field)) = Schema.getField("@(field.getName)")

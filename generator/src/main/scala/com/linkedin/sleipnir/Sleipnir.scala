@@ -10,7 +10,7 @@ object Sleipnir extends Parser with Generator {
   def main(args: Array[String]): Unit = {
 
     if (args.length < 3) {
-      println("Usage: Sleipnir <resolving path> <source dir> <target dir> [namespace prefix]")
+      println("Usage: Sleipnir <resolving path> <source dir> <target dir> [namespace prefix]") // scalastyle:ignore
     } else {
       val resolverPath = args(0)
       val sourceDir = new File(args(1))
@@ -20,7 +20,7 @@ object Sleipnir extends Parser with Generator {
     }
   }
 
-  def run(resolverPath: String, sourceDir: File, targetDir: File, namespacePrefix: Option[String] = None) = {
+  def run(resolverPath: String, sourceDir: File, targetDir: File, namespacePrefix: Option[String] = None): Seq[File] = {
     val sourceFiles = expandSource(sourceDir)
     val schemas = parseSources(sourceFiles, resolverPath)
     processSchemas(schemas, targetDir, namespacePrefix)

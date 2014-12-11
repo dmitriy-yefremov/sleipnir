@@ -27,6 +27,6 @@ object FloatMap {
 
   private val Coercer: OutputCoercer[Float] = { case x: Float => x }
 
-  def apply(map: Map[String, Float]) = new FloatMap(map)
+  def apply(map: Map[String, Float]): FloatMap = new FloatMap(map)
 
 }

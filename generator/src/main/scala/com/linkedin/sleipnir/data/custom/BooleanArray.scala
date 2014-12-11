@@ -26,6 +26,6 @@ object BooleanArray {
 
   private val Coercer: PartialFunction[Any, Boolean] = { case x: Boolean => x }
 
-  def apply(items: Seq[Boolean]) = new BooleanArray(items)
+  def apply(items: Seq[Boolean]): BooleanArray = new BooleanArray(items)
 
 }

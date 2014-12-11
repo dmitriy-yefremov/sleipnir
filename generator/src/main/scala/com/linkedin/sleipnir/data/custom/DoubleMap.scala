@@ -27,6 +27,6 @@ object DoubleMap {
 
   private val Coercer: OutputCoercer[Double] = { case x: Double => x }
 
-  def apply(map: Map[String, Double]) = new DoubleMap(map)
+  def apply(map: Map[String, Double]): DoubleMap = new DoubleMap(map)
 
 }

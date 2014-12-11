@@ -27,6 +27,6 @@ object BytesArray {
 
   private val Coercer: PartialFunction[Any, ByteString] = { case x: ByteString => x }
 
-  def apply(items: Seq[ByteString]) = new BytesArray(items)
+  def apply(items: Seq[ByteString]): BytesArray = new BytesArray(items)
 
 }

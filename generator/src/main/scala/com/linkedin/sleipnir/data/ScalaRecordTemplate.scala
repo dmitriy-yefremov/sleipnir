@@ -11,7 +11,7 @@ import com.linkedin.data.template._
  */
 abstract class ScalaRecordTemplate protected(data: DataMap, schema: RecordDataSchema) extends RecordTemplate(data, schema) {
 
-  def getRequired[T](field: RecordDataSchema.Field, value: Option[T]) =
+  def getRequired[T](field: RecordDataSchema.Field, value: Option[T]): T =
     value.getOrElse(throw new RequiredFieldNotPresentException(field.getName))
 
   def getDirect[T](field: RecordDataSchema.Field, valueClass: Class[T]): Option[T] =

@@ -27,6 +27,6 @@ object LongMap {
 
    private val Coercer: OutputCoercer[Long] = { case x: Long => x }
 
-   def apply(map: Map[String, Long]) = new LongMap(map)
+   def apply(map: Map[String, Long]): LongMap = new LongMap(map)
 
  }

@@ -26,6 +26,6 @@ object DoubleArray {
 
   private val Coercer: PartialFunction[Any, Double] = { case x: Double => x }
 
-  def apply(items: Seq[Double]) = new DoubleArray(items)
+  def apply(items: Seq[Double]): DoubleArray = new DoubleArray(items)
 
 }

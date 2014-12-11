@@ -28,10 +28,11 @@ class RecordTypeGenerator(override val schema: RecordDataSchema,
 
   def constructorArg(field: RecordDataSchema.Field): String = {
     val baseArg = s"${escapedFieldName(field)}: ${recordTypeOf(field)}"
-    if (field.getOptional)
+    if (field.getOptional) {
       baseArg + " = None"
-    else
+    } else {
       baseArg
+    }
   }
 
   def constructorArgs: String = {
@@ -48,7 +49,7 @@ class RecordTypeGenerator(override val schema: RecordDataSchema,
     if(field.getOptional) s"Option[$base]" else base
   }
 
-  def fieldGenerator(field: RecordDataSchema.Field) = nestedGenerator(field.getType)
+  def fieldGenerator(field: RecordDataSchema.Field): TypeGenerator = nestedGenerator(field.getType)
 
   override val name: TypeName = alias.getOrElse {
     TypeName(schema.getName, namespace(schema.getNamespace))

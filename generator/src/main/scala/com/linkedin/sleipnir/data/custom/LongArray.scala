@@ -26,6 +26,6 @@ object LongArray {
 
   private val Coercer: PartialFunction[Any, Long] = { case x: Long => x }
 
-  def apply(items: Seq[Long]) = new LongArray(items)
+  def apply(items: Seq[Long]): LongArray = new LongArray(items)
 
 }

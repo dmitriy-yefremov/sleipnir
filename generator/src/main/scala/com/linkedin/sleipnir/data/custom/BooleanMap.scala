@@ -27,6 +27,6 @@ object BooleanMap {
 
   private val Coercer: OutputCoercer[Boolean] = { case x: Boolean => x }
 
-  def apply(map: Map[String, Boolean]) = new BooleanMap(map)
+  def apply(map: Map[String, Boolean]): BooleanMap = new BooleanMap(map)
 
 }

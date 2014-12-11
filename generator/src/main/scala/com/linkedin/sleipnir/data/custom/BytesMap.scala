@@ -27,6 +27,6 @@ object BytesMap {
 
   private val Coercer: OutputCoercer[ByteString] = { case x: ByteString => x }
 
-  def apply(map: Map[String, ByteString]) = new BytesMap(map)
+  def apply(map: Map[String, ByteString]): BytesMap = new BytesMap(map)
 
 }

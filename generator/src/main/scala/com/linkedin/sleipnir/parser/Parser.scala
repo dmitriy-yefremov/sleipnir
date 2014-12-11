@@ -14,7 +14,7 @@ import scala.collection.JavaConverters._
 trait Parser extends Logging {
 
   /**
-   * Returns all schema files in the given path. 
+   * Returns all schema files in the given path.
    * @param path either a file or a directory
    * @return the file itself if the path represents a file or all schema under the given directory if the path represents a directory
    */

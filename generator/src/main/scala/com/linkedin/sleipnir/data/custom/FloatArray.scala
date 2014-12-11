@@ -26,6 +26,6 @@ object FloatArray {
 
   private val Coercer: PartialFunction[Any, Float] = { case x: Float => x }
 
-  def apply(items: Seq[Float]) = new FloatArray(items)
+  def apply(items: Seq[Float]): FloatArray = new FloatArray(items)
 
 }

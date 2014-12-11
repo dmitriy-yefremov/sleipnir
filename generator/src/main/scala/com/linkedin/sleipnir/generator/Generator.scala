@@ -39,8 +39,11 @@ trait Generator extends Logging {
       generators match {
         case Nil => acc
         case h :: t =>
-          if (acc contains h) loop(t, acc)
-          else loop(t ++ h.referencedGenerators, acc + h)
+          if (acc contains h) {
+             loop(t, acc)
+          } else {
+            loop(t ++ h.referencedGenerators, acc + h)
+          }
       }
     }
 

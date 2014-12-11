@@ -27,6 +27,6 @@ object IntMap {
 
   private val Coercer: OutputCoercer[Int] = { case x: Int => x }
 
-  def apply(map: Map[String, Int]) = new IntMap(map)
+  def apply(map: Map[String, Int]): IntMap = new IntMap(map)
 
 }

@@ -8,7 +8,7 @@ trait ScalaEnumTemplate extends Enumeration {
 
   val $Unknown = Value
 
-  def withNameOrUnknown(s: String) = {
+  def withNameOrUnknown(s: String): Value = {
     try {
       withName(s)
     } catch {

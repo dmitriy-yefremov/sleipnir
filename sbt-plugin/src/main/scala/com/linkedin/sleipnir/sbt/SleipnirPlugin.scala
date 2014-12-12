@@ -63,7 +63,9 @@ object SleipnirPlugin extends Plugin {
    */
   val sleipnirDownstreamSettings: Seq[Def.Setting[_]] = sleipnirSettings ++ Seq(
 
-    dataTemplatesDependenciesFilter := DependencyFilter.allPass,
+    dataTemplatesDependenciesFilter := DependencyFilter.fnToArtifactFilter { artifact =>
+      artifact.configurations.toSeq.exists(_.name == "dataTemplate")
+    },
 
     extractDataTemplatesTarget := target.value / "pdsc-temp",
 
@@ -71,12 +73,7 @@ object SleipnirPlugin extends Plugin {
 
     cleanFiles += extractDataTemplatesTarget.value,
 
-    dataTemplatesDependencies := {
-      val filteredReport = update.value.filter(dataTemplatesDependenciesFilter.value)
-      filteredReport.toSeq.collect {
-        case (_, _, artifact, file) if artifact.configurations.toSeq.exists(_.name == "dataTemplate") => file
-      }
-    },
+    dataTemplatesDependencies := update.value.matching(dataTemplatesDependenciesFilter.value),
 
     extractDataTemplates := {
       val target = extractDataTemplatesTarget.value

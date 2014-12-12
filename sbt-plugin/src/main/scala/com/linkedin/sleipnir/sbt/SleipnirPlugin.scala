@@ -52,6 +52,8 @@ object SleipnirPlugin extends Plugin {
 
   val dataTemplatesDependencies = taskKey[Seq[File]]("Produces a list of dependencies with 'dataTemplate' configuration")
 
+  val dataTemplatesDependenciesFilter = settingKey[sbt.DependencyFilter]("Only dependencies passing the filter will be included")
+
   val extractDataTemplatesTarget = settingKey[File]("Target directory for extracted data templates")
 
   val extractDataTemplates = taskKey[Unit]("Extracts data templates from JAR files")
@@ -61,6 +63,8 @@ object SleipnirPlugin extends Plugin {
    */
   val sleipnirDownstreamSettings: Seq[Def.Setting[_]] = sleipnirSettings ++ Seq(
 
+    dataTemplatesDependenciesFilter := DependencyFilter.allPass,
+
     extractDataTemplatesTarget := target.value / "pdsc-temp",
 
     sleipnirSourceDirectory := extractDataTemplatesTarget.value / "pegasus",
@@ -68,7 +72,8 @@ object SleipnirPlugin extends Plugin {
     cleanFiles += extractDataTemplatesTarget.value,
 
     dataTemplatesDependencies := {
-      update.value.toSeq.collect {
+      val filteredReport = update.value.filter(dataTemplatesDependenciesFilter.value)
+      filteredReport.toSeq.collect {
         case (_, _, artifact, file) if artifact.configurations.toSeq.exists(_.name == "dataTemplate") => file
       }
     },

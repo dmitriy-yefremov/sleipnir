@@ -66,7 +66,7 @@ object SleipnirPlugin extends Plugin {
 
     sleipnirSourceDirectories += extractDataTemplatesTarget.value / "pegasus",
 
-    cleanFiles += extractDataTemplatesTarget,
+    cleanFiles += extractDataTemplatesTarget.value,
 
     dataTemplatesDependencies := {
       update.value.toSeq.collect {

@@ -40,7 +40,7 @@ trait Generator extends Logging {
         case Nil => acc
         case h :: t =>
           if (acc contains h) {
-             loop(t, acc)
+            loop(t, acc)
           } else {
             loop(t ++ h.referencedGenerators, acc + h)
           }

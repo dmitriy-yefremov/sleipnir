@@ -65,7 +65,7 @@ object SleipnirPlugin extends Plugin {
 
     dataTemplatesDependenciesFilter := DependencyFilter.allPass,
 
-    extractDataTemplatesTarget := target.value / "pdsc-temp",
+    extractDataTemplatesTarget := target.value / "pegasus-temp",
 
     sleipnirSourceDirectory := extractDataTemplatesTarget.value / "pegasus",
 

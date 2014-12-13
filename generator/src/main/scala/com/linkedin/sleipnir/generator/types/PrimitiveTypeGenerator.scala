@@ -23,6 +23,6 @@ class PrimitiveTypeGenerator(override val schema: PrimitiveDataSchema,
     Type.BYTES -> TypeName(classOf[ByteString])
   )
 
-  override val name: TypeName = typeNames(schema.getType)
+  override val typeSchema: DataSchema = schema
 
 }

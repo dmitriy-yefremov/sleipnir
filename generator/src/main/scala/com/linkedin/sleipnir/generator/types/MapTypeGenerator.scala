@@ -60,6 +60,6 @@ class PrimitiveMapTypeGenerator(override val schema: MapDataSchema,
     DataSchema.Type.STRING -> TypeName(classOf[StringMap], externalClassName)
   )
 
-  override val name: TypeName = typeNames(schema.getValues.getType)
+  override val typeSchema: DataSchema = schema.getValues
 
 }

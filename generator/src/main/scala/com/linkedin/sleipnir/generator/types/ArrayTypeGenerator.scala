@@ -61,6 +61,6 @@ class PrimitiveArrayTypeGenerator(override val schema: ArrayDataSchema,
     DataSchema.Type.STRING -> TypeName(classOf[StringArray], externalClassName)
   )
 
-  override val name: TypeName = typeNames(schema.getItems.getType)
+  override val typeSchema: DataSchema = schema.getItems
 
 }

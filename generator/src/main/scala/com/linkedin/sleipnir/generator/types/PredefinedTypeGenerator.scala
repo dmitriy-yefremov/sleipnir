@@ -1,5 +1,6 @@
 package com.linkedin.sleipnir.generator.types
 
+import com.linkedin.data.schema.DataSchema
 import com.linkedin.data.schema.DataSchema.Type
 import com.linkedin.sleipnir.generator.GeneratedClass
 
@@ -12,10 +13,14 @@ trait PredefinedTypeGenerator {
 
   self: TypeGenerator =>
 
+  def typeNames: Map[Type, TypeName]
+
+  def typeSchema: DataSchema
+
   override def referencedGenerators: Seq[TypeGenerator] = Seq.empty
 
   override def generateClass: Option[GeneratedClass] = None
 
-  def typeNames: Map[Type, TypeName]
+  override val name: TypeName = typeNames(typeSchema.getDereferencedDataSchema.getType)
 
 }

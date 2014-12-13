@@ -21,6 +21,6 @@ trait PredefinedTypeGenerator {
 
   override def generateClass: Option[GeneratedClass] = None
 
-  override val name: TypeName = typeNames(typeSchema.getDereferencedDataSchema.getType)
+  override def name: TypeName = typeNames(typeSchema.getDereferencedDataSchema.getType)
 
 }

@@ -1,0 +1,6 @@
+{
+  "name": "NoSymbolsEnum",
+  "namespace": "com.linkedin.sleipnir.test.enumeration",
+  "type" : "enum",
+  "symbols" : [ ]
+}

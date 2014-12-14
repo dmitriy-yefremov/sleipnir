@@ -19,6 +19,8 @@ object @(generator.name.shortClassName) extends ScalaEnumTemplate {
 
   type @(generator.name.shortClassName) = Value
 
-  val @(generator.symbols) = Value
+  @if(!generator.schema.getSymbols.isEmpty) {
+    val @(generator.symbols) = Value
+  }
 
 }

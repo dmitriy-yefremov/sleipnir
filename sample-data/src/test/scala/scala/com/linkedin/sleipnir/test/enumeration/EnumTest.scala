@@ -11,6 +11,10 @@ class EnumTest extends SleipnirSpec {
       enum.toString must beEqualTo("if")
     }
 
+    "support types with no symbols" in {
+      NoSymbolsEnum.values.toSeq must beEqualTo(Seq(NoSymbolsEnum.$Unknown))
+    }
+
   }
 
 }

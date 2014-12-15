@@ -1,0 +1,31 @@
+@(generator: com.linkedin.sleipnir.generator.types.TypeGenerator)
+
+@import _root_.com.linkedin.data.schema.EnumDataSchema
+@import _root_.com.linkedin.data.schema.ArrayDataSchema
+@import _root_.com.linkedin.data.schema.MapDataSchema
+@import _root_.com.linkedin.data.schema.RecordDataSchema
+@import _root_.com.linkedin.data.schema.UnionDataSchema
+@import _root_.com.linkedin.data.schema.FixedDataSchema
+
+{
+  @(generator.schema.getDereferencedDataSchema) match {
+
+    case _: EnumDataSchema => {
+      case enum: @(generator.name.externalClassName) => enum.toString
+    }
+
+    case _: ArrayDataSchema => {
+      case array: Seq[_] => new @(generator.name.fullClassName)(array).data
+    }
+
+    case _: MapDataSchema => {
+      case map: Map[_, _] => new @(generator.name.fullClassName)(map).data
+    }
+
+    case _ : RecordDataSchema | _ : FixedDataSchema | _ : UnionDataSchema => {
+      case dataTemplate: @(generator.name.fullClassName) => dataTemplate.data
+    }
+
+  }
+
+}

@@ -1,0 +1,11 @@
+{
+  "type": "typeref",
+  "name": "com.linkedin.sleipnir.test.map.MapOfMaps",
+  "ref": {
+    "type": "map",
+    "values": {
+      "type": "map",
+      "values": "com.linkedin.sleipnir.test.SimpleRecord"
+    }
+  }
+}

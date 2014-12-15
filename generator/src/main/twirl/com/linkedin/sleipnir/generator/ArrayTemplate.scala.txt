@@ -1,5 +1,8 @@
 @(generator: com.linkedin.sleipnir.generator.types.ComplexArrayTypeGenerator)
 
+@import _root_.com.linkedin.sleipnir.generator.helpers.txt.OutputCoercer
+@import _root_.com.linkedin.sleipnir.generator.helpers.txt.InputCoercer
+
 @import _root_.scala.collection.JavaConverters._
 @import _root_.com.linkedin.data.schema.RecordDataSchema.Field
 @import _root_.com.linkedin.data.schema.EnumDataSchema
@@ -28,33 +31,9 @@ object @(generator.name.shortClassName) {
 
   private val Schema: ArrayDataSchema = DataTemplateUtil.parseSchema(SchemaJson).asInstanceOf[ArrayDataSchema]
 
-  private val OutputCoercer: PartialFunction[Any, @(generator.itemsClassName)] = {
-    @(generator.itemsGenerator.schema.getDereferencedDataSchema) match {
-      case _: EnumDataSchema => {
-        case enum: String => @(generator.itemsGenerator.name.fullClassName).withNameOrUnknown(enum)
-      }
+  private val OutputCoercer: PartialFunction[Any, @(generator.itemsClassName)] = @OutputCoercer(generator.itemsGenerator)
 
-      case _ => {
-        case data: DataMap => new @(generator.itemsClassName)(data)
-      }
-
-    }
-
-  }
-
-  private val InputCoercer: PartialFunction[@(generator.itemsClassName), AnyRef] = {
-    @(generator.itemsGenerator.schema.getDereferencedDataSchema) match {
-      case _: EnumDataSchema => {
-        case enum: @(generator.itemsClassName) => enum.toString
-      }
-
-      case _ => {
-        case dataTemplate: @(generator.itemsClassName) => dataTemplate.data()
-      }
-
-    }
-
-  }
+  private val InputCoercer: PartialFunction[@(generator.itemsClassName), AnyRef] = @InputCoercer(generator.itemsGenerator)
 
   def apply(items: Seq[@(generator.itemsClassName)]) = new @(generator.name.shortClassName)(items)
 

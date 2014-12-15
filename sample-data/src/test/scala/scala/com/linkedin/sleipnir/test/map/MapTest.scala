@@ -7,6 +7,14 @@ class MapTest extends SleipnirSpec {
 
   "Map types" should {
 
+    "support custom names through typerefs" in {
+      val map = Map("key" -> SimpleRecordValue)
+      val wrapper = CustomNamedMap(map)
+      wrapper.map must beEqualTo(map)
+      val wrapperFromJson = checkSerialization(wrapper, """{"key":{"field":"string value"}}""")
+      wrapperFromJson.map must beEqualTo(map)
+    }
+
     "support primitive values" in {
       val map = Map("key" -> StringValue)
       val record = MapPrimitiveRecord(map)
@@ -45,11 +53,19 @@ class MapTest extends SleipnirSpec {
       recordFromJson.mapField must beEqualTo(map)
     }
 
-    "support custom names through typerefs" in {
-      val map = Map("key" -> SimpleRecordValue)
-      val wrapper = CustomNamedMap(map)
+    "support array values" in {
+      val map = Map("key" -> Seq(SimpleRecordValue))
+      val wrapper = MapOfArrays(map)
       wrapper.map must beEqualTo(map)
-      val wrapperFromJson = checkSerialization(wrapper, """{"key":{"field":"string value"}}""")
+      val wrapperFromJson = checkSerialization(wrapper, """{"key":[{"field":"string value"}]}""")
+      wrapperFromJson.map must beEqualTo(map)
+    }
+
+    "support map values" in {
+      val map = Map("key" -> Map("key" -> SimpleRecordValue))
+      val wrapper = MapOfMaps(map)
+      wrapper.map must beEqualTo(map)
+      val wrapperFromJson = checkSerialization(wrapper, """{"key":{"key":{"field":"string value"}}}""")
       wrapperFromJson.map must beEqualTo(map)
     }
   }

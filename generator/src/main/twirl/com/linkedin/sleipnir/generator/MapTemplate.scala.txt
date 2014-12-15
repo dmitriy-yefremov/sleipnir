@@ -1,5 +1,8 @@
 @(generator: com.linkedin.sleipnir.generator.types.ComplexMapTypeGenerator)
 
+@import _root_.com.linkedin.sleipnir.generator.helpers.txt.OutputCoercer
+@import _root_.com.linkedin.sleipnir.generator.helpers.txt.InputCoercer
+
 @import _root_.scala.collection.JavaConverters._
 @import _root_.com.linkedin.data.schema.RecordDataSchema.Field
 @import _root_.com.linkedin.data.schema.EnumDataSchema
@@ -15,7 +18,7 @@ import @(generator.name.shortClassName)._
 
 class @(generator.name.shortClassName) protected(val map: Map[String,@(generator.valuesClassName)], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
 
-  def this(map: Map[String,@(generator.valuesClassName)]) = this(map, ScalaMapTemplate.unwrapAll(map, InputCoercer))
+  def this(map: Map[String, @(generator.valuesClassName)]) = this(map, ScalaMapTemplate.unwrapAll(map, InputCoercer))
 
   def this(data: DataMap) = this(ScalaMapTemplate.wrapAll(data, OutputCoercer), data)
 
@@ -27,33 +30,9 @@ object @(generator.name.shortClassName) {
 
   private val Schema: MapDataSchema = DataTemplateUtil.parseSchema(SchemaJson).asInstanceOf[MapDataSchema]
 
-  private val OutputCoercer: PartialFunction[Any, @(generator.valuesClassName)] = {
-    @(generator.valuesGenerator.schema.getDereferencedDataSchema) match {
-      case _: EnumDataSchema => {
-        case enum: String => @(generator.valuesGenerator.name.fullClassName).withNameOrUnknown(enum)
-      }
+  private val OutputCoercer: PartialFunction[Any, @(generator.valuesClassName)] = @OutputCoercer(generator.valuesGenerator)
 
-      case _ => {
-        case data: DataMap => new @(generator.valuesClassName)(data)
-      }
-
-    }
-
-  }
-
-  private val InputCoercer: PartialFunction[@(generator.valuesClassName), AnyRef] = {
-    @(generator.valuesGenerator.schema.getDereferencedDataSchema) match {
-      case _: EnumDataSchema => {
-        case enum: @(generator.valuesClassName) => enum.toString
-      }
-
-      case _ => {
-        case dataTemplate: @(generator.valuesClassName) => dataTemplate.data()
-      }
-
-    }
-
-  }
+  private val InputCoercer: PartialFunction[@(generator.valuesClassName), AnyRef] = @InputCoercer(generator.valuesGenerator)
 
   def apply(map: Map[String,@(generator.valuesClassName)]) = new @(generator.name.shortClassName)(map)
 

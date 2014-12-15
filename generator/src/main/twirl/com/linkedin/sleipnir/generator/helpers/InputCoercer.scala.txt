@@ -15,11 +15,11 @@
     }
 
     case _: ArrayDataSchema => {
-      case array: Seq[_] => new @(generator.name.fullClassName)(array).data
+      case array: scala.Seq[_] => new @(generator.name.fullClassName)(array).data
     }
 
     case _: MapDataSchema => {
-      case map: Map[_, _] => new @(generator.name.fullClassName)(map).data
+      case map: scala.Predef.Map[_, _] => new @(generator.name.fullClassName)(map).data
     }
 
     case _ : RecordDataSchema | _ : FixedDataSchema | _ : UnionDataSchema => {

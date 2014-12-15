@@ -34,7 +34,7 @@ class @(generator.name.shortClassName)(data: DataMap) extends ScalaRecordTemplat
   def this(@(generator.constructorArgs)) = {
     this(new DataMap())
     @for(field <- generator.schema.getFields.asScala) {
-      @setter(field)
+      set@(field.getName.capitalize)(@(generator.escapedFieldName(field)))
     }
   }
 
@@ -45,6 +45,10 @@ class @(generator.name.shortClassName)(data: DataMap) extends ScalaRecordTemplat
    */
   def @(generator.escapedFieldName(field)): @(generator.recordTypeOf(field)) = {
     @getter(field)
+  }
+
+  private def set@(field.getName.capitalize)(@(generator.constructorArg(field))): Unit = {
+    @setter(field)
   }
 
 }

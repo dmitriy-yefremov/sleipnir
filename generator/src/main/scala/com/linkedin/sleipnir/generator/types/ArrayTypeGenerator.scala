@@ -16,7 +16,7 @@ sealed trait ArrayTypeGenerator extends AbstractTypeGenerator {
 
   def itemsGenerator: TypeGenerator = nestedGenerator(schema.getItems)
 
-  protected def externalClassName: String = s"Seq[${itemsGenerator.name.externalClassName}]"
+  protected def externalClassName: String = s"scala.Seq[${itemsGenerator.name.externalClassName}]"
 
 }
 

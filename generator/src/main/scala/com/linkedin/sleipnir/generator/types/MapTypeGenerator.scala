@@ -15,7 +15,7 @@ sealed trait MapTypeGenerator extends AbstractTypeGenerator {
 
   def valuesGenerator: TypeGenerator = nestedGenerator(schema.getValues)
 
-  protected def externalClassName: String = s"Map[String, ${valuesGenerator.name.externalClassName}]"
+  protected def externalClassName: String = s"scala.Predef.Map[String, ${valuesGenerator.name.externalClassName}]"
 
 }
 

@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "name": "ClashingFieldRecord",
+  "namespace": "com.linkedin.sleipnir.test.record",
+  "fields": [
+    {
+      "name": "data",
+      "type": "string"
+    }
+  ]
+}

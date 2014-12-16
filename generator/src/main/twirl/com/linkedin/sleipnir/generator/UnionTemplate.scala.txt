@@ -4,12 +4,16 @@
 @import _root_.com.linkedin.data.schema.DataSchema.Type
 @import _root_.com.linkedin.sleipnir.generator.types.TypeGeneratorFactory
 @import _root_.com.linkedin.sleipnir.generator.types.TypeGenerator
+@import _root_.com.linkedin.data.schema.PrimitiveDataSchema
+@import _root_.com.linkedin.data.schema.RecordDataSchema
+@import _root_.com.linkedin.data.schema.UnionDataSchema
+@import _root_.com.linkedin.data.schema.FixedDataSchema
 
 package @(generator.name.packageName)
 
 import com.linkedin.data.DataMap
 import com.linkedin.data.schema.UnionDataSchema
-import com.linkedin.data.template.DataTemplateUtil
+import com.linkedin.data.template.{DataTemplateUtil,UnionTemplate}
 
 import com.linkedin.sleipnir.data.ScalaUnionTemplate
 
@@ -22,7 +26,14 @@ class @(generator.name.shortClassName)(data: AnyRef) extends ScalaUnionTemplate(
 
   def is@(typeGenerator.name.shortClassName): Boolean = memberIs("@(typeGenerator.schema.getUnionMemberKey)")
 
-  def as@(typeGenerator.name.shortClassName): Option[@(typeGenerator.name.externalClassName)] = maybeGet[@(typeGenerator.name.externalClassName)](@(generator.memberValName(typeGenerator)))
+  def as@(typeGenerator.name.shortClassName): Option[@(typeGenerator.name.externalClassName)] = {
+    @maybeGetterWithType(typeGenerator, generator.memberValName(typeGenerator))
+  }
+
+  def this(value: @(typeGenerator.name.externalClassName)) = {
+    this(new DataMap())
+    @setterWithType(typeGenerator, generator.memberValName(typeGenerator), "value")
+  }
 
 }
 
@@ -39,11 +50,7 @@ object @(generator.name.shortClassName) {
 
   private val @(generator.memberValName(typeGenerator)) = Schema.getType("@(typeGenerator.schema.getUnionMemberKey)")
 
-  def apply(value: @(typeGenerator.name.externalClassName)): @(generator.name.shortClassName) = {
-    val union = new @(generator.name.shortClassName)(new DataMap())
-    union.set(@(generator.memberValName(typeGenerator)), value)
-    union
-  }
+  def apply(value: @(typeGenerator.name.externalClassName)): @(generator.name.shortClassName) = new @(generator.name.shortClassName)(value)
 
 }
 
@@ -52,7 +59,7 @@ object @(generator.name.shortClassName) {
     /**
      * This constant represents 'null' value of the union.
      */
-    val NullInstance = new @(generator.name.shortClassName)(null)
+    val NullInstance = new @(generator.name.shortClassName)(null: AnyRef)
   }
 
   def unapply(union: @(generator.name.shortClassName)): Option[Any] = {
@@ -66,5 +73,56 @@ object @(generator.name.shortClassName) {
 
   }
 
+
+}
+
+@***********
+ * Setters *
+ ***********@
+
+@setterWithType(memberGenerator: TypeGenerator, memberName: String, valueName: String) = {
+  @(memberGenerator.schema.getDereferencedDataSchema) match {
+
+    case _ : PrimitiveDataSchema => {
+      selectDirect[@(memberGenerator.name.fullClassName)](@(memberName), classOf[@(memberGenerator.name.fullClassName)], "@(memberGenerator.schema.getUnionMemberKey)", @(valueName))
+    }
+
+    case _ : RecordDataSchema | _ : FixedDataSchema | _ : UnionDataSchema => {
+      selectWrapped(@(memberName), classOf[@(memberGenerator.name.externalClassName)], "@(memberGenerator.schema.getUnionMemberKey)", @(valueName))
+    }
+
+  }
+
+}
+
+
+@***********
+ * Getters *
+ ***********@
+
+@maybeGetterWithType(memberGenerator: TypeGenerator, memberName: String) = {
+
+  if(memberIs("@memberGenerator.schema.getUnionMemberKey")) {
+    Option(@getterWithType(memberGenerator, memberName))
+  }
+  else {
+    None
+  }
+
+}
+
+@getterWithType(memberGenerator: TypeGenerator, memberName: String) = {
+
+  @(memberGenerator.schema.getDereferencedDataSchema) match {
+
+    case _ : PrimitiveDataSchema => {
+      obtainDirect(@(memberName), classOf[@(memberGenerator.name.externalClassName)], "@(memberGenerator.schema.getUnionMemberKey)")
+    }
+
+    case _ : RecordDataSchema | _ : FixedDataSchema | _ : UnionDataSchema => {
+      obtainWrapped(@(memberName), classOf[@(memberGenerator.name.externalClassName)], "@(memberGenerator.schema.getUnionMemberKey)")
+    }
+
+  }
 
 }

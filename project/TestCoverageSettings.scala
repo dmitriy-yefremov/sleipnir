@@ -39,7 +39,7 @@ object TestCoverageSettings {
   val mergeJacocoReportsTask = mergeJacocoReports := {
 
     // Create the output directory where everything will go
-    val mergeOutputDir = baseDirectory.value / ".." / "build" / "reports" / "coverage"
+    val mergeOutputDir = baseDirectory.value / "build" / "reports" / "coverage"
     if(mergeOutputDir.exists) {
       mergeOutputDir.delete
     }

@@ -59,11 +59,18 @@ object SleipnirPlugin extends Plugin {
   val extractDataTemplates = taskKey[Unit]("Extracts data templates from JAR files")
 
   /**
+   * Default filter to get the list of data template artifacts.
+   */
+  val DefaultDataTemplatesDependenciesFilter = DependencyFilter.fnToArtifactFilter { artifact =>
+    artifact.configurations.toSeq.exists(_.name == "dataTemplate")
+  }
+
+  /**
    * Settings that need to be added to the project to enable generation of Scala bindings for PDSC files coming from downstream services.
    */
   val sleipnirDownstreamSettings: Seq[Def.Setting[_]] = sleipnirSettings ++ Seq(
 
-    dataTemplatesDependenciesFilter := DependencyFilter.allPass,
+    dataTemplatesDependenciesFilter := DefaultDataTemplatesDependenciesFilter,
 
     extractDataTemplatesTarget := target.value / "pegasus-temp",
 
@@ -71,12 +78,7 @@ object SleipnirPlugin extends Plugin {
 
     cleanFiles += extractDataTemplatesTarget.value,
 
-    dataTemplatesDependencies := {
-      val filter = dataTemplatesDependenciesFilter.value && DependencyFilter.fnToArtifactFilter { artifact =>
-        artifact.configurations.toSeq.exists(_.name == "dataTemplate")
-      }
-      update.value.matching(filter)
-    },
+    dataTemplatesDependencies := update.value.matching(dataTemplatesDependenciesFilter.value),
 
     extractDataTemplates := {
       val target = extractDataTemplatesTarget.value

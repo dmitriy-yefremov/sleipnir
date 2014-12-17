@@ -4,7 +4,7 @@ package com.linkedin.sleipnir.data
  * A super type for all enum types
  * @author Anirudh Padmarao
  */
-abstract class ScalaEnumTemplate extends Enumeration {
+trait ScalaEnumTemplate extends Enumeration {
 
   /**
    * The [[Value]] from this [[Enumeration]] to use if the string representing the value

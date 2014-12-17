@@ -7,12 +7,13 @@ class EnumTest extends SleipnirSpec {
   "Enum types" should {
 
     "escape reserved symbol names" in {
-      val enum = ReservedWordsEnum.`if`
-      enum.toString must beEqualTo("if")
+      val enum = ReservedWordsEnum.`sealed`
+      enum.toString must beEqualTo("sealed")
     }
 
     "support types with no symbols" in {
       NoSymbolsEnum.values.toSeq must beEqualTo(Seq(NoSymbolsEnum.$Unknown))
+      NoSymbolsEnum.$Unknown.toString must beEqualTo("$Unknown")
     }
 
   }

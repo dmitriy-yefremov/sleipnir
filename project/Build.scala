@@ -4,18 +4,22 @@ import sbt.IO
 
 import twirl.sbt.TwirlPlugin._
 import org.scalastyle.sbt.ScalastylePlugin
-import de.johoop.jacoco4sbt.JacocoPlugin._
 
 import com.linkedin.sbt.MintPlugin
 import com.linkedin.sbt.core.ext.LiKeys._
 import com.linkedin.sbt.core.ext.Predef._
+
+import TestCoverageSettings._
 
 object Sleipnir extends Build {
 
   /**
    * A dummy aggregator project. It does nothing by itself, but lets us see the root folder in Intellij.
    */
-  lazy val sleipnir = project.in(file(".")).aggregate(sleipnirGenerator, sleipnirSbtPlugin, sampleData)
+  lazy val sleipnir = project.in(file("."))
+    .aggregate(sleipnirGenerator, sleipnirSbtPlugin, sampleData)
+    .settings(testCoverageSubmoduleSettings: _*)
+    .settings(testCoverageAggregatorSettings: _*)
 
   /**
    * The generator project. For now it includes both the code to generate Scala classes and the runtime code needed to
@@ -34,7 +38,7 @@ object Sleipnir extends Build {
     )
     .settings(Twirl.settings: _*)
     .settings(ScalastylePlugin.Settings: _*)
-    .settings(jacoco.settings: _*)
+    .settings(testCoverageSubmoduleSettings: _*)
     .settings(commands ++= Seq(MintPlugin.buildCmd))
 
   /**
@@ -47,7 +51,7 @@ object Sleipnir extends Build {
       sbtPlugin := true
     )
     .settings(ScalastylePlugin.Settings: _*)
-    .settings(jacoco.settings: _*)
+    .settings(testCoverageSubmoduleSettings: _*)
     .settings(commands ++= Seq(MintPlugin.buildCmd))
 
   /**
@@ -62,7 +66,7 @@ object Sleipnir extends Build {
         "external.specs2" in "test"
       )
     )
-    .settings(jacoco.settings: _*)
+    .settings(testCoverageSubmoduleSettings: _*)
 
   lazy val forkedVmSleipnirGenerator = taskKey[Seq[File]]("Sleipnir generator executed in a forked VM")
 

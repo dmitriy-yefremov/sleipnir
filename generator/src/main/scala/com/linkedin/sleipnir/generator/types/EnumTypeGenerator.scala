@@ -14,18 +14,18 @@ class EnumTypeGenerator(override val schema: EnumDataSchema,
                         override val parentGenerator: Option[TypeGenerator],
                         override val namespacePrefix: Option[String]) extends AbstractTypeGenerator {
 
-  override val name: TypeName = alias.getOrElse {
+  override val name: TypeName = escapeScalaReserved(alias.getOrElse {
     TypeName(
       schema.getName,
       namespace(schema.getNamespace),
       namespace(schema.getFullName),
       namespace(schema.getFullName + ".Value")
     )
-  }
+  })
 
   val symbols: String = {
     val symbols = schema.getSymbols.asScala
-    val escaped = symbols.map(escapeReserved)
+    val escaped = symbols.map(escapeScalaReserved)
     escaped.mkString(", ")
   }
 

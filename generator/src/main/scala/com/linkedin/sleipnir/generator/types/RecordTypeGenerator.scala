@@ -17,7 +17,7 @@ class RecordTypeGenerator(override val schema: RecordDataSchema,
   def orderedFields: Seq[RecordDataSchema.Field] = schema.getFields.asScala.sortBy(_.getOptional)
 
   def escapedFieldName(field: RecordDataSchema.Field): String = {
-    escapeReserved(field.getName)
+    escapePegasusReserved(escapeScalaReserved(field.getName))
   }
 
   def fieldValName(field: RecordDataSchema.Field): String = {
@@ -49,9 +49,9 @@ class RecordTypeGenerator(override val schema: RecordDataSchema,
 
   def fieldGenerator(field: RecordDataSchema.Field): TypeGenerator = nestedGenerator(field.getType)
 
-  override val name: TypeName = alias.getOrElse {
+  override val name: TypeName = escapeScalaReserved(alias.getOrElse {
     TypeName(schema.getName, namespace(schema.getNamespace))
-  }
+  })
 
   override def referencedGenerators: Seq[TypeGenerator] = {
     schema.getFields.asScala.map(field => fieldGenerator(field))

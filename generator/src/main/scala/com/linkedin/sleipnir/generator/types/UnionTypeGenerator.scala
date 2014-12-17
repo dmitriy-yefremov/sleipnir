@@ -14,7 +14,7 @@ class UnionTypeGenerator(override val schema: UnionDataSchema,
                          override val parentGenerator: Option[TypeGenerator],
                          override val namespacePrefix: Option[String]) extends AbstractTypeGenerator {
 
-  override val name: TypeName = alias.getOrElse {
+  override val name: TypeName = escapeScalaReserved(alias.getOrElse {
     val referencesToParentRecord = findMatchingParent(_.isInstanceOf[RecordTypeGenerator])
     if (referencesToParentRecord.isEmpty) {
       throw new IllegalArgumentException(s"Can't determine type's name: $schema")
@@ -30,7 +30,7 @@ class UnionTypeGenerator(override val schema: UnionDataSchema,
     val shortClassName = parentRecordSchema.getName + field.getName.capitalize + "Union"
     val packageName = parentRecordSchema.getNamespace
     TypeName(shortClassName, namespace(packageName))
-  }
+  })
 
   def memberValName(generator: TypeGenerator): String = s"Member${generator.name.shortClassName}"
 

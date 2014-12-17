@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringEscapeUtils
  * Some code shared between most of type generators.
  * @author Dmitriy Yefremov
  */
-trait AbstractTypeGenerator extends TypeGenerator with Logging {
+trait AbstractTypeGenerator extends TypeGenerator with ReservedWordsEscaping with Logging {
 
   /**
    * Returns the alias of the current type if it is defined through a type reference.
@@ -33,19 +33,6 @@ trait AbstractTypeGenerator extends TypeGenerator with Logging {
     namespacePrefix match {
       case None => packageName
       case Some(prefix) => s"$prefix.$packageName"
-    }
-  }
-
-  /**
-   * Escapes the given string if it is a reserved word.
-   */
-  protected def escapeReserved(word: String) = {
-    if (AbstractTypeGenerator.ScalaReservedWords(word)) {
-      s"`$word`"
-    } else if (AbstractTypeGenerator.PegasusReservedWords(word)) {
-      s"`${word}_`"
-    } else {
-      word
     }
   }
 
@@ -96,28 +83,6 @@ trait AbstractTypeGenerator extends TypeGenerator with Logging {
 }
 
 object AbstractTypeGenerator {
-
-  /**
-   * The set shows the reserved words in Scala. These reserved words may not be used as constant or variable or any
-   * other identifier names.
-   *
-   * See the spec for details: http://www.scala-lang.org/files/archive/spec/2.11/01-lexical-syntax.html
-   */
-  val ScalaReservedWords: Set[String] = Set(
-    "abstract", "case", "catch", "class", "def", "do", "else", "extends", "false", "final", "finally", "for", "forSome",
-    "if", "implicit", "import", "lazy", "match", "new", "null", "object", "override", "package", "private", "protected",
-    "return", "sealed", "super", "this", "throw", "trait", "try", "true", "type", "val", "var", "while", "with", "yield"
-  )
-
-  /**
-   * Words that are reserved because they happen to be used in Pegasus base classes.
-   */
-  val PegasusReservedWords: Set[String] = Set("data", "schema", "clone", "copy", "hashCode", "toString")
-
-  /**
-   * Set of words that should be escaped.
-   */
-  //val ReservedWords: Set[String] = ScalaReservedWords ++ PegasusReservedWords
 
   /**
    * Finds a parent of the given generator that matches the given predicate.

@@ -17,6 +17,9 @@ trait ReservedWordsEscaping {
     }
   }
 
+  /**
+   * Escapes all fields of [[TypeName]]. If any of package segments is a reserved Scala words this segment is escaped.
+   */
   protected def escapeScalaReserved(name: TypeName): TypeName = {
 
     def escapeNamespace(namespace: String): String = {

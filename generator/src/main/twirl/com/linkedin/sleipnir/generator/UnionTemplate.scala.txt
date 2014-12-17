@@ -8,6 +8,9 @@
 @import _root_.com.linkedin.data.schema.RecordDataSchema
 @import _root_.com.linkedin.data.schema.UnionDataSchema
 @import _root_.com.linkedin.data.schema.FixedDataSchema
+@import _root_.com.linkedin.data.schema.ArrayDataSchema
+@import _root_.com.linkedin.data.schema.MapDataSchema
+@import _root_.com.linkedin.data.schema.EnumDataSchema
 
 package @(generator.name.packageName)
 
@@ -91,6 +94,14 @@ object @(generator.name.shortClassName) {
       selectWrapped(@(memberName), classOf[@(memberGenerator.name.externalClassName)], "@(memberGenerator.schema.getUnionMemberKey)", @(valueName))
     }
 
+    case _ : EnumDataSchema => {
+      selectDirect(@(memberName), classOf[String], "@(memberGenerator.schema.getUnionMemberKey)", @(valueName).toString)
+    }
+
+    case _ : ArrayDataSchema | _ : MapDataSchema => {
+      selectWrapped(@(memberName), classOf[@(memberGenerator.name.fullClassName)], "@(memberGenerator.schema.getUnionMemberKey)", @(memberGenerator.name.fullClassName)(@(valueName)))
+    }
+
   }
 
 }
@@ -121,6 +132,21 @@ object @(generator.name.shortClassName) {
 
     case _ : RecordDataSchema | _ : FixedDataSchema | _ : UnionDataSchema => {
       obtainWrapped(@(memberName), classOf[@(memberGenerator.name.externalClassName)], "@(memberGenerator.schema.getUnionMemberKey)")
+    }
+
+    case _ : EnumDataSchema => {
+      {
+        val name = obtainDirect(@(memberName), classOf[String], "@(memberGenerator.schema.getUnionMemberKey)")
+        @(memberGenerator.name.fullClassName).withNameOrUnknown(name)
+      }
+    }
+
+    case _ : ArrayDataSchema => {
+      obtainWrapped(@(memberName), classOf[@(memberGenerator.name.fullClassName)], "@(memberGenerator.schema.getUnionMemberKey)").items
+    }
+
+    case _ : MapDataSchema => {
+      obtainWrapped(@(memberName), classOf[@(memberGenerator.name.fullClassName)], "@(memberGenerator.schema.getUnionMemberKey)").map
     }
 
   }

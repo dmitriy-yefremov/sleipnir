@@ -97,13 +97,8 @@ object @(generator.name.shortClassName) {
       putDirect(@(fieldName), classOf[String], @(valueName).toString)
     }
 
-    case array : ArrayDataSchema => {
+    case _ : ArrayDataSchema | _ : MapDataSchema => {
       putWrapped(@(fieldName), classOf[@(fieldGenerator.name.fullClassName)], @(fieldGenerator.name.fullClassName)(@(valueName)))
-    }
-
-    case map : MapDataSchema => {
-      val wrapper = @(fieldGenerator.name.fullClassName)(@(valueName))
-      putWrapped(@(fieldName), classOf[@(fieldGenerator.name.fullClassName)], wrapper)
     }
 
     case _ => {
@@ -144,11 +139,11 @@ object @(generator.name.shortClassName) {
       }
     }
 
-    case array : ArrayDataSchema => {
+    case _ : ArrayDataSchema => {
       getWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)]).map(_.items)
     }
 
-    case map : MapDataSchema => {
+    case _ : MapDataSchema => {
       getWrapped(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.fullClassName)]).map(_.map)
     }
 

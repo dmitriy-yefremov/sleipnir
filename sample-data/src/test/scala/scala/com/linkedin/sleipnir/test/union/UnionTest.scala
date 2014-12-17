@@ -1,17 +1,41 @@
 package scala.com.linkedin.sleipnir.test.union
 
-import scala.com.linkedin.sleipnir.test.{SimpleRecord, SleipnirSpec}
+import scala.com.linkedin.sleipnir.test.{SimpleEnum, SimpleRecord, SleipnirSpec}
 
 class UnionTest extends SleipnirSpec {
 
   "Union types" should {
 
-    "support instantiating from all underlying types" in {
-      val unionFromString = StringOrSimpleRecord(StringValue)
-      checkSerialization(unionFromString, """{"string":"string value"}""")
-      val unionFromRecord = StringOrSimpleRecord(SimpleRecordValue)
-      checkSerialization(unionFromRecord, """{"com.linkedin.sleipnir.test.SimpleRecord":{"field":"string value"}}""")
-      success
+    "support primitive types" in {
+      val union = StringOrSimpleRecord(StringValue)
+      val unionFromJson = checkSerialization(union, """{"string":"string value"}""")
+      unionFromJson.asString must beEqualTo(Some(StringValue))
+    }
+
+    "support record types" in {
+      val union = StringOrSimpleRecord(SimpleRecordValue)
+      val unionFromJson = checkSerialization(union, """{"com.linkedin.sleipnir.test.SimpleRecord":{"field":"string value"}}""")
+      unionFromJson.asSimpleRecord must beEqualTo(Some(SimpleRecordValue))
+    }
+
+    "support enum types" in {
+      val union = EnumUnion(SimpleEnum.Foo)
+      val unionFromJson = checkSerialization(union, """{"com.linkedin.sleipnir.test.SimpleEnum":"Foo"}""")
+      unionFromJson.asSimpleEnum must beEqualTo(Some(SimpleEnum.Foo))
+    }
+
+    "support array types" in {
+      val array = Seq(StringValue)
+      val union = ArrayUnion(array)
+      val unionFromJson = checkSerialization(union, """{"array":["string value"]}""")
+      unionFromJson.asStringArray must beEqualTo(Some(array))
+    }
+
+    "support map types" in {
+      val map = Map("key" -> StringValue)
+      val union = MapUnion(map)
+      val unionFromJson = checkSerialization(union, """{"map":{"key":"string value"}}""")
+      unionFromJson.asStringMap must beEqualTo(Some(map))
     }
 
     "support unboxing of the underlying type" in {

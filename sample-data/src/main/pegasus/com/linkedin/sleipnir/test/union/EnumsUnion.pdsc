@@ -1,0 +1,8 @@
+{
+    "type": "typeref",
+    "name": "com.linkedin.sleipnir.test.union.EnumsUnion",
+    "ref": [
+        "com.linkedin.sleipnir.test.SimpleEnum",
+        { "name": "AnotherSimpleEnum", "type" : "enum", "symbols" : [ "Baz" ] }
+    ]
+}

@@ -38,6 +38,12 @@ class UnionTest extends SleipnirSpec {
       unionFromJson.asStringMap must beEqualTo(Some(map))
     }
 
+    "support union of more than one enum" in {
+      val union = EnumsUnion(AnotherSimpleEnum.Baz)
+      val unionFromJson = checkSerialization(union, """{"com.linkedin.sleipnir.test.union.AnotherSimpleEnum":"Baz"}""")
+      unionFromJson.asAnotherSimpleEnum must beEqualTo(Some(AnotherSimpleEnum.Baz))
+    }
+
     "support unboxing of the underlying type" in {
 
       def unbox(union: StringOrSimpleRecord): Any = {

@@ -1,10 +1,11 @@
 package com.linkedin.sleipnir.data
 
-import com.linkedin.data.{DataMap, DataList}
+import scala.collection.JavaConverters._
+
+import com.linkedin.data.DataList
 import com.linkedin.data.schema.{ArrayDataSchema, DataSchema}
 import com.linkedin.data.template.DataTemplate
-
-import scala.collection.JavaConverters._
+import com.linkedin.sleipnir.data.TypeCoercer._
 
 /**
  * A super type for all array types.
@@ -23,7 +24,7 @@ abstract class ScalaArrayTemplate protected(itemsData: DataList, dataSchema: Arr
 
 }
 
-object ScalaArrayTemplate extends TypeCoercer {
+object ScalaArrayTemplate {
 
   /**
    * Converts a Scala [[Seq]] into a Pegasus [[DataList]]. Values in the seq are unwrapped with the coercer.

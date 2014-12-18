@@ -5,6 +5,7 @@ import com.linkedin.data.schema.ArrayDataSchema
 import com.linkedin.data.template.DataTemplateUtil
 import com.linkedin.sleipnir.data.ScalaArrayTemplate
 import com.linkedin.sleipnir.data.ScalaArrayTemplate._
+import com.linkedin.sleipnir.data.TypeCoercer._
 import com.linkedin.sleipnir.data.custom.DoubleArray._
 
 /**

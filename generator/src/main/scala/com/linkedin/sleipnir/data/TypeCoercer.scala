@@ -3,7 +3,7 @@ package com.linkedin.sleipnir.data
 /**
  * Contains types and functions for the conversion between scala and pegasus types.
  */
-trait TypeCoercer {
+object TypeCoercer {
 
   /**
    * Converts Scala types into the Pegasus types.

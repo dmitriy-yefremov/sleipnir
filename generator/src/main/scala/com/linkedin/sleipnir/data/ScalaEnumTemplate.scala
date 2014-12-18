@@ -10,15 +10,15 @@ trait ScalaEnumTemplate extends Enumeration {
    * Type that represents values of this enumeration.
    * This type is unique for every concrete type as a workaround for type erasure of enum values.
    */
-  type CustomValue <: Value
+  type Type <: Value
 
   /**
-   * The [[CustomValue]] from this [[Enumeration]] to use if the string representing the value
+   * The [[Type]] from this [[Enumeration]] to use if the string representing the value
    * during deserialization from Pegasus JSON is not recognized.
    */
-  val $Unknown: CustomValue
+  val $Unknown: Type
 
-  def withNameOrUnknown(s: String): CustomValue =
-    values.find(_.toString == s).getOrElse($Unknown).asInstanceOf[CustomValue]
+  def withNameOrUnknown(s: String): Type =
+    values.find(_.toString == s).getOrElse($Unknown).asInstanceOf[Type]
 
 }

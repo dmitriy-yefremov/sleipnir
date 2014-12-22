@@ -10,6 +10,7 @@
 @import _root_.com.linkedin.data.schema.EnumDataSchema
 @import _root_.com.linkedin.data.schema.ArrayDataSchema
 @import _root_.com.linkedin.data.schema.MapDataSchema
+@import _root_.com.linkedin.data.schema.TyperefDataSchema
 @import _root_.com.linkedin.sleipnir.generator.types.TypeGenerator
 @import _root_.com.linkedin.sleipnir.generator.types.TypeGeneratorFactory
 
@@ -18,6 +19,7 @@ package @(generator.name.packageName)
 import scala.collection.JavaConverters._
 
 import com.linkedin.data.DataMap
+import com.linkedin.data.template.SetMode
 import com.linkedin.data.schema.RecordDataSchema
 import com.linkedin.data.template.DataTemplateUtil
 import com.linkedin.sleipnir.data.ScalaRecordTemplate
@@ -83,7 +85,11 @@ object @(generator.name.shortClassName) {
 }
 
 @setterWithType(fieldName: String, valueName: String, fieldGenerator: TypeGenerator) = {
-  @(fieldGenerator.schema.getDereferencedDataSchema) match {
+  @(fieldGenerator.schema) match {
+
+    case _ :  TyperefDataSchema => {
+      putCustomType(@(fieldName), classOf[@(fieldGenerator.name.externalClassName)], classOf[@(fieldGenerator.referencedGenerators.head.name.externalClassName)], @(valueName), SetMode.IGNORE_NULL)
+    }
 
     case _ : PrimitiveDataSchema => {
       putDirect[@(fieldGenerator.name.fullClassName)](@(fieldName), classOf[@(fieldGenerator.name.fullClassName)], @(valueName))
@@ -122,7 +128,11 @@ object @(generator.name.shortClassName) {
 }
 
 @getterWithType(field: Field, fieldGenerator: TypeGenerator) = {
-  @(fieldGenerator.schema.getDereferencedDataSchema) match {
+  @(fieldGenerator.schema) match {
+
+    case _ : TyperefDataSchema => {
+      getCustom(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.externalClassName)])
+    }
 
     case _ : PrimitiveDataSchema => {
       getDirect(@(generator.fieldValName(field)), classOf[@(fieldGenerator.name.externalClassName)])

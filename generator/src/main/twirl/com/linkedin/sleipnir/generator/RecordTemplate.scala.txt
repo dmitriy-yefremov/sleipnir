@@ -88,7 +88,7 @@ object @(generator.name.shortClassName) {
   @(fieldGenerator.schema) match {
 
     case _ :  TyperefDataSchema => {
-      putCustomType(@(fieldName), classOf[@(fieldGenerator.name.externalClassName)], classOf[@(fieldGenerator.referencedGenerators.head.name.externalClassName)], @(valueName), SetMode.IGNORE_NULL)
+      putCustomType(@(fieldName), classOf[@(fieldGenerator.name.externalClassName)], classOf[@(fieldGenerator.referencedGenerators.head.name.externalClassName)], @(valueName), SetMode.DISALLOW_NULL)
     }
 
     case _ : PrimitiveDataSchema => {

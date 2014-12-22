@@ -12,30 +12,30 @@ import java.lang.Object;
 //
 public class CustomPoint
 {
-    private int _x;
-    private int _y;
+    private int x;
+    private int y;
 
     public CustomPoint(String s)
     {
         String parts[] = s.split(",");
-        _x = Integer.parseInt(parts[0]);
-        _y = Integer.parseInt(parts[1]);
+        x = Integer.parseInt(parts[0]);
+        y = Integer.parseInt(parts[1]);
     }
 
     public CustomPoint(int x, int y)
     {
-        _x = x;
-        _y = y;
+        this.x = x;
+        this.y = y;
     }
 
     public int getX()
     {
-        return _x;
+        return x;
     }
 
     public int getY()
     {
-        return _y;
+        return y;
     }
 
     // TODO: Implement hashCode, ...
@@ -48,7 +48,7 @@ public class CustomPoint
 
     public String toString()
     {
-        return _x + "," + _y;
+        return x + "," + y;
     }
 
     //

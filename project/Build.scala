@@ -80,11 +80,7 @@ object Sleipnir extends Build {
       streams.value.log.info(s"There are ${files.size} classes generated from PDSC")
       files
     },
-    sourceGenerators in Compile <+= (forkedVmSleipnirGenerator in Compile),
-    sourceGenerators in Compile <+= Def.task {
-      val finder = sourceDirectory.value / "main" / "pegasus" ** "*.java"
-      finder.get
-    }
+    sourceGenerators in Compile <+= (forkedVmSleipnirGenerator in Compile)
   )
 
   def runForkedGenerator(src: File, dst: File, classpath: Seq[File]): Seq[File] = {

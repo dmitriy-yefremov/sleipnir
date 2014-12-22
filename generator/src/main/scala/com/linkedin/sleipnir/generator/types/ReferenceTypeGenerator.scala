@@ -15,7 +15,7 @@ class ReferenceTypeGenerator(override val schema: TyperefDataSchema,
 
   // for predefined types we can not overwrite the name, so we always delegate the name decision to the referenced generator
   // for typerefs with a custom java class binding, we take the name of that class
-  override def name: TypeName = customInfo.getOrElse(referencedGenerator.name)
+  override def name: TypeName = customType.getOrElse(referencedGenerator.name)
 
   private def referencedGenerator = nestedGenerator(schema.getRef)
 
@@ -23,34 +23,19 @@ class ReferenceTypeGenerator(override val schema: TyperefDataSchema,
 
   override val generateClass: Option[GeneratedClass] = None
 
-  def customInfo: Option[TypeName] = {
-
+  /**
+   * Returns the custom binding type if it is defined in the schema.
+   */
+  private def customType: Option[TypeName] = {
     val properties = schema.getProperties.asScala
-
-    properties.get("java").flatMap { java =>
-
-      if (java.getClass != classOf[DataMap]) {
-        throw new IllegalArgumentException(schema + """has "java" property that is not a DataMap""")
-      }
-
-      val map = java.asInstanceOf[DataMap].asScala
-
-      val customClass = map.get("class").map { customClass =>
-        if (!customClass.isInstanceOf[String]) {
-          throw new IllegalArgumentException(schema + """has "java" property with "class" that is not a string""")
+    properties.get("java").flatMap {
+      case map: DataMap =>
+        map.asScala.get("class").map {
+          case customClass: String => TypeName(customClass)
+          case _ => throw new IllegalArgumentException(schema + """has "java" property with "class" that is not a string""")
         }
-
-        //TypeName(Class.forName(customClass.asInstanceOf[String]))
-        val stringClass = customClass.asInstanceOf[String]
-        val index = stringClass.lastIndexOf('.')
-        val (start, end) = stringClass.splitAt(index)
-        TypeName(end.tail, start)
-
-      }
-
-      customClass
+      case _ => throw new IllegalArgumentException(schema + """has "java" property that is not a DataMap""")
     }
-
   }
 
 }

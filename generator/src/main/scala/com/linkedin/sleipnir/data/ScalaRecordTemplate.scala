@@ -20,4 +20,7 @@ abstract class ScalaRecordTemplate protected(data: DataMap, schema: RecordDataSc
   def getWrapped[T <: DataTemplate[_]](field: RecordDataSchema.Field, valueClass: Class[T]): Option[T] =
     Option(obtainWrapped(field, valueClass, GetMode.DEFAULT))
 
+  def getCustom[T](field: RecordDataSchema.Field, valueClass: Class[T]): Option[T] =
+    Option(obtainCustomType(field, valueClass, GetMode.DEFAULT))
+
 }

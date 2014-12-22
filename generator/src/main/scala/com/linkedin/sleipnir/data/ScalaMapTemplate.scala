@@ -1,10 +1,11 @@
 package com.linkedin.sleipnir.data
 
-import com.linkedin.data.DataMap
-import com.linkedin.data.schema.{MapDataSchema, DataSchema}
-import com.linkedin.data.template.DataTemplate
-
 import scala.collection.JavaConverters._
+
+import com.linkedin.data.DataMap
+import com.linkedin.data.schema.{DataSchema, MapDataSchema}
+import com.linkedin.data.template.DataTemplate
+import com.linkedin.sleipnir.data.TypeCoercer._
 
 /**
  * A super type for all map types
@@ -32,7 +33,7 @@ abstract class ScalaMapTemplate protected(mapData: DataMap, dataSchema: MapDataS
   override def toString: String = data.entrySet().toString
 }
 
-object ScalaMapTemplate extends TypeCoercer {
+object ScalaMapTemplate {
 
   /**
    * Converts a Scala [[Map]] into a Pegasus [[DataMap]]. Values in the map are unwrapped. Unwrapping is only applicable

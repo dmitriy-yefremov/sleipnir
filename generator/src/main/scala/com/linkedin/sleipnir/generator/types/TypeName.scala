@@ -18,6 +18,12 @@ object TypeName {
     packageName + "." + shortClassName
   }
 
+  def apply(fullClassName: String): TypeName = {
+    val index = fullClassName.lastIndexOf('.')
+    val (start, end) = fullClassName.splitAt(index)
+    TypeName(end.tail, start)
+  }
+
   def apply(shortClassName: String, packageName: String): TypeName = {
     val fullName = fullClassName(shortClassName, packageName)
     TypeName(shortClassName, packageName, fullName, fullName)

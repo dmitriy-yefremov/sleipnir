@@ -5,6 +5,7 @@ import com.linkedin.data.schema.MapDataSchema
 import com.linkedin.data.template.DataTemplateUtil
 import com.linkedin.sleipnir.data.ScalaMapTemplate
 import com.linkedin.sleipnir.data.ScalaMapTemplate._
+import com.linkedin.sleipnir.data.TypeCoercer._
 import com.linkedin.sleipnir.data.custom.BooleanMap._
 
 /**

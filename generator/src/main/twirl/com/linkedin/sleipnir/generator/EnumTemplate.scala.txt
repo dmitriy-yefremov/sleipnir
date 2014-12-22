@@ -17,10 +17,16 @@ object @(generator.name.shortClassName) extends ScalaEnumTemplate {
 
   private val Schema: EnumDataSchema = DataTemplateUtil.parseSchema(SchemaJson).asInstanceOf[EnumDataSchema]
 
-  type @(generator.name.shortClassName) = Value
+  type @(generator.name.shortClassName) = Type
+
+  type Type = CustomVal
+
+  class CustomVal extends Val
+
+  val $Unknown: Type = new Type
 
   @if(!generator.schema.getSymbols.isEmpty) {
-    val @(generator.symbols) = Value
+    val @(generator.symbols): Type = new Type
   }
 
 }

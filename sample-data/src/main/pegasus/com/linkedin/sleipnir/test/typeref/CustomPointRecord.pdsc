@@ -1,0 +1,11 @@
+{
+    "type": "record",
+    "name": "CustomPointRecord",
+    "namespace": "com.linkedin.sleipnir.test.typeref",
+    "fields": [
+        {
+            "name": "field",
+            "type": "CustomPoint"
+        }
+    ]
+}

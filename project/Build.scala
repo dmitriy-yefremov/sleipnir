@@ -4,12 +4,11 @@ import sbt.IO
 
 import twirl.sbt.TwirlPlugin._
 import org.scalastyle.sbt.ScalastylePlugin
+import de.johoop.jacoco4sbt.JacocoPlugin._
 
 import com.linkedin.sbt.MintPlugin
 import com.linkedin.sbt.core.ext.LiKeys._
 import com.linkedin.sbt.core.ext.Predef._
-
-import TestCoverageSettings._
 
 object Sleipnir extends Build {
 
@@ -18,8 +17,9 @@ object Sleipnir extends Build {
    */
   lazy val sleipnir = project.in(file("."))
     .aggregate(sleipnirGenerator, sleipnirSbtPlugin, sampleData)
-    .settings(testCoverageSubmoduleSettings: _*)
-    .settings(testCoverageAggregatorSettings: _*)
+    .settings(jacoco.settings: _*)
+    // Configures Jacoco to put the merged report in the location expected by Product Dashboard (go/coverage). 
+    .settings((jacoco.aggregateReportDirectory in jacoco.Config) := baseDirectory.value / "build" / "reports" / "coverage")
 
   /**
    * The generator project. For now it includes both the code to generate Scala classes and the runtime code needed to
@@ -38,7 +38,7 @@ object Sleipnir extends Build {
     )
     .settings(Twirl.settings: _*)
     .settings(ScalastylePlugin.Settings: _*)
-    .settings(testCoverageSubmoduleSettings: _*)
+    .settings(jacoco.settings: _*)
     .settings(commands ++= Seq(MintPlugin.buildCmd))
 
   /**
@@ -51,7 +51,7 @@ object Sleipnir extends Build {
       sbtPlugin := true
     )
     .settings(ScalastylePlugin.Settings: _*)
-    .settings(testCoverageSubmoduleSettings: _*)
+    .settings(jacoco.settings: _*)
     .settings(commands ++= Seq(MintPlugin.buildCmd))
 
   /**
@@ -66,7 +66,7 @@ object Sleipnir extends Build {
         "external.specs2" in "test"
       )
     )
-    .settings(testCoverageSubmoduleSettings: _*)
+    .settings(jacoco.settings: _*)
 
   lazy val forkedVmSleipnirGenerator = taskKey[Seq[File]]("Sleipnir generator executed in a forked VM")
 

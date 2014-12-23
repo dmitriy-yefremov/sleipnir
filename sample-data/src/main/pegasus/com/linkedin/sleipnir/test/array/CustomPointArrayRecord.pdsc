@@ -1,0 +1,14 @@
+{
+    "type": "record",
+    "name": "CustomPointArrayRecord",
+    "namespace": "com.linkedin.sleipnir.test.array",
+    "fields": [
+        {
+            "name": "field",
+            "type": {
+                "type": "array",
+                "items": "com.linkedin.sleipnir.test.CustomPoint"
+            }
+        }
+    ]
+}

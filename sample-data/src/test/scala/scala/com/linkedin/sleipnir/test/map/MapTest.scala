@@ -1,6 +1,7 @@
 package scala.com.linkedin.sleipnir.test.map
 
 import com.linkedin.data.ByteString
+import com.linkedin.sleipnir.test.CustomPoint
 import scala.com.linkedin.sleipnir.test.{SimpleEnum, SleipnirSpec}
 
 class MapTest extends SleipnirSpec {
@@ -67,6 +68,14 @@ class MapTest extends SleipnirSpec {
       wrapper.map must beEqualTo(map)
       val wrapperFromJson = checkSerialization(wrapper, """{"key":{"key":{"field":"string value"}}}""")
       wrapperFromJson.map must beEqualTo(map)
+    }
+
+    "support custom java bindings" in {
+      val customPointMap = Map("key" -> new CustomPoint(1, 2))
+      val wrapper = MapCustomPoint(customPointMap)
+      wrapper.map must beEqualTo(customPointMap)
+      val wrapperFromJson = checkSerialization(wrapper, """{"key":"1,2"}""")
+      wrapperFromJson.map must beEqualTo(customPointMap)
     }
   }
 

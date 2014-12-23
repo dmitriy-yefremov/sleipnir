@@ -40,13 +40,13 @@ object TypeGeneratorFactory {
         new RecordTypeGenerator(record, parentGeneratorOpt, namespacePrefix)
       case fixed: FixedDataSchema =>
         new FixedTypeGenerator(fixed, parentGeneratorOpt, namespacePrefix)
-      case array: ArrayDataSchema if array.getItems.getDereferencedDataSchema.isComplex =>
+      case array: ArrayDataSchema if array.getItems.isComplex =>
         new ComplexArrayTypeGenerator(array, parentGeneratorOpt, namespacePrefix)
-      case array: ArrayDataSchema if array.getItems.getDereferencedDataSchema.isPrimitive =>
+      case array: ArrayDataSchema if array.getItems.isPrimitive =>
         new PrimitiveArrayTypeGenerator(array, parentGeneratorOpt, namespacePrefix)
-      case map: MapDataSchema if map.getValues.getDereferencedDataSchema.isComplex =>
+      case map: MapDataSchema if map.getValues.isComplex =>
         new ComplexMapTypeGenerator(map, parentGeneratorOpt, namespacePrefix)
-      case map: MapDataSchema if map.getValues.getDereferencedDataSchema.isPrimitive =>
+      case map: MapDataSchema if map.getValues.isPrimitive =>
         new PrimitiveMapTypeGenerator(map, parentGeneratorOpt, namespacePrefix)
       case union: UnionDataSchema =>
         new UnionTypeGenerator(union, parentGeneratorOpt, namespacePrefix)

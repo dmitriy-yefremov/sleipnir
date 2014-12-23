@@ -1,6 +1,7 @@
 package scala.com.linkedin.sleipnir.test.record
 
 import scala.com.linkedin.sleipnir.test.{SimpleEnum, SleipnirSpec}
+import com.linkedin.sleipnir.test.CustomPoint
 
 class RecordTest extends SleipnirSpec {
 
@@ -202,6 +203,18 @@ class RecordTest extends SleipnirSpec {
       record.field must beEqualTo(union)
       val recordFromJson = checkSerialization(record, """{"field":{"string":"string value"}}""")
       recordFromJson.field must beEqualTo(union)
+    }
+
+  }
+
+  "Typeref fields" should {
+
+    "support custom java bindings" in {
+      val customPoint = new CustomPoint(1, 2)
+      val record = CustomPointRecord(customPoint)
+      record.field must beEqualTo(customPoint)
+      val recordFromJson = checkSerialization(record, """{"field":"1,2"}""")
+      recordFromJson.field must beEqualTo(customPoint)
     }
 
   }

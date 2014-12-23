@@ -6,9 +6,14 @@
 @import _root_.com.linkedin.data.schema.RecordDataSchema
 @import _root_.com.linkedin.data.schema.UnionDataSchema
 @import _root_.com.linkedin.data.schema.FixedDataSchema
+@import _root_.com.linkedin.data.schema.TyperefDataSchema
 
 {
-  @(generator.schema.getDereferencedDataSchema) match {
+  @(generator.schema) match {
+
+    case _: TyperefDataSchema => {
+      case typeref: @(generator.referencedGenerators.head.name.externalClassName) => customCoercer.coerceOutput(typeref)
+    }
 
     case _: EnumDataSchema => {
       case name: String => @(generator.name.fullClassName).withNameOrUnknown(name)

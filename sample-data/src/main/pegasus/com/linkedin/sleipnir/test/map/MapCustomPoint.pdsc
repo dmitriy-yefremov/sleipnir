@@ -1,0 +1,8 @@
+{
+    "type": "typeref",
+    "name": "com.linkedin.sleipnir.test.map.MapCustomPoint",
+    "ref": {
+        "type": "map",
+        "values": "com.linkedin.sleipnir.test.CustomPoint"
+    }
+}

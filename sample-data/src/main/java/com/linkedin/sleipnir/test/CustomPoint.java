@@ -1,4 +1,4 @@
-package com.linkedin.sleipnir.test.typeref;
+package com.linkedin.sleipnir.test;
 
 import com.linkedin.data.template.Custom;
 import com.linkedin.data.template.DirectCoercer;
@@ -38,7 +38,6 @@ public class CustomPoint
         return y;
     }
 
-    // TODO: Implement hashCode, ...
     public boolean equals(Object other) {
         if (!(other instanceof CustomPoint))
             return false;

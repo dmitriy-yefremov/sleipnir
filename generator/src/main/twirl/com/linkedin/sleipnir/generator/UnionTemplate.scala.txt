@@ -11,6 +11,7 @@
 @import _root_.com.linkedin.data.schema.ArrayDataSchema
 @import _root_.com.linkedin.data.schema.MapDataSchema
 @import _root_.com.linkedin.data.schema.EnumDataSchema
+@import _root_.com.linkedin.data.schema.TyperefDataSchema
 
 package @(generator.name.packageName)
 
@@ -84,9 +85,13 @@ object @(generator.name.shortClassName) {
  ***********@
 
 @setterWithType(memberGenerator: TypeGenerator, memberName: String, valueName: String) = {
-  @(memberGenerator.schema.getDereferencedDataSchema) match {
+  @(memberGenerator.schema) match {
 
-    case _ : PrimitiveDataSchema => {
+    case _ : TyperefDataSchema => {
+      selectDirect[@(memberGenerator.name.fullClassName)](@(memberName), classOf[@(memberGenerator.name.fullClassName)], classOf[@(memberGenerator.referencedGenerators.head.name.fullClassName)], "@(memberGenerator.schema.getUnionMemberKey)", @(valueName))
+    }
+
+    case _ : PrimitiveDataSchema | _ : TyperefDataSchema => {
       selectDirect[@(memberGenerator.name.fullClassName)](@(memberName), classOf[@(memberGenerator.name.fullClassName)], "@(memberGenerator.schema.getUnionMemberKey)", @(valueName))
     }
 
@@ -124,9 +129,9 @@ object @(generator.name.shortClassName) {
 
 @getterWithType(memberGenerator: TypeGenerator, memberName: String) = {
 
-  @(memberGenerator.schema.getDereferencedDataSchema) match {
+  @(memberGenerator.schema) match {
 
-    case _ : PrimitiveDataSchema => {
+    case _ : PrimitiveDataSchema | _ : TyperefDataSchema => {
       obtainDirect(@(memberName), classOf[@(memberGenerator.name.externalClassName)], "@(memberGenerator.schema.getUnionMemberKey)")
     }
 

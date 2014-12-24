@@ -1,6 +1,7 @@
 package scala.com.linkedin.sleipnir.test.union
 
 import scala.com.linkedin.sleipnir.test.{SimpleEnum, SimpleRecord, SleipnirSpec}
+import com.linkedin.sleipnir.test.CustomPoint
 
 class UnionTest extends SleipnirSpec {
 
@@ -36,6 +37,13 @@ class UnionTest extends SleipnirSpec {
       val union = MapUnion(map)
       val unionFromJson = checkSerialization(union, """{"map":{"key":"string value"}}""")
       unionFromJson.asStringMap must beEqualTo(Some(map))
+    }
+
+    "support custom java bindings" in {
+      val customPoint = new CustomPoint(1, 2)
+      val union = CustomPointUnion(customPoint)
+      val unionFromJson = checkSerialization(union, """{"string":"1,2"}""")
+      unionFromJson.asCustomPoint must beEqualTo(Some(customPoint))
     }
 
     "support union of more than one enum" in {

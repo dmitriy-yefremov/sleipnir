@@ -1,0 +1,12 @@
+@(generator: com.linkedin.sleipnir.generator.types.TypeGenerator)
+
+@import _root_.com.linkedin.data.schema.TyperefDataSchema
+
+@(generator.schema) match {
+  case _: TyperefDataSchema => {
+    Custom.initializeCustomClass(classOf[@(generator.name.externalClassName)])
+  }
+  case _ => {
+
+  }
+}

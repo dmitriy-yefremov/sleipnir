@@ -12,12 +12,13 @@
 @import _root_.com.linkedin.data.schema.MapDataSchema
 @import _root_.com.linkedin.data.schema.EnumDataSchema
 @import _root_.com.linkedin.data.schema.TyperefDataSchema
+@import _root_.com.linkedin.sleipnir.generator.helpers.txt.CustomInitializer
 
 package @(generator.name.packageName)
 
 import com.linkedin.data.DataMap
 import com.linkedin.data.schema.UnionDataSchema
-import com.linkedin.data.template.{DataTemplateUtil,UnionTemplate}
+import com.linkedin.data.template.{Custom,DataTemplateUtil,UnionTemplate}
 
 import com.linkedin.sleipnir.data.ScalaUnionTemplate
 
@@ -25,6 +26,8 @@ import @(generator.name.shortClassName)._
 
 
 class @(generator.name.shortClassName)(data: AnyRef) extends ScalaUnionTemplate(data, Schema) {
+
+  @(generator.name.shortClassName)
 
 @for(typeGenerator <- generator.referencedGenerators.filterNot(_.schema.getType == Type.NULL)) {
 
@@ -45,6 +48,10 @@ class @(generator.name.shortClassName)(data: AnyRef) extends ScalaUnionTemplate(
 
 
 object @(generator.name.shortClassName) {
+
+@for(typeGenerator <- generator.referencedGenerators.filterNot(_.schema.getType == Type.NULL)) {
+  @CustomInitializer(typeGenerator)
+}
 
   private val SchemaJson = "@(generator.schemaJson)"
 

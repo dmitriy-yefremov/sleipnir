@@ -2,6 +2,7 @@
 
 @import _root_.com.linkedin.sleipnir.generator.helpers.txt.OutputCoercer
 @import _root_.com.linkedin.sleipnir.generator.helpers.txt.InputCoercer
+@import _root_.com.linkedin.sleipnir.generator.helpers.txt.CustomInitializer
 
 @import _root_.scala.collection.JavaConverters._
 @import _root_.com.linkedin.data.schema.RecordDataSchema.Field
@@ -11,12 +12,14 @@ package @(generator.name.packageName)
 
 import com.linkedin.data.DataList
 import com.linkedin.data.schema.ArrayDataSchema
-import com.linkedin.data.template.DataTemplateUtil
+import com.linkedin.data.template.{Custom,DataTemplateUtil}
 import com.linkedin.sleipnir.data.ScalaArrayTemplate
 
 import @(generator.name.shortClassName)._
 
 class @(generator.name.shortClassName) protected(val items: scala.Seq[@(generator.itemsClassName)], itemsData: DataList) extends ScalaArrayTemplate(itemsData, Schema) {
+
+  @(generator.name.shortClassName)
 
   def this(items: scala.Seq[@(generator.itemsClassName)]) = this(items, ScalaArrayTemplate.unwrapAll(items, InputCoercer))
 
@@ -25,6 +28,8 @@ class @(generator.name.shortClassName) protected(val items: scala.Seq[@(generato
 }
 
 object @(generator.name.shortClassName) {
+
+  @CustomInitializer(generator.itemsGenerator)
 
   private val SchemaJson: String = "@(generator.schemaJson)"
 

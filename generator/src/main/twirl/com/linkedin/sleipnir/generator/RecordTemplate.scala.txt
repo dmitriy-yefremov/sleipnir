@@ -13,6 +13,7 @@
 @import _root_.com.linkedin.data.schema.TyperefDataSchema
 @import _root_.com.linkedin.sleipnir.generator.types.TypeGenerator
 @import _root_.com.linkedin.sleipnir.generator.types.TypeGeneratorFactory
+@import _root_.com.linkedin.sleipnir.generator.helpers.txt.CustomInitializer
 
 package @(generator.name.packageName)
 
@@ -21,7 +22,7 @@ import scala.collection.JavaConverters._
 import com.linkedin.data.DataMap
 import com.linkedin.data.template.SetMode
 import com.linkedin.data.schema.RecordDataSchema
-import com.linkedin.data.template.DataTemplateUtil
+import com.linkedin.data.template.{Custom,DataTemplateUtil}
 import com.linkedin.sleipnir.data.ScalaRecordTemplate
 
 
@@ -31,6 +32,8 @@ import @(generator.name.shortClassName)._
  * @(generator.schema.getDoc)
  */
 class @(generator.name.shortClassName)(data: DataMap) extends ScalaRecordTemplate(data, Schema) {
+
+  @(generator.name.shortClassName)
 
   def this(@(generator.constructorArgs)) = {
     this(new DataMap())
@@ -57,6 +60,10 @@ class @(generator.name.shortClassName)(data: DataMap) extends ScalaRecordTemplat
 }
 
 object @(generator.name.shortClassName) {
+
+@for(fieldGenerator <- generator.referencedGenerators) {
+  @CustomInitializer(fieldGenerator)
+}
 
   private val SchemaJson: String = "@(generator.schemaJson)"
 

@@ -2,6 +2,7 @@
 
 @import _root_.com.linkedin.sleipnir.generator.helpers.txt.OutputCoercer
 @import _root_.com.linkedin.sleipnir.generator.helpers.txt.InputCoercer
+@import _root_.com.linkedin.sleipnir.generator.helpers.txt.CustomInitializer
 
 @import _root_.scala.collection.JavaConverters._
 @import _root_.com.linkedin.data.schema.RecordDataSchema.Field
@@ -11,12 +12,14 @@ package @(generator.name.packageName)
 
 import com.linkedin.data.DataMap
 import com.linkedin.data.schema.MapDataSchema
-import com.linkedin.data.template.{DataTemplate,DataTemplateUtil}
+import com.linkedin.data.template.{Custom,DataTemplate,DataTemplateUtil}
 import com.linkedin.sleipnir.data.ScalaMapTemplate
 
 import @(generator.name.shortClassName)._
 
 class @(generator.name.shortClassName) protected(val map: scala.Predef.Map[String,@(generator.valuesClassName)], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
+
+  @(generator.name.shortClassName)
 
   def this(map: scala.Predef.Map[String, @(generator.valuesClassName)]) = this(map, ScalaMapTemplate.unwrapAll(map, InputCoercer))
 
@@ -25,6 +28,8 @@ class @(generator.name.shortClassName) protected(val map: scala.Predef.Map[Strin
 }
 
 object @(generator.name.shortClassName) {
+
+  @CustomInitializer(generator.valuesGenerator)
 
   private val SchemaJson: String = "@(generator.schemaJson)"
 

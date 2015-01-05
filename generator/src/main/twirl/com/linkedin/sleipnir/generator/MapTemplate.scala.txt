@@ -2,7 +2,6 @@
 
 @import _root_.com.linkedin.sleipnir.generator.helpers.txt.OutputCoercer
 @import _root_.com.linkedin.sleipnir.generator.helpers.txt.InputCoercer
-@import _root_.com.linkedin.sleipnir.generator.helpers.txt.CustomCoercer
 
 @import _root_.scala.collection.JavaConverters._
 @import _root_.com.linkedin.data.schema.RecordDataSchema.Field
@@ -30,8 +29,6 @@ object @(generator.name.shortClassName) {
   private val SchemaJson: String = "@(generator.schemaJson)"
 
   private val Schema: MapDataSchema = DataTemplateUtil.parseSchema(SchemaJson).asInstanceOf[MapDataSchema]
-
-  @CustomCoercer(generator.valuesGenerator)
 
   private val OutputCoercer: PartialFunction[Any, @(generator.valuesClassName)] = @OutputCoercer(generator.valuesGenerator)
 

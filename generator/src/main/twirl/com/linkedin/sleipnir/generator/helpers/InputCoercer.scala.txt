@@ -12,7 +12,7 @@
   @(generator.schema) match {
 
     case _: TyperefDataSchema => {
-      case typeref: @(generator.name.externalClassName) => customCoercer.coerceInput(typeref)
+      case customClass: @(generator.name.fullClassName) => DataTemplateUtil.coerceInput(customClass, classOf[@(generator.name.fullClassName)], classOf[@(generator.referencedGenerators.head.name.fullClassName)])
     }
 
     case _: EnumDataSchema => {

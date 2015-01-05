@@ -81,6 +81,6 @@ public class CustomPoint
     //
     static
     {
-        Custom.registerCoercer(CustomPoint.class, new CustomPointCoercer());
+        Custom.registerCoercer(new CustomPointCoercer(), CustomPoint.class);
     }
 }

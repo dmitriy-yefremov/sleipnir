@@ -1,7 +1,0 @@
-@(generator: com.linkedin.sleipnir.generator.types.TypeGenerator)
-
-@import _root_.com.linkedin.data.schema.DataSchema
-
-@if(generator.schema.getType == DataSchema.Type.TYPEREF) {
-  private val customCoercer: @(generator.name.fullClassName).@(generator.name.shortClassName)Coercer = new @(generator.name.fullClassName).@(generator.name.shortClassName)Coercer()
-}

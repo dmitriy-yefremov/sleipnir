@@ -19,8 +19,6 @@ import @(generator.name.shortClassName)._
 
 class @(generator.name.shortClassName) protected(val items: scala.Seq[@(generator.itemsClassName)], itemsData: DataList) extends ScalaArrayTemplate(itemsData, Schema) {
 
-  @(generator.name.shortClassName)
-
   def this(items: scala.Seq[@(generator.itemsClassName)]) = this(items, ScalaArrayTemplate.unwrapAll(items, InputCoercer))
 
   def this(data: DataList) = this(ScalaArrayTemplate.wrapAll(data, OutputCoercer), data)

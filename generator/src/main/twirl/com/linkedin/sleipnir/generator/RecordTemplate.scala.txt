@@ -33,8 +33,6 @@ import @(generator.name.shortClassName)._
  */
 class @(generator.name.shortClassName)(data: DataMap) extends ScalaRecordTemplate(data, Schema) {
 
-  @(generator.name.shortClassName)
-
   def this(@(generator.constructorArgs)) = {
     this(new DataMap())
     @for(field <- generator.schema.getFields.asScala) {

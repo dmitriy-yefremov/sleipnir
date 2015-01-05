@@ -19,8 +19,6 @@ import @(generator.name.shortClassName)._
 
 class @(generator.name.shortClassName) protected(val map: scala.Predef.Map[String,@(generator.valuesClassName)], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
 
-  @(generator.name.shortClassName)
-
   def this(map: scala.Predef.Map[String, @(generator.valuesClassName)]) = this(map, ScalaMapTemplate.unwrapAll(map, InputCoercer))
 
   def this(data: DataMap) = this(ScalaMapTemplate.wrapAll(data, OutputCoercer), data)

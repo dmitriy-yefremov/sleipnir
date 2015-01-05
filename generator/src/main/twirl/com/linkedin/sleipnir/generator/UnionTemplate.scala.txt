@@ -27,8 +27,6 @@ import @(generator.name.shortClassName)._
 
 class @(generator.name.shortClassName)(data: AnyRef) extends ScalaUnionTemplate(data, Schema) {
 
-  @(generator.name.shortClassName)
-
 @for(typeGenerator <- generator.referencedGenerators.filterNot(_.schema.getType == Type.NULL)) {
 
   def is@(typeGenerator.name.shortClassName): Boolean = memberIs("@(typeGenerator.schema.getUnionMemberKey)")

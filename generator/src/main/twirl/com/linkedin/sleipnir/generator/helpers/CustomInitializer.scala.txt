@@ -1,9 +1,10 @@
 @(generator: com.linkedin.sleipnir.generator.types.TypeGenerator)
 
 @import _root_.com.linkedin.data.schema.TyperefDataSchema
+@import _root_.com.linkedin.sleipnir.generator.types.ReferenceTypeGenerator
 
 @(generator.schema) match {
-  case _: TyperefDataSchema => {
+  case _: TyperefDataSchema if generator.asInstanceOf[ReferenceTypeGenerator].customType.isDefined => {
     Custom.initializeCustomClass(classOf[@(generator.name.externalClassName)])
   }
   case _ => {

@@ -26,7 +26,7 @@ class ReferenceTypeGenerator(override val schema: TyperefDataSchema,
   /**
    * Returns the custom binding type if it is defined in the schema.
    */
-  private def customType: Option[TypeName] = {
+  def customType: Option[TypeName] = {
     val properties = schema.getProperties.asScala
     properties.get("java").flatMap {
       case map: DataMap =>

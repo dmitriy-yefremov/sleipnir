@@ -38,14 +38,15 @@ object SleipnirPlugin extends Plugin {
       val resolverPath = resolverPathFiles.mkString(pathSeparator)
 
       val cacheFileSources = sleipnirCacheSources.value
-      val sourceFiles = (src ** ".pdsc").get
-      val previousScalaFiles = (dst ** ".scala").get
+      val sourceFiles = (src ** "*.pdsc").get
+      val previousScalaFiles = (dst ** "*.scala").get
       val s = streams.value
 
       val (anyFilesChanged, cacheSourceFiles) = {
         prepareCacheUpdate(cacheFileSources, sourceFiles, s)
       }
 
+      log.debug("Detected changed files: " + anyFilesChanged)
       if (anyFilesChanged) {
         log.info("Generating Scala bindings for PDSC...")
         //TODO: remove this logging after the codebase is stabilized and not much debugging is needed

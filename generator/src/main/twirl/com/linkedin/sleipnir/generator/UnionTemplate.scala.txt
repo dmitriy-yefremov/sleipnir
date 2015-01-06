@@ -12,7 +12,7 @@
 @import _root_.com.linkedin.data.schema.MapDataSchema
 @import _root_.com.linkedin.data.schema.EnumDataSchema
 @import _root_.com.linkedin.data.schema.TyperefDataSchema
-@import _root_.com.linkedin.sleipnir.generator.helpers.txt.CustomInitializer
+@import _root_.com.linkedin.sleipnir.generator.helpers.txt.CustomInitializers
 
 package @(generator.name.packageName)
 
@@ -48,7 +48,7 @@ class @(generator.name.shortClassName)(data: AnyRef) extends ScalaUnionTemplate(
 object @(generator.name.shortClassName) {
 
 @for(typeGenerator <- generator.referencedGenerators.filterNot(_.schema.getType == Type.NULL)) {
-  @CustomInitializer(typeGenerator)
+  @CustomInitializers(typeGenerator)
 }
 
   private val SchemaJson = "@(generator.schemaJson)"

@@ -13,7 +13,7 @@
 @import _root_.com.linkedin.data.schema.TyperefDataSchema
 @import _root_.com.linkedin.sleipnir.generator.types.TypeGenerator
 @import _root_.com.linkedin.sleipnir.generator.types.TypeGeneratorFactory
-@import _root_.com.linkedin.sleipnir.generator.helpers.txt.CustomInitializer
+@import _root_.com.linkedin.sleipnir.generator.helpers.txt.CustomInitializers
 
 package @(generator.name.packageName)
 
@@ -60,7 +60,7 @@ class @(generator.name.shortClassName)(data: DataMap) extends ScalaRecordTemplat
 object @(generator.name.shortClassName) {
 
 @for(fieldGenerator <- generator.referencedGenerators) {
-  @CustomInitializer(fieldGenerator)
+  @CustomInitializers(fieldGenerator)
 }
 
   private val SchemaJson: String = "@(generator.schemaJson)"

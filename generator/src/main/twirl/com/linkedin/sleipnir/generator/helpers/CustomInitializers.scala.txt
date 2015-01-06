@@ -1,0 +1,21 @@
+@(generator: com.linkedin.sleipnir.generator.types.TypeGenerator)
+
+@import _root_.com.linkedin.sleipnir.generator.types.ReferenceTypeGenerator
+
+@(generator) match {
+  case typerefGenerator: ReferenceTypeGenerator if typerefGenerator.customType.isDefined => {
+    Custom.initializeCustomClass(classOf[@(typerefGenerator.customType.get.externalClassName)])
+  }
+  case _ => {
+
+  }
+}
+
+@(generator) match {
+  case typerefGenerator: ReferenceTypeGenerator if typerefGenerator.customCoercerType.isDefined => {
+    Custom.initializeCoercerClass(classOf[@(typerefGenerator.customCoercerType.get.externalClassName)])
+  }
+  case _ => {
+
+  }
+}

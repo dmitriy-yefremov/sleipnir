@@ -4,6 +4,7 @@ import com.linkedin.data.schema.TyperefDataSchema
 import com.linkedin.sleipnir.generator.GeneratedClass
 import com.linkedin.data.DataMap
 import scala.collection.JavaConverters._
+import scala.collection.JavaConversions._
 
 /**
  * A generator for [[TyperefDataSchema]] types. It does nothing except providing type meta information in the generators chain.
@@ -23,18 +24,35 @@ class ReferenceTypeGenerator(override val schema: TyperefDataSchema,
 
   override val generateClass: Option[GeneratedClass] = None
 
+  private def javaProperties: Option[Map[String, Any]] = {
+    val properties = schema.getProperties.asScala
+    properties.get("java").map {
+      case map: DataMap => map.toMap
+      case _ => throw new IllegalArgumentException(schema + """has "java" property that is not a DataMap""")
+    }
+  }
+
   /**
    * Returns the custom binding type if it is defined in the schema.
    */
   def customType: Option[TypeName] = {
-    val properties = schema.getProperties.asScala
-    properties.get("java").flatMap {
-      case map: DataMap =>
-        map.asScala.get("class").map {
-          case customClass: String => TypeName(customClass)
-          case _ => throw new IllegalArgumentException(schema + """has "java" property with "class" that is not a string""")
-        }
-      case _ => throw new IllegalArgumentException(schema + """has "java" property that is not a DataMap""")
+    javaProperties.flatMap { map =>
+      map.get("class").map {
+        case customClass: String => TypeName(customClass)
+        case _ => throw new IllegalArgumentException(schema + """has "java" property with "class" that is not a string""")
+      }
+    }
+  }
+
+  /**
+   * Returns the custom coercer type if it is defined in the schema.
+   */
+  def customCoercerType: Option[TypeName] = {
+    javaProperties.flatMap { map =>
+      map.get("coercerClass").map {
+        case coercerClass: String => TypeName(coercerClass)
+        case _ => throw new IllegalArgumentException(schema + """has "java" property with "coercerClass" that is not a string""")
+      }
     }
   }
 

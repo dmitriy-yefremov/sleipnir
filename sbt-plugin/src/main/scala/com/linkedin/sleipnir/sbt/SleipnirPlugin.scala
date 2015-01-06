@@ -14,6 +14,8 @@ object SleipnirPlugin extends Plugin {
 
   val sleipnirPrefix = settingKey[Option[String]]("Namespace prefix used for generated Scala classes")
 
+  val sleipnirCacheSources = taskKey[File]("Caches .pdsc sources")
+
   /**
    * Settings that need to be added to the project to enable generation of Scala bindings for PDSC files located in the project.
    */
@@ -22,6 +24,8 @@ object SleipnirPlugin extends Plugin {
     sleipnirPrefix := Some("scala"),
 
     sleipnirSourceDirectory := sourceDirectory.value / "main" / "pegasus",
+
+    sleipnirCacheSources := streams.value.cacheDirectory / "pdsc.sources",
 
     sleipnirGenerator in Compile := {
       val log = streams.value.log
@@ -32,12 +36,28 @@ object SleipnirPlugin extends Plugin {
         (managedClasspath in Compile).value.map(_.data.getAbsolutePath) ++
         (internalDependencyClasspath in Compile).value.map(_.data.getAbsolutePath) // adds in .pdscs from projects that this project .dependsOn
       val resolverPath = resolverPathFiles.mkString(pathSeparator)
-      log.info("Generating Scala bindings for PDSC...")
-      //TODO: remove this logging after the codebase is stabilized and not much debugging is needed
-      log.info("Sleipnir resolver path: " + resolverPath)
-      log.info("Sleipnir source path: " + src)
-      log.info("Sleipnir destination path: " + dst)
-      Sleipnir.run(resolverPath, src, dst, namespacePrefix)
+
+      val cacheFileSources = sleipnirCacheSources.value
+      val sourceFiles = (src ** ".pdsc").get
+      val previousScalaFiles = (dst ** ".scala").get
+      val s = streams.value
+
+      val (anyFilesChanged, cacheSourceFiles) = {
+        prepareCacheUpdate(cacheFileSources, sourceFiles, s)
+      }
+
+      if (anyFilesChanged) {
+        log.info("Generating Scala bindings for PDSC...")
+        //TODO: remove this logging after the codebase is stabilized and not much debugging is needed
+        log.info("Sleipnir resolver path: " + resolverPath)
+        log.info("Sleipnir source path: " + src)
+        log.info("Sleipnir destination path: " + dst)
+        val generated = Sleipnir.run(resolverPath, src, dst, namespacePrefix)
+        cacheSourceFiles()
+        generated
+      } else {
+        previousScalaFiles
+      }
     },
 
     sourceGenerators in Compile <+= (sleipnirGenerator in Compile),
@@ -91,5 +111,25 @@ object SleipnirPlugin extends Plugin {
     compile in Compile <<= (compile in Compile).dependsOn(extractDataTemplates)
 
   )
+
+  /**
+   * Returns an indication of whether `sourceFiles` and their modify dates differ from what is recorded in `cacheFile`,
+   * plus a function that can be called to write `sourceFiles` and their modify dates to `cacheFile`.
+   */
+  def prepareCacheUpdate(cacheFile: File, sourceFiles: Seq[File],
+                         streams: std.TaskStreams[_]): (Boolean, () => Unit) = {
+    val fileToModifiedMap = sourceFiles.map(f => f -> FileInfo.lastModified(f)).toMap
+
+    val (_, previousFileToModifiedMap) = Sync.readInfo(cacheFile)(FileInfo.lastModified.format)
+    val relation = Seq.fill(sourceFiles.size)(file(".")) zip sourceFiles //we only care about the source files here
+
+    streams.log.debug(fileToModifiedMap.size + " <- current VS previous ->" + previousFileToModifiedMap.size)
+    val anyFilesChanged = !cacheFile.exists || (previousFileToModifiedMap != fileToModifiedMap)
+    def updateCache() {
+      Sync.writeInfo(cacheFile, Relation.empty[File, File] ++ relation.toMap,
+        sourceFiles.map(f => f -> FileInfo.lastModified(f)).toMap)(FileInfo.lastModified.format)
+    }
+    (anyFilesChanged, updateCache)
+  }
 
 }

@@ -3,19 +3,13 @@
 @import _root_.com.linkedin.sleipnir.generator.types.ReferenceTypeGenerator
 
 @(generator) match {
-  case typerefGenerator: ReferenceTypeGenerator if typerefGenerator.customType.isDefined => {
-    Custom.initializeCustomClass(classOf[@(typerefGenerator.customType.get.externalClassName)])
+  case typerefGenerator: ReferenceTypeGenerator => {
+    @for(customType  <- typerefGenerator.customType) {
+      Custom.initializeCustomClass(classOf[@(customType.externalClassName)])
+    }
+    @for(customCoercerType  <- typerefGenerator.customCoercerType) {
+      Custom.initializeCoercerClass(classOf[@(customCoercerType.externalClassName)])
+    }
   }
-  case _ => {
-
-  }
-}
-
-@(generator) match {
-  case typerefGenerator: ReferenceTypeGenerator if typerefGenerator.customCoercerType.isDefined => {
-    Custom.initializeCoercerClass(classOf[@(typerefGenerator.customCoercerType.get.externalClassName)])
-  }
-  case _ => {
-
-  }
+  case _ => {}
 }

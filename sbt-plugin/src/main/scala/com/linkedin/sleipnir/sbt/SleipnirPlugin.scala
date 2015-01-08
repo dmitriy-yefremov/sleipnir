@@ -53,9 +53,11 @@ object SleipnirPlugin extends Plugin {
         log.info("Sleipnir resolver path: " + resolverPath)
         log.info("Sleipnir source path: " + src)
         log.info("Sleipnir destination path: " + dst)
-        val generated = Sleipnir.run(resolverPath, src, dst, namespacePrefix)
+        val generatedFiles = Sleipnir.run(resolverPath, src, dst, namespacePrefix)
+        val staleFiles = previousScalaFiles.sorted.diff(generatedFiles.sorted)
+        IO.delete(staleFiles)
         cacheSourceFiles()
-        generated
+        generatedFiles
       } else {
         previousScalaFiles
       }
@@ -103,6 +105,7 @@ object SleipnirPlugin extends Plugin {
 
     extractDataTemplates := {
       val target = extractDataTemplatesTarget.value
+      IO.delete(target)
       dataTemplatesDependencies.value.foreach { jar =>
         streams.value.log.info(s"Extracting data templates from ${jar.getName} to $target")
         IO.unzip(jar, target, new SimpleFilter(_.toLowerCase.endsWith(".pdsc")))

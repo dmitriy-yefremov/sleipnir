@@ -1,0 +1,10 @@
+{
+    "type" : "typeref",
+    "name" : "CustomString",
+    "namespace": "com.linkedin.sleipnir.test.typeref",
+    "ref"  : "string",
+    "java" : {
+        "class" : "com.linkedin.sleipnir.test.CustomString",
+        "coercerClass": "com.linkedin.sleipnir.test.CustomStringCoercer"
+    }
+}

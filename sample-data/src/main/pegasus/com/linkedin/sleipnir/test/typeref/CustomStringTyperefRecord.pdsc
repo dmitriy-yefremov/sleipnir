@@ -1,0 +1,11 @@
+{
+    "type": "record",
+    "name": "CustomStringTyperefRecord",
+    "namespace": "com.linkedin.sleipnir.test.typeref",
+    "fields": [
+        {
+            "name": "field",
+            "type": "CustomString"
+        }
+    ]
+}

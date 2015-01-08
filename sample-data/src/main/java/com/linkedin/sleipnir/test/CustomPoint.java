@@ -42,7 +42,7 @@ public class CustomPoint
         if (!(other instanceof CustomPoint))
             return false;
         CustomPoint otherAsCustomPoint = (CustomPoint) other;
-        return toString().equals(other.toString());
+        return toString().equals(otherAsCustomPoint.toString());
     }
 
     public String toString()

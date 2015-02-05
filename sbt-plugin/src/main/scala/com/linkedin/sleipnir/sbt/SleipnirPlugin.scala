@@ -12,6 +12,8 @@ object SleipnirPlugin extends Plugin {
 
   val sleipnirSourceDirectory = settingKey[File]("Folder with PDSC files used to generate Scala bindings")
 
+  val sleipnirDestinationDirectory = settingKey[File]("Folder with the generated bindings")
+
   val sleipnirPrefix = settingKey[Option[String]]("Namespace prefix used for generated Scala classes")
 
   val sleipnirCacheSources = taskKey[File]("Caches .pdsc sources")
@@ -25,12 +27,14 @@ object SleipnirPlugin extends Plugin {
 
     sleipnirSourceDirectory := sourceDirectory.value / "main" / "pegasus",
 
+    sleipnirDestinationDirectory := sourceDirectory.value / "main" / "codegen",
+
     sleipnirCacheSources := streams.value.cacheDirectory / "pdsc.sources",
 
     sleipnirGenerator in Compile := {
       val log = streams.value.log
       val src = sleipnirSourceDirectory.value
-      val dst = sourceManaged.value
+      val dst = sleipnirDestinationDirectory.value
       val namespacePrefix = sleipnirPrefix.value
       val resolverPathFiles = Seq(src.getAbsolutePath) ++
         (managedClasspath in Compile).value.map(_.data.getAbsolutePath) ++
@@ -65,7 +69,11 @@ object SleipnirPlugin extends Plugin {
 
     sourceGenerators in Compile <+= (sleipnirGenerator in Compile),
 
-    libraryDependencies  += {
+    unmanagedSourceDirectories in Compile += sleipnirDestinationDirectory.value,
+
+    managedSourceDirectories in Compile += sleipnirDestinationDirectory.value,
+
+    libraryDependencies += {
       val version = SleipnirPlugin.getClass.getPackage.getImplementationVersion
       "com.linkedin.sleipnir" % s"sleipnirgenerator_2.10" % version
     }

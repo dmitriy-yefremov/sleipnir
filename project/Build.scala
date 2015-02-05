@@ -16,7 +16,7 @@ object Sleipnir extends Build {
    * A dummy aggregator project. It does nothing by itself, but lets us see the root folder in Intellij.
    */
   lazy val sleipnir = project.in(file("."))
-    .aggregate(sleipnirGenerator, sleipnirSbtPlugin, sampleData)
+    .aggregate(sleipnirGenerator, sleipnirSbtPlugin, sampleData, converters)
     .settings(jacoco.settings: _*)
     // Configures Jacoco to put the merged report in the location expected by Product Dashboard (go/coverage). 
     .settings((jacoco.aggregateReportDirectory in jacoco.Config) := baseDirectory.value / "build" / "reports" / "coverage")
@@ -38,6 +38,20 @@ object Sleipnir extends Build {
     )
     .settings(Twirl.settings: _*)
     .settings(ScalastylePlugin.Settings: _*)
+    .settings(jacoco.settings: _*)
+    .settings(commands ++= Seq(MintPlugin.buildCmd))
+
+  /**
+   * The converters project. It allows conversion between restli generic types.
+   */
+  lazy val converters = project.in(file("converters"))
+    .settings(
+      productSpecDependencies ++= Seq(
+        "product.pegasus.data",
+        "product.pegasus.restli-client",
+        "product.pegasus.restli-common"
+      )
+    )
     .settings(jacoco.settings: _*)
     .settings(commands ++= Seq(MintPlugin.buildCmd))
 

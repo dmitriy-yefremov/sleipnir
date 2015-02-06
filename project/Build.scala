@@ -47,6 +47,7 @@ object Sleipnir extends Build {
   lazy val converters = project.in(file("converters"))
     .settings(
       productSpecDependencies ++= Seq(
+        "external.specs2" in "test",
         "product.pegasus.data",
         "product.pegasus.restli-client",
         "product.pegasus.restli-common"

@@ -45,6 +45,7 @@ object Sleipnir extends Build {
    * The converters project. It allows conversion between restli generic types.
    */
   lazy val converters = project.in(file("converters"))
+    .dependsOn(sleipnirGenerator % "test->compile")
     .settings(
       productSpecDependencies ++= Seq(
         "external.specs2" in "test",

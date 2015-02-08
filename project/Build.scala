@@ -88,14 +88,16 @@ object Sleipnir extends Build {
   val forkedVmSleipnirGeneratorSettings = Seq(
     forkedVmSleipnirGenerator in Compile := {
       val src = sourceDirectory.value / "main" / "pegasus"
-      val dst = sourceManaged.value
+      val dst = sourceDirectory.value / "main" / "codegen"
       val classpath = (dependencyClasspath in Runtime in sleipnirGenerator).value.files
       streams.value.log.info("Generating PDSC bindings...")
       val files = runForkedGenerator(src, dst, classpath)
       streams.value.log.info(s"There are ${files.size} classes generated from PDSC")
       files
     },
-    sourceGenerators in Compile <+= (forkedVmSleipnirGenerator in Compile)
+    sourceGenerators in Compile <+= (forkedVmSleipnirGenerator in Compile),
+    unmanagedSourceDirectories in Compile += sourceDirectory.value / "main" / "codegen",
+    managedSourceDirectories in Compile += sourceDirectory.value / "main" / "codegen"
   )
 
   def runForkedGenerator(src: File, dst: File, classpath: Seq[File]): Seq[File] = {

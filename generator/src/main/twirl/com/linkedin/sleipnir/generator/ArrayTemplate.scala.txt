@@ -1,22 +1,26 @@
 @(generator: com.linkedin.sleipnir.generator.types.ComplexArrayTypeGenerator)
-
 @import _root_.com.linkedin.sleipnir.generator.helpers.txt.OutputCoercer
 @import _root_.com.linkedin.sleipnir.generator.helpers.txt.InputCoercer
 @import _root_.com.linkedin.sleipnir.generator.helpers.txt.CustomInitializers
-
 @import _root_.scala.collection.JavaConverters._
 @import _root_.com.linkedin.data.schema.RecordDataSchema.Field
 @import _root_.com.linkedin.data.schema.EnumDataSchema
-
+@import java.util.Calendar
 package @(generator.name.packageName)
+
 
 import com.linkedin.data.DataList
 import com.linkedin.data.schema.ArrayDataSchema
 import com.linkedin.data.template.{Custom,DataTemplateUtil}
+
 import com.linkedin.sleipnir.data.ScalaArrayTemplate
+
+import javax.annotation.Generated
 
 import @(generator.name.shortClassName)._
 
+
+@@Generated(value = Array("@(generator.typeGeneratorName)"), comments="LinkedIn Data Template. Generated from @(generator.filename)", date = "@(Calendar.getInstance().getTime())")
 class @(generator.name.shortClassName) protected(val items: scala.Seq[@(generator.itemsClassName)], itemsData: DataList) extends ScalaArrayTemplate(itemsData, Schema) {
 
   def this(items: scala.Seq[@(generator.itemsClassName)]) = this(items, ScalaArrayTemplate.unwrapAll(items, InputCoercer))

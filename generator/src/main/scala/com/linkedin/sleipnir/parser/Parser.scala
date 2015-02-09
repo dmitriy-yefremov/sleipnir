@@ -1,11 +1,16 @@
 package com.linkedin.sleipnir.parser
 
-import grizzled.slf4j.Logging
-import java.io.{FileInputStream, FileNotFoundException, File}
+
 import com.linkedin.util.FileUtil
 import com.linkedin.data.schema.resolver.{FileDataSchemaLocation, FileDataSchemaResolver}
 import com.linkedin.data.schema._
+
+import grizzled.slf4j.Logging
+
+import java.io.{FileInputStream, FileNotFoundException, File}
+
 import scala.collection.JavaConverters._
+
 
 /**
  * This mix-in is responsible for data schema files parsing functionality.
@@ -33,20 +38,27 @@ trait Parser extends Logging {
    * Parses the given files and returns the top level schemas found.
    * @param sources source files to parse
    * @param resolverPath where to look for referenced data types
-   * @return top level data schemas (not all types defined in the source files are returned)
+   * @return a map of top level data schemas (not all types defined in the source files are returned) to the
+   *         file that they were originally defined in
    */
-  def parseSources(sources: Seq[File], resolverPath: String): Seq[DataSchema] = {
+  def parseSources(sources: Seq[File], resolverPath: String): Map[DataSchema, File] = {
     val resolver = new FileDataSchemaResolver(SchemaParserFactory.instance, resolverPath)
-    sources.flatMap { source =>
+    val seqOfSchemaFileTuple = sources.flatMap { source =>
       val schemaLocation = new FileDataSchemaLocation(source)
+      //In both cases, for each element in the sequence of data schemas, let us create a Tuple
+      //We will then flatten out the list of lists of Tuples at the end
       if (resolver.locationResolved(schemaLocation)) {
         logger.info(s"Skipping $source, already resolved")
-        findResolvedSchemas(schemaLocation, resolver)
+        val dataSchemaSeq = findResolvedSchemas(schemaLocation, resolver)
+        dataSchemaSeq.map(dataSchema => new Tuple2(dataSchema, source))
       } else {
         logger.info(s"Parsing $source")
-        parseSchema(schemaLocation, resolver)
+        val dataSchemaSeq = parseSchema(schemaLocation, resolver)
+        dataSchemaSeq.map(dataSchema => new Tuple2(dataSchema, source))
       }
     }
+
+    seqOfSchemaFileTuple.toMap
   }
 
   private def findResolvedSchemas(schemaLocation: DataSchemaLocation, resolver: DataSchemaResolver): Seq[DataSchema] = {
@@ -97,5 +109,4 @@ trait Parser extends Logging {
         }
     }
   }
-
 }

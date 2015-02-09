@@ -1,10 +1,13 @@
 package com.linkedin.sleipnir.generator.types
 
-import scala.collection.JavaConverters._
 
 import com.linkedin.data.schema.EnumDataSchema
+
 import com.linkedin.sleipnir.generator.GeneratedClass
 import com.linkedin.sleipnir.generator.txt.EnumTemplate
+
+import scala.collection.JavaConverters._
+
 
 /**
  * A generator for [[EnumDataSchema]] types.
@@ -12,7 +15,8 @@ import com.linkedin.sleipnir.generator.txt.EnumTemplate
  */
 class EnumTypeGenerator(override val schema: EnumDataSchema,
                         override val parentGenerator: Option[TypeGenerator],
-                        override val namespacePrefix: Option[String]) extends AbstractTypeGenerator {
+                        override val namespacePrefix: Option[String],
+                        override val filename: String) extends AbstractTypeGenerator {
 
   override val name: TypeName = escapeScalaReserved(alias.getOrElse {
     TypeName(

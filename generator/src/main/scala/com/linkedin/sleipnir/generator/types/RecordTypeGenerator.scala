@@ -1,10 +1,13 @@
 package com.linkedin.sleipnir.generator.types
 
-import scala.collection.JavaConverters._
 
 import com.linkedin.data.schema.RecordDataSchema
+
 import com.linkedin.sleipnir.generator.GeneratedClass
 import com.linkedin.sleipnir.generator.txt.RecordTemplate
+
+import scala.collection.JavaConverters._
+
 
 /**
  * A generator for [[RecordDataSchema]] types.
@@ -12,7 +15,8 @@ import com.linkedin.sleipnir.generator.txt.RecordTemplate
  */
 class RecordTypeGenerator(override val schema: RecordDataSchema,
                           override val parentGenerator: Option[TypeGenerator],
-                          override val namespacePrefix: Option[String]) extends AbstractTypeGenerator {
+                          override val namespacePrefix: Option[String],
+                          override val filename: String) extends AbstractTypeGenerator {
 
   def orderedFields: Seq[RecordDataSchema.Field] = schema.getFields.asScala.sortBy(field => field.getOptional || fieldHasDefault(field))
 
@@ -90,5 +94,4 @@ class RecordTypeGenerator(override val schema: RecordDataSchema,
     val source = RecordTemplate(this).toString()
     generatedClass(source)
   }
-
 }

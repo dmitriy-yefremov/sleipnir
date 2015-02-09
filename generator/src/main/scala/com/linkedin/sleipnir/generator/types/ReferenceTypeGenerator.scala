@@ -1,10 +1,14 @@
 package com.linkedin.sleipnir.generator.types
 
+
 import com.linkedin.data.schema.TyperefDataSchema
-import com.linkedin.sleipnir.generator.GeneratedClass
 import com.linkedin.data.DataMap
+
+import com.linkedin.sleipnir.generator.GeneratedClass
+
 import scala.collection.JavaConverters._
 import scala.collection.JavaConversions._
+
 
 /**
  * A generator for [[TyperefDataSchema]] types. It does nothing except providing type meta information in the generators chain.
@@ -12,7 +16,8 @@ import scala.collection.JavaConversions._
  */
 class ReferenceTypeGenerator(override val schema: TyperefDataSchema,
                              override val parentGenerator: Option[TypeGenerator],
-                             override val namespacePrefix: Option[String]) extends AbstractTypeGenerator {
+                             override val namespacePrefix: Option[String],
+                             override val filename: String) extends AbstractTypeGenerator {
 
   // for predefined types we can not overwrite the name, so we always delegate the name decision to the referenced generator
   // for typerefs with a custom java class binding, we take the name of that class
@@ -55,5 +60,4 @@ class ReferenceTypeGenerator(override val schema: TyperefDataSchema,
       }
     }
   }
-
 }

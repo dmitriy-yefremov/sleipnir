@@ -1,9 +1,12 @@
 package com.linkedin.sleipnir.generator.types
 
+
 import com.linkedin.data.schema.{DataSchema, MapDataSchema}
+
 import com.linkedin.sleipnir.data.custom._
 import com.linkedin.sleipnir.generator.GeneratedClass
 import com.linkedin.sleipnir.generator.txt.MapTemplate
+
 
 /**
  * Common functionality for [[MapDataSchema]] generators.
@@ -24,7 +27,8 @@ sealed trait MapTypeGenerator extends AbstractTypeGenerator {
  */
 class ComplexMapTypeGenerator(override val schema: MapDataSchema,
                               override val parentGenerator: Option[TypeGenerator],
-                              override val namespacePrefix: Option[String]) extends MapTypeGenerator {
+                              override val namespacePrefix: Option[String],
+                              override val filename: String) extends MapTypeGenerator {
 
   override val name: TypeName = escapeScalaReserved(alias.getOrElse {
     val valuesName = valuesGenerator.name
@@ -48,7 +52,8 @@ class ComplexMapTypeGenerator(override val schema: MapDataSchema,
  */
 class PrimitiveMapTypeGenerator(override val schema: MapDataSchema,
                                 override val parentGenerator: Option[TypeGenerator],
-                                override val namespacePrefix: Option[String]) extends MapTypeGenerator with PredefinedTypeGenerator {
+                                override val namespacePrefix: Option[String],
+                                override val filename: String) extends MapTypeGenerator with PredefinedTypeGenerator {
 
   override val typeNames = Map(
     DataSchema.Type.BOOLEAN -> TypeName(classOf[BooleanMap], externalClassName),
@@ -61,5 +66,4 @@ class PrimitiveMapTypeGenerator(override val schema: MapDataSchema,
   )
 
   override val typeSchema: DataSchema = schema.getValues
-
 }

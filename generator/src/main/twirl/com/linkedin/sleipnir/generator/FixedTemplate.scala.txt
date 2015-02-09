@@ -1,16 +1,21 @@
 @(generator: com.linkedin.sleipnir.generator.types.FixedTypeGenerator)
-
+@import java.util.Calendar
 package @(generator.name.packageName)
+
 
 import com.linkedin.data.ByteString
 import com.linkedin.data.schema.FixedDataSchema
 import com.linkedin.data.template.{DataTemplateUtil, FixedTemplate}
 
+import javax.annotation.Generated
+
 import @(generator.name.shortClassName)._
+
 
 /**
  * @(generator.schema.getDoc)
  */
+@@Generated(value = Array("@(generator.typeGeneratorName)"), comments="LinkedIn Data Template. Generated from @(generator.filename)", date = "@(Calendar.getInstance().getTime())")
 class @(generator.name.shortClassName)(data: AnyRef) extends FixedTemplate(data, Schema)
 
 object @(generator.name.shortClassName) {

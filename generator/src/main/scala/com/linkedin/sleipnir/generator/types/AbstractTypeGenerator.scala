@@ -1,9 +1,14 @@
 package com.linkedin.sleipnir.generator.types
 
+
 import com.linkedin.data.schema.DataSchema
+
 import com.linkedin.sleipnir.generator.GeneratedClass
+
 import grizzled.slf4j.Logging
+
 import org.apache.commons.lang3.StringEscapeUtils
+
 
 /**
  * Some code shared between most of type generators.
@@ -27,6 +32,16 @@ trait AbstractTypeGenerator extends TypeGenerator with ReservedWordsEscaping wit
   def namespacePrefix: Option[String]
 
   /**
+   * The full path name of the PDSC file that the definition of this schema came from.
+   */
+  def filename: String
+
+  /**
+   * The full class name of the generator used to create this type.
+   */
+  def typeGeneratorName: String = getClass.getCanonicalName
+
+  /**
    * Constructs a full name space given the expected package name.
    */
   protected def namespace(packageName: String): String = {
@@ -47,7 +62,8 @@ trait AbstractTypeGenerator extends TypeGenerator with ReservedWordsEscaping wit
   /**
    * Creates an instance of the generator of the specified type. Current generator is used as the parent when the instance is created.
    */
-  protected def nestedGenerator(nestedSchema: DataSchema) = TypeGeneratorFactory.instance(nestedSchema, this, namespacePrefix)
+  protected def nestedGenerator(nestedSchema: DataSchema) =
+    TypeGeneratorFactory.instance(nestedSchema, this, namespacePrefix, filename)
 
   /**
    * A shortcut to return a [[GeneratedClass]] instance given the source code.
@@ -101,5 +117,4 @@ object AbstractTypeGenerator {
 
     find(List(generator))
   }
-
 }

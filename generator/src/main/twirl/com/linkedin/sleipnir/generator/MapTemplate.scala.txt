@@ -1,22 +1,26 @@
 @(generator: com.linkedin.sleipnir.generator.types.ComplexMapTypeGenerator)
-
 @import _root_.com.linkedin.sleipnir.generator.helpers.txt.OutputCoercer
 @import _root_.com.linkedin.sleipnir.generator.helpers.txt.InputCoercer
 @import _root_.com.linkedin.sleipnir.generator.helpers.txt.CustomInitializers
-
 @import _root_.scala.collection.JavaConverters._
 @import _root_.com.linkedin.data.schema.RecordDataSchema.Field
 @import _root_.com.linkedin.data.schema.EnumDataSchema
-
+@import java.util.Calendar
 package @(generator.name.packageName)
+
 
 import com.linkedin.data.DataMap
 import com.linkedin.data.schema.MapDataSchema
 import com.linkedin.data.template.{Custom,DataTemplate,DataTemplateUtil}
+
 import com.linkedin.sleipnir.data.ScalaMapTemplate
+
+import javax.annotation.Generated
 
 import @(generator.name.shortClassName)._
 
+
+@@Generated(value = Array("@(generator.typeGeneratorName)"), comments="LinkedIn Data Template. Generated from @(generator.filename)", date = "@(Calendar.getInstance().getTime())")
 class @(generator.name.shortClassName) protected(val map: scala.Predef.Map[String,@(generator.valuesClassName)], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
 
   def this(map: scala.Predef.Map[String, @(generator.valuesClassName)]) = this(map, ScalaMapTemplate.unwrapAll(map, InputCoercer))

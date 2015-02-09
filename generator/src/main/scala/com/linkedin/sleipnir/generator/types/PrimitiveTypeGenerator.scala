@@ -1,8 +1,10 @@
 package com.linkedin.sleipnir.generator.types
 
+
 import com.linkedin.data.ByteString
 import com.linkedin.data.schema._
 import com.linkedin.data.schema.DataSchema.Type
+
 
 /**
  * A universal generator for all primitive data types.
@@ -10,7 +12,8 @@ import com.linkedin.data.schema.DataSchema.Type
  */
 class PrimitiveTypeGenerator(override val schema: PrimitiveDataSchema,
                              override val parentGenerator: Option[TypeGenerator],
-                             override val namespacePrefix: Option[String]) extends AbstractTypeGenerator with PredefinedTypeGenerator {
+                             override val namespacePrefix: Option[String],
+                             override val filename: String) extends AbstractTypeGenerator with PredefinedTypeGenerator {
 
   override val typeNames = Map(
     Type.BOOLEAN -> TypeName(classOf[java.lang.Boolean], "Boolean"),
@@ -24,5 +27,4 @@ class PrimitiveTypeGenerator(override val schema: PrimitiveDataSchema,
   )
 
   override val typeSchema: DataSchema = schema
-
 }

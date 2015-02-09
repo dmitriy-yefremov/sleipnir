@@ -1,8 +1,11 @@
 package com.linkedin.sleipnir.generator.types
 
+
 import com.linkedin.data.schema.FixedDataSchema
+
 import com.linkedin.sleipnir.generator.GeneratedClass
 import com.linkedin.sleipnir.generator.txt.FixedTemplate
+
 
 /**
  * A generator for [[FixedDataSchema]] types.
@@ -10,7 +13,8 @@ import com.linkedin.sleipnir.generator.txt.FixedTemplate
  */
 class FixedTypeGenerator(override val schema: FixedDataSchema,
                          override val parentGenerator: Option[TypeGenerator],
-                         override val namespacePrefix: Option[String]) extends AbstractTypeGenerator {
+                         override val namespacePrefix: Option[String],
+                         override val filename: String) extends AbstractTypeGenerator {
 
   override val name: TypeName = alias.getOrElse {
     TypeName(schema.getName, namespace(schema.getNamespace))
@@ -23,5 +27,4 @@ class FixedTypeGenerator(override val schema: FixedDataSchema,
     val source = FixedTemplate(this).toString()
     generatedClass(source)
   }
-
 }

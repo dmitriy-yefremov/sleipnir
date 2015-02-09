@@ -1,13 +1,17 @@
 package com.linkedin.sleipnir.generator
 
+
+import com.linkedin.data.schema._
+import com.linkedin.sleipnir.generator.types._
+
+import grizzled.slf4j.Logging
+
 import java.io.{File, FileWriter, PrintWriter}
 
 import scala.util.control.NonFatal
 
-import com.linkedin.data.schema._
-import com.linkedin.sleipnir.generator.types._
-import grizzled.slf4j.Logging
 import scalariform.formatter.ScalaFormatter
+
 
 /**
  * This mix-in is responsible for generation of Scala source code.
@@ -17,13 +21,13 @@ trait Generator extends Logging {
 
   /**
    * Generates Scala bindings for the given data schemas.
-   * @param schemas top level schemas to process
+   * @param schemaFileMap a map of top level schemas to the file that the schema originated from
    * @param targetDir output directory
    * @param namespacePrefix optional prefix that is added to name space of the generated types
    * @return files that were generated
    */
-  def processSchemas(schemas: Seq[DataSchema], targetDir: File, namespacePrefix: Option[String]): Seq[File] = {
-    val generators = uniqueGenerators(schemas, namespacePrefix)
+  def processSchemas(schemaFileMap: Map[DataSchema, File], targetDir: File, namespacePrefix: Option[String]): Seq[File] = {
+    val generators = uniqueGenerators(schemaFileMap, namespacePrefix)
     val generatedClasses = generators.flatMap { generator =>
       generator.generateClass
     }
@@ -33,7 +37,7 @@ trait Generator extends Logging {
     }
   }
 
-  private def uniqueGenerators(schemas: Seq[DataSchema], namespacePrefix: Option[String]): Seq[TypeGenerator] = {
+  private def uniqueGenerators(schemaFileMap: Map[DataSchema, File], namespacePrefix: Option[String]): Seq[TypeGenerator] = {
 
     def loop(generators: Seq[TypeGenerator], acc: Set[TypeGenerator]): Set[TypeGenerator] = {
       generators match {
@@ -47,8 +51,8 @@ trait Generator extends Logging {
       }
     }
 
-    val generators = schemas.foldLeft(Set[TypeGenerator]()) { (acc, schema) =>
-      loop(Seq(TypeGeneratorFactory.instance(schema, namespacePrefix)), acc)
+    val generators = schemaFileMap.foldLeft(Set[TypeGenerator]()) { (acc, schema) =>
+      loop(Seq(TypeGeneratorFactory.instance(schema._1, namespacePrefix, schema._2.getAbsolutePath)), acc)
     }
 
     generators.toList

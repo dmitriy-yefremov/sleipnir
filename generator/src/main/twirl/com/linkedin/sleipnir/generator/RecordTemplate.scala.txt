@@ -1,5 +1,4 @@
 @(generator: com.linkedin.sleipnir.generator.types.RecordTypeGenerator)
-
 @import _root_.scala.collection.JavaConverters._
 @import _root_.com.linkedin.data.schema.RecordDataSchema.Field
 @import _root_.com.linkedin.data.schema.DataSchema
@@ -14,23 +13,28 @@
 @import _root_.com.linkedin.sleipnir.generator.types.TypeGenerator
 @import _root_.com.linkedin.sleipnir.generator.types.TypeGeneratorFactory
 @import _root_.com.linkedin.sleipnir.generator.helpers.txt.CustomInitializers
-
+@import java.util.Calendar
 package @(generator.name.packageName)
+
+
+import com.linkedin.data.DataMap
+import com.linkedin.data.schema.RecordDataSchema
+import com.linkedin.data.template.SetMode
+import com.linkedin.data.template.{Custom,DataTemplateUtil}
+
+import com.linkedin.sleipnir.data.ScalaRecordTemplate
 
 import scala.collection.JavaConverters._
 
-import com.linkedin.data.DataMap
-import com.linkedin.data.template.SetMode
-import com.linkedin.data.schema.RecordDataSchema
-import com.linkedin.data.template.{Custom,DataTemplateUtil}
-import com.linkedin.sleipnir.data.ScalaRecordTemplate
-
+import javax.annotation.Generated
 
 import @(generator.name.shortClassName)._
+
 
 /**
  * @(generator.schema.getDoc)
  */
+@@Generated(value = Array("@(generator.typeGeneratorName)"), comments="LinkedIn Data Template. Generated from @(generator.filename)", date = "@(Calendar.getInstance().getTime())")
 class @(generator.name.shortClassName)(data: DataMap) extends ScalaRecordTemplate(data, Schema) {
 
   def this(@(generator.constructorArgs)) = {

@@ -1,10 +1,14 @@
 package com.linkedin.sleipnir.generator.types
 
+
 import com.linkedin.data.schema.{ArrayDataSchema, DataSchema}
+
 import com.linkedin.sleipnir.data.custom._
 import com.linkedin.sleipnir.generator.GeneratedClass
 import com.linkedin.sleipnir.generator.txt.ArrayTemplate
+
 import grizzled.slf4j.Logging
+
 
 /**
  * Common functionality for [[ArrayDataSchema]] generators.
@@ -25,7 +29,8 @@ sealed trait ArrayTypeGenerator extends AbstractTypeGenerator {
  */
 class ComplexArrayTypeGenerator(override val schema: ArrayDataSchema,
                                 override val parentGenerator: Option[TypeGenerator],
-                                override val namespacePrefix: Option[String]) extends ArrayTypeGenerator with Logging {
+                                override val namespacePrefix: Option[String],
+                                override val filename: String) extends ArrayTypeGenerator with Logging {
 
   override val name: TypeName = alias.getOrElse {
     val itemsName: TypeName = itemsGenerator.name
@@ -49,7 +54,8 @@ class ComplexArrayTypeGenerator(override val schema: ArrayDataSchema,
  */
 class PrimitiveArrayTypeGenerator(override val schema: ArrayDataSchema,
                                   override val parentGenerator: Option[TypeGenerator],
-                                  override val namespacePrefix: Option[String]) extends ArrayTypeGenerator with PredefinedTypeGenerator {
+                                  override val namespacePrefix: Option[String],
+                                  override val filename: String) extends ArrayTypeGenerator with PredefinedTypeGenerator {
 
   override val typeNames = Map(
     DataSchema.Type.BOOLEAN -> TypeName(classOf[BooleanArray], externalClassName),
@@ -62,5 +68,4 @@ class PrimitiveArrayTypeGenerator(override val schema: ArrayDataSchema,
   )
 
   override val typeSchema: DataSchema = schema.getItems
-
 }

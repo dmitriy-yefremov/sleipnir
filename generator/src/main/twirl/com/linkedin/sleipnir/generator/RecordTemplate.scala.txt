@@ -45,7 +45,7 @@ class @(generator.name.shortClassName)(data: DataMap) extends ScalaRecordTemplat
   /**
    * @(field.getDoc)
    */
-  def @(generator.escapedFieldName(field)): @(generator.recordTypeOf(field)) = {
+  def @(generator.escapedFieldName(field)): @(generator.getterFieldTypeOf(field)) = {
     @getter(field)
   }
 
@@ -80,7 +80,7 @@ object @(generator.name.shortClassName) {
  ***********@
 
 @setter(field: Field) = {
-  @if(field.getOptional) {
+  @if(field.getOptional || generator.fieldHasDefault(field)) {
     @(generator.escapedFieldName(field)).foreach { @(field.getName)Value =>
       @setterWithType(generator.fieldValName(field), field.getName +"Value", generator.fieldGenerator(field))
     }

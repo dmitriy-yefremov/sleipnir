@@ -14,7 +14,7 @@ class RecordTypeGenerator(override val schema: RecordDataSchema,
                           override val parentGenerator: Option[TypeGenerator],
                           override val namespacePrefix: Option[String]) extends AbstractTypeGenerator {
 
-  def orderedFields: Seq[RecordDataSchema.Field] = schema.getFields.asScala.sortBy(_.getOptional)
+  def orderedFields: Seq[RecordDataSchema.Field] = schema.getFields.asScala.sortBy(field => field.getOptional || fieldHasDefault(field))
 
   def escapedFieldName(field: RecordDataSchema.Field): String = {
     escapePegasusReserved(escapeScalaReserved(field.getName))
@@ -24,9 +24,13 @@ class RecordTypeGenerator(override val schema: RecordDataSchema,
     s"Field${field.getName.capitalize}"
   }
 
+  def fieldHasDefault(field: RecordDataSchema.Field): Boolean =
+    Option(field.getDefault).isDefined
+
   def constructorArg(field: RecordDataSchema.Field): String = {
-    val baseArg = s"${escapedFieldName(field)}: ${recordTypeOf(field)}"
-    if (field.getOptional) {
+    val baseType = setterFieldTypeOf(field)
+    val baseArg = s"${escapedFieldName(field)}: $baseType"
+    if (field.getOptional || fieldHasDefault(field)) {
       baseArg + " = None"
     } else {
       baseArg
@@ -42,9 +46,22 @@ class RecordTypeGenerator(override val schema: RecordDataSchema,
     escaped.mkString(", ")
   }
 
-  def recordTypeOf(field: RecordDataSchema.Field): String = {
+  def getterFieldTypeOf(field: RecordDataSchema.Field): String = {
     val base = fieldGenerator(field).name.externalClassName
-    if(field.getOptional) s"Option[$base]" else base
+    if(field.getOptional) {
+      s"Option[$base]"
+    } else {
+      base
+    }
+  }
+
+  def setterFieldTypeOf(field: RecordDataSchema.Field): String = {
+    val base = fieldGenerator(field).name.externalClassName
+    if (fieldHasDefault(field)) {
+      s"Option[$base]"
+    } else {
+      getterFieldTypeOf(field)
+    }
   }
 
   def fieldGenerator(field: RecordDataSchema.Field): TypeGenerator = nestedGenerator(field.getType)

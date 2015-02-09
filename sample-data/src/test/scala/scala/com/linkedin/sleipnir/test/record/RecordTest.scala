@@ -255,4 +255,22 @@ class RecordTest extends SleipnirSpec {
 
   }
 
+  "Default fields" should {
+
+    "use default when value not specified" in {
+      val record = DefaultRecord()
+      record.field must beEqualTo("default")
+      val recordFromJson = checkSerialization(record, """{}""")
+      recordFromJson.field must beEqualTo("default")
+    }
+
+    "use value when specified" in {
+      val record = DefaultRecord(Some(StringValue))
+      record.field must beEqualTo(StringValue)
+      val recordFromJson = checkSerialization(record, """{"field":"string value"}""")
+      recordFromJson.field must beEqualTo(StringValue)
+    }
+
+  }
+
 }

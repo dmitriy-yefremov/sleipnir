@@ -46,6 +46,17 @@ class RecordTypeGenerator(override val schema: RecordDataSchema,
     escaped.mkString(", ")
   }
 
+  def matchPattern(param: String): String = {
+    val escapedFields = orderedFields.map(escapedFieldName)
+    val fieldGetters = escapedFields.map(field => s"""$param.$field""")
+    val params = fieldGetters.mkString(", ")
+    if (escapedFields.length > 1) {
+      s"""($params)"""
+    } else {
+      params
+    }
+  }
+
   def getterFieldTypeOf(field: RecordDataSchema.Field): String = {
     val base = fieldGenerator(field).name.externalClassName
     if(field.getOptional) {

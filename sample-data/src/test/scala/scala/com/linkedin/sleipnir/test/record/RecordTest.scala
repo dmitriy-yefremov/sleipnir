@@ -1,6 +1,6 @@
 package scala.com.linkedin.sleipnir.test.record
 
-import scala.com.linkedin.sleipnir.test.{SimpleEnum, SleipnirSpec}
+import scala.com.linkedin.sleipnir.test.{SimpleEnum, SimpleRecord, SleipnirSpec}
 import com.linkedin.sleipnir.test.CustomPoint
 
 class RecordTest extends SleipnirSpec {
@@ -269,6 +269,17 @@ class RecordTest extends SleipnirSpec {
       record.field must beEqualTo(StringValue)
       val recordFromJson = checkSerialization(record, """{"field":"string value"}""")
       recordFromJson.field must beEqualTo(StringValue)
+    }
+
+  }
+
+  "Unboxing" should {
+
+    "be supported" in {
+      val record = RecordRecord(SimpleRecordValue)
+      record match {
+        case RecordRecord(SimpleRecord(string)) => string must beEqualTo(StringValue)
+      }
     }
 
   }

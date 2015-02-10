@@ -73,6 +73,8 @@ object @(generator.name.shortClassName) {
 
   def apply(@(generator.constructorArgs)) = new @(generator.name.shortClassName)(@generator.constructorParams)
 
+  def unapply(record: @(generator.name.shortClassName)) = Some(@(generator.matchPattern("record")))
+
 }
 
 @***********

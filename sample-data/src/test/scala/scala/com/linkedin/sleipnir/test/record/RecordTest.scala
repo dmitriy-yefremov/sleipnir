@@ -284,4 +284,14 @@ class RecordTest extends SleipnirSpec {
 
   }
 
+  "Over 22 fields" should {
+
+    "be supported" in {
+      val record = ManyFieldsRecord()
+      checkSerialization(record, """{}""")
+      success
+    }
+
+  }
+
 }

@@ -94,7 +94,7 @@ object SleipnirPlugin extends Plugin {
    * Default filter to get the list of data template artifacts.
    */
   val DefaultDataTemplatesDependenciesFilter = DependencyFilter.fnToArtifactFilter { artifact =>
-    artifact.configurations.toSeq.exists(_.name == "dataTemplate")
+    artifact.name.endsWith("-data-template") || artifact.configurations.toSeq.exists(_.name == "dataTemplate")
   }
 
   /**

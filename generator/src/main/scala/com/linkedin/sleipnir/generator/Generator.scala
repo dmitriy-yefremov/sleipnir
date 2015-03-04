@@ -42,12 +42,8 @@ trait Generator extends Logging {
     def loop(generators: Seq[TypeGenerator], acc: Set[TypeGenerator]): Set[TypeGenerator] = {
       generators match {
         case Nil => acc
-        case h :: t =>
-          if (acc contains h) {
-            loop(t, acc)
-          } else {
-            loop(t ++ h.referencedGenerators, acc + h)
-          }
+        case h :: t if acc.contains(h) => loop(t, acc)
+        case h :: t => loop(t ++ h.referencedGenerators, acc + h)
       }
     }
 
@@ -62,7 +58,8 @@ trait Generator extends Logging {
     val names = generatedClasses.map(_.name)
     val uniqueNames = names.distinct
     if (names.size != uniqueNames.size) {
-      throw new IllegalArgumentException("The same class name is used multiple times")
+      val duplicates = names.diff(uniqueNames).distinct.mkString(", ")
+      logger.warn(s"Same class(es) generated multiple times: $duplicates. That may be caused by multiple versions of the same schema.")
     }
   }
 

@@ -20,7 +20,7 @@ import javax.annotation.Generated
 import @(generator.name.shortClassName)._
 
 
-@@Generated(value = Array("@(generator.typeGeneratorName)"), comments="LinkedIn Data Template. Generated from @(generator.filename)", date = "@(Calendar.getInstance().getTime())")
+@@Generated(value = scala.Array("@(generator.typeGeneratorName)"), comments="LinkedIn Data Template. Generated from @(generator.filename)", date = "@(Calendar.getInstance().getTime())")
 class @(generator.name.shortClassName) protected(val items: scala.Seq[@(generator.itemsClassName)], itemsData: DataList) extends ScalaArrayTemplate(itemsData, Schema) {
 
   def this(items: scala.Seq[@(generator.itemsClassName)]) = this(items, ScalaArrayTemplate.unwrapAll(items, InputCoercer))

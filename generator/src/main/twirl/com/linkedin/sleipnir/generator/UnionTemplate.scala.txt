@@ -27,7 +27,7 @@ import javax.annotation.Generated
 import @(generator.name.shortClassName)._
 
 
-@@Generated(value = Array("@(generator.typeGeneratorName)"), comments="LinkedIn Data Template. Generated from @(generator.filename)", date = "@(Calendar.getInstance().getTime())")
+@@Generated(value = scala.Array("@(generator.typeGeneratorName)"), comments="LinkedIn Data Template. Generated from @(generator.filename)", date = "@(Calendar.getInstance().getTime())")
 class @(generator.name.shortClassName)(data: AnyRef) extends ScalaUnionTemplate(data, Schema) {
 
 @for(typeGenerator <- generator.referencedGenerators.filterNot(_.schema.getType == Type.NULL)) {

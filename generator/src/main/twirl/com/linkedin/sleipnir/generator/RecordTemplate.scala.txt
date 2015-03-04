@@ -34,7 +34,7 @@ import @(generator.name.shortClassName)._
 /**
  * @(generator.schema.getDoc)
  */
-@@Generated(value = Array("@(generator.typeGeneratorName)"), comments="LinkedIn Data Template. Generated from @(generator.filename)", date = "@(Calendar.getInstance().getTime())")
+@@Generated(value = scala.Array("@(generator.typeGeneratorName)"), comments="LinkedIn Data Template. Generated from @(generator.filename)", date = "@(Calendar.getInstance().getTime())")
 class @(generator.name.shortClassName)(data: DataMap) extends ScalaRecordTemplate(data, Schema) {
 
   def this(@(generator.constructorArgs)) = {

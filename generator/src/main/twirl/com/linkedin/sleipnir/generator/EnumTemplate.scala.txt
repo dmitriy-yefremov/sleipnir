@@ -15,7 +15,7 @@ import javax.annotation.Generated
 /**
  * @(generator.schema.getDoc)
  */
-@@Generated(value = Array("@(generator.typeGeneratorName)"), comments="LinkedIn Data Template. Generated from @(generator.filename)", date = "@(Calendar.getInstance().getTime())")
+@@Generated(value = scala.Array("@(generator.typeGeneratorName)"), comments="LinkedIn Data Template. Generated from @(generator.filename)", date = "@(Calendar.getInstance().getTime())")
 object @(generator.name.shortClassName) extends ScalaEnumTemplate {
 
   private val SchemaJson: String = "@(generator.schemaJson)"

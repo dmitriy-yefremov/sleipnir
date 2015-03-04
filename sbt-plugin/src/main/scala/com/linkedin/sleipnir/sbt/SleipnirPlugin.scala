@@ -73,6 +73,8 @@ object SleipnirPlugin extends Plugin {
 
     managedSourceDirectories in Compile += sleipnirDestinationDirectory.value,
 
+    cleanFiles += sleipnirDestinationDirectory.value,
+
     libraryDependencies += {
       val version = SleipnirPlugin.getClass.getPackage.getImplementationVersion
       "com.linkedin.sleipnir" % s"sleipnirgenerator_2.10" % version

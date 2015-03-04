@@ -98,7 +98,8 @@ object Sleipnir extends Build {
     },
     sourceGenerators in Compile <+= (forkedVmSleipnirGenerator in Compile),
     unmanagedSourceDirectories in Compile += sourceDirectory.value / "main" / "codegen",
-    managedSourceDirectories in Compile += sourceDirectory.value / "main" / "codegen"
+    managedSourceDirectories in Compile += sourceDirectory.value / "main" / "codegen",
+    cleanFiles += sourceDirectory.value / "main" / "codegen"
   )
 
   def runForkedGenerator(src: File, dst: File, classpath: Seq[File]): Seq[File] = {

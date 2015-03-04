@@ -108,7 +108,7 @@ object SleipnirPlugin extends Plugin {
 
     sleipnirSourceDirectory := extractDataTemplatesTarget.value / "pegasus",
 
-    cleanFiles += extractDataTemplatesTarget.value,
+    cleanFiles ++= Seq(extractDataTemplatesTarget.value, sleipnirDestinationDirectory.value),
 
     dataTemplatesDependencies := update.value.matching(dataTemplatesDependenciesFilter.value),
 

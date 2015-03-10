@@ -58,8 +58,11 @@ object SleipnirPlugin extends Plugin {
         log.info("Sleipnir source path: " + src)
         log.info("Sleipnir destination path: " + dst)
         val generatedFiles = Sleipnir.run(resolverPath, src, dst, namespacePrefix)
-        val staleFiles = previousScalaFiles.sorted.diff(generatedFiles.sorted)
-        IO.delete(staleFiles)
+
+        // NOTE: deleting stale files does not work properly with sleipnir activated on two different projects
+        //val staleFiles = previousScalaFiles.sorted.diff(generatedFiles.sorted)
+        //log.info("Not deleting stale files " + staleFiles.mkString(", "))
+        //IO.delete(staleFiles)
         cacheSourceFiles()
         generatedFiles
       } else {

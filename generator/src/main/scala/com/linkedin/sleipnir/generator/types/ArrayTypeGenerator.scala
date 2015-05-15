@@ -7,8 +7,7 @@ import com.linkedin.sleipnir.data.custom._
 import com.linkedin.sleipnir.generator.GeneratedClass
 import com.linkedin.sleipnir.generator.txt.ArrayTemplate
 
-import grizzled.slf4j.Logging
-
+import com.typesafe.scalalogging.slf4j.StrictLogging
 
 /**
  * Common functionality for [[ArrayDataSchema]] generators.
@@ -30,7 +29,7 @@ sealed trait ArrayTypeGenerator extends AbstractTypeGenerator {
 class ComplexArrayTypeGenerator(override val schema: ArrayDataSchema,
                                 override val parentGenerator: Option[TypeGenerator],
                                 override val namespacePrefix: Option[String],
-                                override val filename: String) extends ArrayTypeGenerator with Logging {
+                                override val filename: String) extends ArrayTypeGenerator with StrictLogging {
 
   override val name: TypeName = alias.getOrElse {
     val itemsName: TypeName = itemsGenerator.name

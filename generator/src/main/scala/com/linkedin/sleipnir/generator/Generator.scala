@@ -4,7 +4,7 @@ package com.linkedin.sleipnir.generator
 import com.linkedin.data.schema._
 import com.linkedin.sleipnir.generator.types._
 
-import grizzled.slf4j.Logging
+import com.typesafe.scalalogging.slf4j.StrictLogging
 
 import java.io.{File, FileWriter, PrintWriter}
 
@@ -17,7 +17,7 @@ import scalariform.formatter.ScalaFormatter
  * This mix-in is responsible for generation of Scala source code.
  * @author Dmitriy Yefremov
  */
-trait Generator extends Logging {
+trait Generator extends StrictLogging {
 
   /**
    * Generates Scala bindings for the given data schemas.

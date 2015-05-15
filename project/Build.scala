@@ -3,12 +3,7 @@ import Keys._
 import sbt.IO
 
 import twirl.sbt.TwirlPlugin._
-import org.scalastyle.sbt.ScalastylePlugin
 import de.johoop.jacoco4sbt.JacocoPlugin._
-
-import com.linkedin.sbt.MintPlugin
-import com.linkedin.sbt.core.ext.LiKeys._
-import com.linkedin.sbt.core.ext.Predef._
 
 object Sleipnir extends Build {
 
@@ -16,10 +11,8 @@ object Sleipnir extends Build {
    * A dummy aggregator project. It does nothing by itself, but lets us see the root folder in Intellij.
    */
   lazy val sleipnir = project.in(file("."))
-    .aggregate(sleipnirGenerator, sleipnirSbtPlugin, sampleData, converters)
+    .aggregate(sleipnirGenerator, sleipnirSbtPlugin, sampleData)
     .settings(jacoco.settings: _*)
-    // Configures Jacoco to put the merged report in the location expected by Product Dashboard (go/coverage). 
-    .settings((jacoco.aggregateReportDirectory in jacoco.Config) := baseDirectory.value / "build" / "reports" / "coverage")
 
   /**
    * The generator project. For now it includes both the code to generate Scala classes and the runtime code needed to
@@ -27,35 +20,17 @@ object Sleipnir extends Build {
    */
   lazy val sleipnirGenerator = project.in(file("generator"))
     .settings(
-      productSpecDependencies ++= Seq(
-        "external.grizzled-slf4j",
-        "external.logback",
-        "external.commons-lang",
-        "external.scalariform",
-        "external.specs2" in "test",
-        "product.pegasus.data"
+      libraryDependencies ++= Seq(
+        "com.typesafe.scala-logging" %% "scala-logging-slf4j" % "2.1.2",
+        "ch.qos.logback" % "logback-classic" % "1.1.2",
+        "com.linkedin.pegasus" % "data" % "1.20.0",
+        "org.scalariform" %% "scalariform" % "0.1.4",
+        "org.apache.commons" % "commons-lang3" % "3.4",
+        "org.specs2" %% "specs2-core" % "2.4.14" % "test"
       )
     )
     .settings(Twirl.settings: _*)
-    .settings(ScalastylePlugin.Settings: _*)
     .settings(jacoco.settings: _*)
-    .settings(commands ++= Seq(MintPlugin.buildCmd))
-
-  /**
-   * The converters project. It allows conversion between restli generic types.
-   */
-  lazy val converters = project.in(file("converters"))
-    .dependsOn(sleipnirGenerator % "test->compile")
-    .settings(
-      productSpecDependencies ++= Seq(
-        "external.specs2" in "test",
-        "product.pegasus.data",
-        "product.pegasus.restli-client",
-        "product.pegasus.restli-common"
-      )
-    )
-    .settings(jacoco.settings: _*)
-    .settings(commands ++= Seq(MintPlugin.buildCmd))
 
   /**
    * The generator in the form of an SBT plugin.
@@ -66,9 +41,7 @@ object Sleipnir extends Build {
     .settings(
       sbtPlugin := true
     )
-    .settings(ScalastylePlugin.Settings: _*)
     .settings(jacoco.settings: _*)
-    .settings(commands ++= Seq(MintPlugin.buildCmd))
 
   /**
    * Some sample PDSC files to test the generator. All the craziness below is needed to build the generator and actually
@@ -78,8 +51,8 @@ object Sleipnir extends Build {
     .dependsOn(sleipnirGenerator)
     .settings(forkedVmSleipnirGeneratorSettings: _*)
     .settings(
-      productSpecDependencies ++= Seq(
-        "external.specs2" in "test"
+      libraryDependencies ++= Seq(
+        "org.specs2" %% "specs2-core" % "2.4.14" % "test"
       )
     )
     .settings(jacoco.settings: _*)

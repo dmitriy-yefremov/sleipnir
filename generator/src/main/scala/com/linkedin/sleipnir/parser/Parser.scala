@@ -5,7 +5,7 @@ import com.linkedin.util.FileUtil
 import com.linkedin.data.schema.resolver.{FileDataSchemaLocation, FileDataSchemaResolver}
 import com.linkedin.data.schema._
 
-import grizzled.slf4j.Logging
+import com.typesafe.scalalogging.slf4j.StrictLogging
 
 import java.io.{FileInputStream, FileNotFoundException, File}
 
@@ -16,7 +16,7 @@ import scala.collection.JavaConverters._
  * This mix-in is responsible for data schema files parsing functionality.
  * @author Dmitriy Yefremov
  */
-trait Parser extends Logging {
+trait Parser extends StrictLogging {
 
   /**
    * Returns all schema files in the given path.

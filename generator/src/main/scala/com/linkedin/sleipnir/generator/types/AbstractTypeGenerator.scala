@@ -5,7 +5,7 @@ import com.linkedin.data.schema.DataSchema
 
 import com.linkedin.sleipnir.generator.GeneratedClass
 
-import grizzled.slf4j.Logging
+import com.typesafe.scalalogging.slf4j.StrictLogging
 
 import org.apache.commons.lang3.StringEscapeUtils
 
@@ -14,7 +14,7 @@ import org.apache.commons.lang3.StringEscapeUtils
  * Some code shared between most of type generators.
  * @author Dmitriy Yefremov
  */
-trait AbstractTypeGenerator extends TypeGenerator with ReservedWordsEscaping with Logging {
+trait AbstractTypeGenerator extends TypeGenerator with ReservedWordsEscaping with StrictLogging {
 
   /**
    * Returns the alias of the current type if it is defined through a type reference.

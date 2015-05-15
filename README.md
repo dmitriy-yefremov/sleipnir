@@ -1,5 +1,5 @@
-# What is Sleipnir
-Sleipnir is a generator of native Scala bindings for Pegasus schemas. The code is implemented with the following ideas in mind:
+# Sleipnir [![Build Status](https://travis-ci.org/dmitriy-yefremov/sleipnir.svg?branch=master)](https://travis-ci.org/dmitriy-yefremov/sleipnir)
+Sleipnir is a generator of native Scala bindings for rest.li Pegasus schemas. The code is implemented with the following ideas in mind:
 
 1. Use as much of Pegasus infrastructure as possible: schema files parsing is reused, generated classes extend RecordTemplate/DataTemplate and work on top of DataMap and so on.
 2. Low tech code generation: we use Twirl templates (aka Play Scala templates), more on this here.

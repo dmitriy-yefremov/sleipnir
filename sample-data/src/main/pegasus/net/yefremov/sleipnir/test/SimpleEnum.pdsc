@@ -1,0 +1,7 @@
+{
+  "name": "SimpleEnum",
+  "namespace": "net.yefremov.sleipnir.test",
+  "doc": "Simple enum type to be used in other tests",
+  "type" : "enum",
+  "symbols" : [ "Foo", "Bar" ]
+}

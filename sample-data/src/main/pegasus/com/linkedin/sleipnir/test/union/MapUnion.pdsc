@@ -1,7 +1,0 @@
-{
-    "type": "typeref",
-    "name": "com.linkedin.sleipnir.test.union.MapUnion",
-    "ref": [
-        { "type": "map", "values": "string" }
-    ]
-}

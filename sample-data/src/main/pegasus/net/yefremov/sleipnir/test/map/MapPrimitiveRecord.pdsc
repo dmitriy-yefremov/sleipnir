@@ -1,0 +1,14 @@
+{
+  "type": "record",
+  "name": "MapPrimitiveRecord",
+  "namespace": "net.yefremov.sleipnir.test.map",
+  "fields": [
+    {
+      "name": "mapField",
+      "type": {
+        "type": "map",
+        "values": "string"
+      }
+    }
+  ]
+}

@@ -1,9 +1,0 @@
-{
-    "type" : "typeref",
-    "name" : "CustomPoint",
-    "namespace": "com.linkedin.sleipnir.test",
-    "ref"  : "string",
-    "java" : {
-        "class" : "com.linkedin.sleipnir.test.CustomPoint"
-    }
-}

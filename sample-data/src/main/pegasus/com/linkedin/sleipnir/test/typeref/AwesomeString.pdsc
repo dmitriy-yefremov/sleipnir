@@ -1,6 +1,0 @@
-{
-  "type" : "typeref",
-  "name" : "AwesomeString",
-  "namespace" : "com.linkedin.sleipnir.test.typeref",
-  "ref" : "string"
-}

@@ -1,0 +1,19 @@
+{
+  "type": "record",
+  "name": "ReservedWordsRecord",
+  "namespace": "net.yefremov.sleipnir.test.record",
+  "fields": [
+    {
+      "name": "object",
+      "type": "string"
+    },
+    {
+      "name": "type",
+      "type": {
+        "name": "type",
+        "type": "enum",
+        "symbols": []
+      }
+    }
+  ]
+}

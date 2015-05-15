@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "name": "OptionalPrimitiveRecord",
+  "namespace": "net.yefremov.sleipnir.test.record",
+  "fields": [
+    {
+      "name": "stringOption",
+      "type": "string",
+      "optional": true
+    }
+  ]
+}

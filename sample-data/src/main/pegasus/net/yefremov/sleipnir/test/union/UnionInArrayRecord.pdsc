@@ -1,0 +1,17 @@
+{
+  "type": "record",
+  "name": "UnionInArrayRecord",
+  "namespace": "net.yefremov.sleipnir.test.union",
+  "fields": [
+    {
+      "name": "field",
+      "type": {
+        "type": "array",
+        "items": [
+          "string",
+          "net.yefremov.sleipnir.test.SimpleRecord"
+        ]
+      }
+    }
+  ]
+}

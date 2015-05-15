@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "name": "OptionalEnumRecord",
+  "namespace": "net.yefremov.sleipnir.test.record",
+  "fields": [
+    {
+      "name": "enumOption",
+      "type": "net.yefremov.sleipnir.test.SimpleEnum",
+      "optional": true
+    }
+  ]
+}

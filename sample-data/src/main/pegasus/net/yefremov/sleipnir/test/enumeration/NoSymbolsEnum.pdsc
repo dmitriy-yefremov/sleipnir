@@ -1,0 +1,6 @@
+{
+  "name": "NoSymbolsEnum",
+  "namespace": "net.yefremov.sleipnir.test.enumeration",
+  "type" : "enum",
+  "symbols" : [ ]
+}

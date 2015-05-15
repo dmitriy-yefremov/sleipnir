@@ -1,0 +1,63 @@
+@*
+ *    Copyright 2015 Dmitriy Yefremov
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ *@
+
+
+@(generator: net.yefremov.sleipnir.generator.types.ComplexMapTypeGenerator)
+@import _root_.net.yefremov.sleipnir.generator.helpers.txt.OutputCoercer
+@import _root_.net.yefremov.sleipnir.generator.helpers.txt.InputCoercer
+@import _root_.net.yefremov.sleipnir.generator.helpers.txt.CustomInitializers
+@import _root_.scala.collection.JavaConverters._
+@import _root_.com.linkedin.data.schema.RecordDataSchema.Field
+@import _root_.com.linkedin.data.schema.EnumDataSchema
+@import java.util.Calendar
+package @(generator.name.packageName)
+
+
+import com.linkedin.data.DataMap
+import com.linkedin.data.schema.MapDataSchema
+import com.linkedin.data.template.{Custom,DataTemplate,DataTemplateUtil}
+
+import net.yefremov.sleipnir.data.ScalaMapTemplate
+
+import javax.annotation.Generated
+
+import @(generator.name.shortClassName)._
+
+
+@@Generated(value = scala.Array("@(generator.typeGeneratorName)"), comments="LinkedIn Data Template. Generated from @(generator.filename)", date = "@(Calendar.getInstance().getTime())")
+class @(generator.name.shortClassName) protected(val map: scala.Predef.Map[String,@(generator.valuesClassName)], mapData: DataMap) extends ScalaMapTemplate(mapData, Schema) {
+
+  def this(map: scala.Predef.Map[String, @(generator.valuesClassName)]) = this(map, ScalaMapTemplate.unwrapAll(map, InputCoercer))
+
+  def this(data: DataMap) = this(ScalaMapTemplate.wrapAll(data, OutputCoercer), data)
+
+}
+
+object @(generator.name.shortClassName) {
+
+  @CustomInitializers(generator.valuesGenerator)
+
+  private val SchemaJson: String = "@(generator.schemaJson)"
+
+  private val Schema: MapDataSchema = DataTemplateUtil.parseSchema(SchemaJson).asInstanceOf[MapDataSchema]
+
+  private val OutputCoercer: PartialFunction[Any, @(generator.valuesClassName)] = @OutputCoercer(generator.valuesGenerator)
+
+  private val InputCoercer: PartialFunction[@(generator.valuesClassName), AnyRef] = @InputCoercer(generator.valuesGenerator)
+
+  def apply(map: scala.Predef.Map[String,@(generator.valuesClassName)]) = new @(generator.name.shortClassName)(map)
+
+}

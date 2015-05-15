@@ -1,7 +1,0 @@
-{
-    "type": "typeref",
-    "name": "com.linkedin.sleipnir.test.union.EnumUnion",
-    "ref": [
-        "com.linkedin.sleipnir.test.SimpleEnum"
-    ]
-}

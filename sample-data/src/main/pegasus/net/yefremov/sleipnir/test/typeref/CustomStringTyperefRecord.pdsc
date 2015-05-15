@@ -1,0 +1,11 @@
+{
+    "type": "record",
+    "name": "CustomStringTyperefRecord",
+    "namespace": "net.yefremov.sleipnir.test.typeref",
+    "fields": [
+        {
+            "name": "field",
+            "type": "CustomString"
+        }
+    ]
+}

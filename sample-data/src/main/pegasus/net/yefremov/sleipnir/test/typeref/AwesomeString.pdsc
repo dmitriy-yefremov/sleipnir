@@ -1,0 +1,6 @@
+{
+  "type" : "typeref",
+  "name" : "AwesomeString",
+  "namespace" : "net.yefremov.sleipnir.test.typeref",
+  "ref" : "string"
+}

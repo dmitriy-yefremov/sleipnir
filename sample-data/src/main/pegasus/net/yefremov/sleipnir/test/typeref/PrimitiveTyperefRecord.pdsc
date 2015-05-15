@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "name": "PrimitiveTyperefRecord",
+  "namespace": "net.yefremov.sleipnir.test.typeref",
+  "fields": [
+    {
+      "name": "field",
+      "type": "AwesomeString"
+    }
+  ]
+}

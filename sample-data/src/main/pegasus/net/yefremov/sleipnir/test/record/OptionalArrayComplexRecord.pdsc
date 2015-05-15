@@ -1,0 +1,15 @@
+{
+  "type": "record",
+  "name": "OptionalArrayComplexRecord",
+  "namespace": "net.yefremov.sleipnir.test.record",
+  "fields": [
+    {
+      "name": "arrayOption",
+      "type": {
+        "type": "array",
+        "items": "net.yefremov.sleipnir.test.SimpleRecord"
+      },
+      "optional": true
+    }
+  ]
+}

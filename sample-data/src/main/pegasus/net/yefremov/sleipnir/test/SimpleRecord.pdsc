@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "name": "SimpleRecord",
+  "namespace": "net.yefremov.sleipnir.test",
+  "doc": "Simple record type to be used in other tests",
+  "fields": [
+    {
+      "name": "field",
+      "type": "string"
+    }
+  ]
+}

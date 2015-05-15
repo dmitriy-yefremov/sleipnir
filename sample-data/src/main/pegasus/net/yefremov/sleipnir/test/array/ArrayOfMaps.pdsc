@@ -1,0 +1,11 @@
+{
+  "type": "typeref",
+  "name": "net.yefremov.sleipnir.test.array.ArrayOfMaps",
+  "ref": {
+    "type": "array",
+    "items": {
+      "type": "map",
+      "values": "net.yefremov.sleipnir.test.SimpleRecord"
+    }
+  }
+}

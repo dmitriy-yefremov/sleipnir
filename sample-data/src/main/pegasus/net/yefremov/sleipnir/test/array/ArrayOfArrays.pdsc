@@ -1,0 +1,11 @@
+{
+  "type": "typeref",
+  "name": "net.yefremov.sleipnir.test.array.ArrayOfArrays",
+  "ref": {
+    "type": "array",
+    "items": {
+      "type": "array",
+      "items": "net.yefremov.sleipnir.test.SimpleRecord"
+    }
+  }
+}

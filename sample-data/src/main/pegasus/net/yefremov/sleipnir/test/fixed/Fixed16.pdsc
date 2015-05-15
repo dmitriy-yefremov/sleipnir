@@ -1,0 +1,6 @@
+{
+  "type" : "fixed",
+  "name" : "Fixed16",
+  "namespace": "net.yefremov.sleipnir.test.fixed",
+  "size" : 16
+}

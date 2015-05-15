@@ -1,0 +1,8 @@
+{
+  "type": "typeref",
+  "name": "net.yefremov.sleipnir.test.union.UnionWithNull",
+  "ref": [
+    "string",
+    "null"
+  ]
+}

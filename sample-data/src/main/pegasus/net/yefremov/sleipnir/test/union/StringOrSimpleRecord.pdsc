@@ -1,0 +1,8 @@
+{
+  "type": "typeref",
+  "name": "net.yefremov.sleipnir.test.union.StringOrSimpleRecord",
+  "ref": [
+    "string",
+    "net.yefremov.sleipnir.test.SimpleRecord"
+  ]
+}

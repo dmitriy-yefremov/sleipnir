@@ -1,0 +1,7 @@
+{
+    "type": "typeref",
+    "name": "net.yefremov.sleipnir.test.union.ArrayUnion",
+    "ref": [
+        { "type": "array", "items": "string" }
+    ]
+}

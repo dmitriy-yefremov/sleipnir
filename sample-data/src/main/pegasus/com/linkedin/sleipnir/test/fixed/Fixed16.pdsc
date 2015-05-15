@@ -1,6 +1,0 @@
-{
-  "type" : "fixed",
-  "name" : "Fixed16",
-  "namespace": "com.linkedin.sleipnir.test.fixed",
-  "size" : 16
-}

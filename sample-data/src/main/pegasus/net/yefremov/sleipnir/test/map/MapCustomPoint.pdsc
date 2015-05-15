@@ -1,0 +1,8 @@
+{
+    "type": "typeref",
+    "name": "net.yefremov.sleipnir.test.map.MapCustomPoint",
+    "ref": {
+        "type": "map",
+        "values": "net.yefremov.sleipnir.test.CustomPoint"
+    }
+}

@@ -1,8 +1,0 @@
-{
-  "type": "typeref",
-  "name": "com.linkedin.sleipnir.test.union.StringOrSimpleRecord",
-  "ref": [
-    "string",
-    "com.linkedin.sleipnir.test.SimpleRecord"
-  ]
-}

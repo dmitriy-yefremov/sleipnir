@@ -1,0 +1,14 @@
+{
+    "type": "record",
+    "name": "CustomPointArrayRecord",
+    "namespace": "net.yefremov.sleipnir.test.array",
+    "fields": [
+        {
+            "name": "field",
+            "type": {
+                "type": "array",
+                "items": "net.yefremov.sleipnir.test.CustomPoint"
+            }
+        }
+    ]
+}

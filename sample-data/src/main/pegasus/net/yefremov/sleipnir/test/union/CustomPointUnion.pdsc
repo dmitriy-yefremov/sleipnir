@@ -1,0 +1,7 @@
+{
+    "type": "typeref",
+    "name": "net.yefremov.sleipnir.test.union.CustomPointUnion",
+    "ref": [
+        "net.yefremov.sleipnir.test.CustomPoint"
+    ]
+}

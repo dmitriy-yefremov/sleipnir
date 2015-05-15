@@ -1,0 +1,10 @@
+{
+    "type" : "typeref",
+    "name" : "CustomString",
+    "namespace": "net.yefremov.sleipnir.test.typeref",
+    "ref"  : "string",
+    "java" : {
+        "class" : "net.yefremov.sleipnir.test.CustomString",
+        "coercerClass": "net.yefremov.sleipnir.test.CustomStringCoercer"
+    }
+}

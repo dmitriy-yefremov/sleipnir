@@ -1,0 +1,15 @@
+{
+  "type": "record",
+  "name": "OptionalMapPrimitiveRecord",
+  "namespace": "net.yefremov.sleipnir.test.record",
+  "fields": [
+    {
+      "name": "mapOption",
+      "type": {
+        "type": "map",
+        "values": "string"
+      },
+      "optional": true
+    }
+  ]
+}

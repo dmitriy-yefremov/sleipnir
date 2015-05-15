@@ -1,0 +1,14 @@
+{
+  "type": "record",
+  "name": "ArrayBytesRecord",
+  "namespace": "net.yefremov.sleipnir.test.array",
+  "fields": [
+    {
+      "name": "arrayField",
+      "type": {
+        "type": "array",
+        "items": "bytes"
+      }
+    }
+  ]
+}

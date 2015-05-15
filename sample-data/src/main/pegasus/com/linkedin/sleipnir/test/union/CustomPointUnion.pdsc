@@ -1,7 +1,0 @@
-{
-    "type": "typeref",
-    "name": "com.linkedin.sleipnir.test.union.CustomPointUnion",
-    "ref": [
-        "com.linkedin.sleipnir.test.CustomPoint"
-    ]
-}

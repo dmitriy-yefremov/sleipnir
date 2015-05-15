@@ -40,7 +40,7 @@ trait SleipnirSpec extends Specification {
    * Serializes the given data template to JSON.
    * @return JSON string
    */
-  def toJson(template: DataTemplate[_]): String = dataTemplateCodec.dataTemplateToString(template)
+  def toJson(template: DataTemplate[_]): String = dataTemplateCodec.dataTemplateToString(template, true)
 
   /**
    * Deserializes a data template from the given JSON.

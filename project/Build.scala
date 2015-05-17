@@ -23,19 +23,24 @@ import de.johoop.jacoco4sbt.JacocoPlugin._
 
 object Sleipnir extends Build {
 
+  val sharedSettings = jacoco.settings ++ Seq(
+    organization := "net.yefremov"
+  )
+
   /**
    * A dummy aggregator project. It does nothing by itself, but lets us see the root folder in Intellij.
    */
   lazy val sleipnir = project.in(file("."))
     .aggregate(sleipnirGenerator, sleipnirSbtPlugin, sampleData)
-    .settings(jacoco.settings: _*)
+    .settings(sharedSettings: _*)
+    .settings(publishArtifact := false)
 
   /**
    * The generator project. For now it includes both the code to generate Scala classes and the runtime code needed to
    * use the generated classes.
    */
   lazy val sleipnirGenerator = project.in(file("generator"))
-    .settings(organization := "net.yefremov")
+    .settings(sharedSettings: _*)
     .settings(
       libraryDependencies ++= Seq(
         "com.typesafe.scala-logging" %% "scala-logging-slf4j" % "2.1.2",
@@ -47,7 +52,6 @@ object Sleipnir extends Build {
       )
     )
     .settings(Twirl.settings: _*)
-    .settings(jacoco.settings: _*)
 
   /**
    * The generator in the form of an SBT plugin.
@@ -55,9 +59,8 @@ object Sleipnir extends Build {
   lazy val sleipnirSbtPlugin = project.in(file("sbt-plugin"))
     .dependsOn(sleipnirGenerator)
     .aggregate(sleipnirGenerator)
-    .settings(organization := "net.yefremov")
+    .settings(sharedSettings: _*)
     .settings(sbtPlugin := true)
-    .settings(jacoco.settings: _*)
 
   /**
    * Some sample PDSC files to test the generator. All the craziness below is needed to build the generator and actually
@@ -65,13 +68,14 @@ object Sleipnir extends Build {
    */
   lazy val sampleData = project.in(file("sample-data"))
     .dependsOn(sleipnirGenerator)
+    .settings(sharedSettings: _*)
+    .settings(publishArtifact := false)
     .settings(forkedVmSleipnirGeneratorSettings: _*)
     .settings(
       libraryDependencies ++= Seq(
         "org.specs2" %% "specs2-core" % "2.4.14" % "test"
       )
     )
-    .settings(jacoco.settings: _*)
 
   lazy val forkedVmSleipnirGenerator = taskKey[Seq[File]]("Sleipnir generator executed in a forked VM")
 

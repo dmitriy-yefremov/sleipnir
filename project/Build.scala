@@ -35,6 +35,7 @@ object Sleipnir extends Build {
    * use the generated classes.
    */
   lazy val sleipnirGenerator = project.in(file("generator"))
+    .settings(organization := "net.yefremov")
     .settings(
       libraryDependencies ++= Seq(
         "com.typesafe.scala-logging" %% "scala-logging-slf4j" % "2.1.2",
@@ -54,9 +55,8 @@ object Sleipnir extends Build {
   lazy val sleipnirSbtPlugin = project.in(file("sbt-plugin"))
     .dependsOn(sleipnirGenerator)
     .aggregate(sleipnirGenerator)
-    .settings(
-      sbtPlugin := true
-    )
+    .settings(organization := "net.yefremov")
+    .settings(sbtPlugin := true)
     .settings(jacoco.settings: _*)
 
   /**

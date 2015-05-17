@@ -71,6 +71,14 @@ class ArrayTest extends SleipnirSpec {
       recordFromJson.field must beEqualTo(customPoints)
     }
 
+    "support custom names through typerefs" in {
+      val array = Seq(SimpleRecordValue)
+      val customArray = CustomNamedArray(array)
+      customArray.items must beEqualTo(array)
+      val customArrayFromJson = checkSerialization(customArray, """[{"field":"string value"}]""")
+      customArrayFromJson.items must beEqualTo(array)
+    }
+
   }
 
 }

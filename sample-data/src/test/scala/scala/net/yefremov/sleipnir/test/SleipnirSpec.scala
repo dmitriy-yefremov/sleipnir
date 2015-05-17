@@ -48,8 +48,13 @@ trait SleipnirSpec extends Specification {
    */
   def fromJson[T <: DataTemplate[_] : ClassTag](json: String, schema: DataSchema): T = {
     val clazz = implicitly[ClassTag[T]].runtimeClass.asInstanceOf[Class[T]]
-    val dataMap = dataTemplateCodec.stringToMap(json)
-    DataTemplateUtil.wrap(dataMap, schema, clazz)
+    val dataComplex = {
+      schema.getDereferencedType match {
+        case DataSchema.Type.ARRAY => dataTemplateCodec.stringToList(json)
+        case _ => dataTemplateCodec.stringToMap(json)
+      }
+    }
+    DataTemplateUtil.wrap(dataComplex, schema, clazz)
   }
 
   /**

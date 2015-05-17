@@ -38,6 +38,16 @@ abstract class ScalaArrayTemplate protected(itemsData: DataList, dataSchema: Arr
 
   def items: Seq[Any]
 
+  override def hashCode(): Int = data.values().hashCode()
+
+  override def equals(other: Any): Boolean = {
+    other match {
+      case otherTemplate: ScalaArrayTemplate => data.equals(otherTemplate.data)
+    }
+  }
+
+  override def toString: String = data.values().toString
+
 }
 
 object ScalaArrayTemplate {

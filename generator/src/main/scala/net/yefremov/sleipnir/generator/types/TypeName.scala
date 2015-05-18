@@ -19,7 +19,7 @@ package net.yefremov.sleipnir.generator.types
 /**
  * Represents all naming related information of a type.
  * @param shortClassName short class name (e.g. "TypeGenerator")
- * @param packageName package name (e.g. "com.linkedin.sleipnir")
+ * @param packageName package name (e.g. "net.yefremov.sleipnir")
  * @param fullClassName fully qualified class name including the package (e.g. "net.yefremov.sleipnir.generator.types.TypeGenerator")
  * @param externalClassName fully qualified class name to be used for external references to this type (e.g. for arrays
  *                          it will be "Seq[net.yefremov.sleipnir.generator.types.TypeGenerator]" instead of the actual

@@ -41,6 +41,7 @@ object Sleipnir extends Build {
    */
   lazy val sleipnirGenerator = project.in(file("generator"))
     .settings(sharedSettings: _*)
+    .settings(name := "sleipnir-generator")
     .settings(
       libraryDependencies ++= Seq(
         "com.typesafe.scala-logging" %% "scala-logging-slf4j" % "2.1.2",
@@ -61,6 +62,7 @@ object Sleipnir extends Build {
     .aggregate(sleipnirGenerator)
     .settings(sharedSettings: _*)
     .settings(sbtPlugin := true)
+    .settings(name := "sleipnir-sbt-plugin")
 
   /**
    * Some sample PDSC files to test the generator. All the craziness below is needed to build the generator and actually

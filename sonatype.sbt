@@ -1,3 +1,5 @@
+sonatypeProfileName := "net.yefremov"
+
 pomExtra := {
   <url>https://github.com/dmitriy-yefremov/sleipnir</url>
   <licenses>

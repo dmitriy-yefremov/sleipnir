@@ -24,7 +24,7 @@ import de.johoop.jacoco4sbt.JacocoPlugin._
 object Sleipnir extends Build {
 
   val sharedSettings = jacoco.settings ++ Seq(
-    organization := "net.yefremov"
+    organization := "net.yefremov.sleipnir"
   )
 
   /**

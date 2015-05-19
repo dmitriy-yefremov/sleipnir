@@ -20,12 +20,28 @@ import sbt.IO
 
 import twirl.sbt.TwirlPlugin._
 import de.johoop.jacoco4sbt.JacocoPlugin._
+import sbtrelease.ReleaseStateTransformations._
+import sbtrelease.ReleasePlugin.autoImport._
 
 object Sleipnir extends Build {
 
   val sharedSettings = jacoco.settings ++ Sonatype.Settings ++ Seq(
     organization := "net.yefremov.sleipnir",
-    scalaVersion := "2.10.4"
+    scalaVersion := "2.10.4",
+    releaseProcess := Seq[ReleaseStep](
+      checkSnapshotDependencies,
+      inquireVersions,
+      runClean,
+      runTest,
+      setReleaseVersion,
+      commitReleaseVersion,
+      tagRelease,
+      ReleaseStep(action = Command.process("publishSigned", _)),
+      setNextVersion,
+      commitNextVersion,
+      ReleaseStep(action = Command.process("sonatypeReleaseAll", _)),
+      pushChanges
+    )
   )
 
   /**

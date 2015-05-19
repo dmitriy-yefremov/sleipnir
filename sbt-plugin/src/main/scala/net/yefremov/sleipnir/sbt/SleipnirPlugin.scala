@@ -96,7 +96,7 @@ object SleipnirPlugin extends Plugin {
 
     libraryDependencies += {
       val version = SleipnirPlugin.getClass.getPackage.getImplementationVersion
-      "net.yefremov" % s"sleipnirgenerator_2.10" % version
+      "net.yefremov.sleipnir" % s"sleipnir-generator_2.10" % version
     }
 
   )

@@ -20,9 +20,12 @@ For example, to generate bindings for the schemas in the sample-data project, ru
 
 ## Sbt Plugin
 To use Sleipnir in your SBT project, you should add the sleipnir plugin, and add its settings to your project.
-1. Add the following line to plugins.sbt:
+
+1. Add the following line to plugins.sbt:  
+        
         addSbtPlugin("net.yefremov.sleipnir" % "sleipnir-sbt-plugin" % "<version>")
 2. Add the sleipnir settings to the project that defines the Pegasus schemas:
+        
         import net.yefremov.sleipnir.sbt.SleipnirPlugin._
 
         lazy val exampleProject = Project(...)

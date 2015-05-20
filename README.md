@@ -1,46 +1,48 @@
 # Sleipnir [![Build Status](https://travis-ci.org/dmitriy-yefremov/sleipnir.svg?branch=master)](https://travis-ci.org/dmitriy-yefremov/sleipnir)
-Sleipnir is a generator of native Scala bindings for rest.li Pegasus schemas. The code is implemented with the following ideas in mind:
+Sleipnir is a generator of native Scala bindings for rest.li [Pegasus](https://github.com/linkedin/rest.li/wiki/DATA-Data-Schema-and-Templates) schemas. The code is implemented with the following ideas in mind:
 
 1. Use as much of Pegasus infrastructure as possible: schema files parsing is reused, generated classes extend RecordTemplate/DataTemplate and work on top of DataMap and so on.
 2. Low tech code generation: we use Twirl templates (aka Play Scala templates), more on this here.
 
+The [sleipnir-sample](https://github.com/dmitriy-yefremov/sleipnir-sample) project uses Sleipnir to generate Scala bindings for a Play server.
 # Usage
-You can use Sleipnir in a few different ways: as a command line tool or as an SBT plugin.
+You can use Sleipnir in a couple ways: as a command line tool or as an SBT plugin.
 
 ## Command Line Tool
-    net.yefremov.sleipnir.Sleipnir <resolving path> <source dir> <target dir> [namespace prefix]
-For example:
+In SBT, run:
 
-    net.yefremov.sleipnir.Sleipnir sample-data/src/main/pegasus sample-data/src/main/pegasus sample-data/target/scala-2.10/src_managed scala
+    project sleipnirGenerator
+    runMain net.yefremov.sleipnir.Sleipnir <resolving path> <source dir> <target dir> [namespace prefix]
+
+For example, to generate bindings for the schemas in the sample-data project, run:
+
+    runMain net.yefremov.sleipnir.Sleipnir  sample-data/src/main/pegasus sample-data/src/main/pegasus sample-data/src/main/codegen
 
 ## Sbt Plugin
-To use Sleipnir in your Play / SBT project you need to add it as a plugin and import the corresponding settings.
+To use Sleipnir in your SBT project, you should add the sleipnir plugin, and add its settings to your project.
 1. Add the following line to plugins.sbt:
-        addSbtPlugin("net.yefremov.sleipnir" % "sleipnirsbtplugin" % "<latest recommended version>")
-2. Make the following changes in your Build.scala:
-        ...
+        addSbtPlugin("net.yefremov.sleipnir" % "sleipnir-sbt-plugin" % "<version>")
+2. Add the sleipnir settings to the project that defines the Pegasus schemas:
         import net.yefremov.sleipnir.sbt.SleipnirPlugin._
-        ...
 
-        lazy val dataTemplate = Project("data-template", file("data-template"))
-        ...
+        lazy val exampleProject = Project(...)
             .settings(sleipnirSettings: _*)
-        ...
+            .settings(
+              sleipnirSourceDirectory := baseDirectory.value / "data" / "src" / "main" / "pegasus",
+              sleipnirDestinationDirectory := baseDirectory.value / "data" / "src" / "main" / "codegen"
+            )
 
-The changes above will enable generation of Scala bindings for PDSC files defined within the project. You may also want to generate Scala classes for PDSC files defined in downstream dependencies. This should be considered a temporary solution until all downstream services will start generating Scala bindings as a part of their build processes.
+The changes above will enable generation of Scala bindings for PDSC files defined within your project. You may also want to generate bindings for PDSC files defined in a dependency of your project. This is necessary if the dependency does not generate Scala bindings as a part of its own build process.
 
-        ...
-        lazy val commonModule = Project(...)
-            ...
+To generate bindings for PDSC files of all dependencies:
+
+        lazy val exampleProject = Project(...)
             .settings(sleipnirDownstreamSettings: _*)
-            ...
 
-You may also enable filtering of dependencies that will be processed:
+Also, you may enable filtering of dependencies that will be processed:
 
-        lazy val commonModule = Project(...)
-            ...
+        lazy val exampleProject = Project(...)
             .settings(sleipnirDownstreamSettings: _*)
-            .settings(dataTemplatesDependenciesFilter := DependencyFilter.allPass -- moduleFilter(organization = "com.linkedin.notifications-api"))
-            ...
+            .settings(dataTemplatesDependenciesFilter := DependencyFilter.allPass -- moduleFilter(organization = "net.yefremov.example-service"))
 
-Only dependencies that pass the filter specified in dataTemplatesDependenciesFilter will have Scala bindings generated.
+Only dependencies unfiltered by the dataTemplatesDependenciesFilter will have Scala bindings generated.
